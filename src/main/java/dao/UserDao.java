@@ -1,0 +1,288 @@
+package dao;
+
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import common.ConnectDB;
+import component.Login;
+import entity.Users;
+
+public class UserDao {
+	private int userId;
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public void insertRenter(Users user) {
+		try (
+				var con = ConnectDB.getConnect();
+				var cs = con.prepareCall("{call addRenter(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+			) 
+		{
+			cs.setString(1, user.getAvatar());
+			cs.setString(2, user.getName());
+			cs.setString(3, user.getGender());
+			cs.setString(4, user.getPhone());
+			cs.setDate(5, (Date) user.getDob());
+			cs.setString(6, user.getAddress());
+			cs.setString(7, user.getNic());
+			cs.setString(8, user.getiAuthority());
+			cs.setString(9, user.getImgIAuthority());
+			cs.setNull(10, java.sql.Types.NVARCHAR); // email
+			cs.setNull(11, java.sql.Types.NVARCHAR); // password
+			cs.setNull(12, java.sql.Types.BIT); // is_active
+			cs.executeUpdate();
+			System.out.println("insert success");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateUser(Users user) {
+		try 
+		(
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call upUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+		)
+		{
+			cs.setInt(1, user.getId());
+			cs.setString(2, user.getAvatar());
+			cs.setString(3, user.getName());
+			cs.setString(4, user.getGender());
+			cs.setString(5, user.getPhone());
+			cs.setDate(6, (Date) user.getDob());
+			cs.setString(7, user.getAddress());
+			cs.setString(8, user.getNic());
+			cs.setString(9, user.getiAuthority());
+			cs.setString(10, user.getImgIAuthority());
+			cs.executeUpdate();
+			System.out.println("Update renter success");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public List<Users> selectRenders(int pageNumber, int rowOfPage) {
+		List<Users> list = new ArrayList<>();
+		try 
+		(
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call selRenter(?, ?)}");
+			
+		) 
+		{
+			cs.setInt(1, pageNumber);
+			cs.setInt(2, rowOfPage);
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				var renter = new Users();
+				renter.setId(rs.getInt("id"));
+				renter.setAvatar(rs.getString("avatar"));
+				renter.setName(rs.getString("name"));
+				renter.setGender(rs.getString("gender"));
+				renter.setDob(rs.getDate("dob"));
+				renter.setPhone(rs.getString("phone"));
+				renter.setAddress(rs.getString("address"));
+				renter.setNic(rs.getString("nic"));
+				renter.setiAuthority(rs.getString("iAuthority"));
+				renter.setImgIAuthority(rs.getString("imgIAuthority"));
+				list.add(renter);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+		
+	}
+
+	
+	public List<Object> selRenterName() {
+		List<Object> list = new ArrayList<>();
+		try 
+		(
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call selectRenterName()}");
+		)
+		{
+			
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				var renter = new Users();
+				renter.setId(rs.getInt("id"));
+				renter.setName(rs.getString("name"));
+				renter.setPhone(rs.getString("phone"));
+				renter.setDob(rs.getDate("dob"));
+				renter.setNic(rs.getString("nic"));
+				list.add(renter);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public int countRenter() {
+		int count = 0;
+		
+		try
+		(
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call countRenter()}");
+			var rs = cs.executeQuery();
+		)
+		{
+			while (rs.next()) {
+				count = rs.getInt("total");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+	// Call info user
+	public Users selUser(int id) {
+		Users user = null;
+	    try (var con = ConnectDB.getConnect();
+	         var cs = con.prepareCall("{call selInforUser(?)}");
+	    ) {
+	        cs.setInt(1, id);
+	        var rs = cs.executeQuery();
+	        if (rs.next()) {
+	            user = new Users();
+	            user.setAvatar(rs.getString("avatar"));
+	            user.setName(rs.getString("name"));
+	            user.setGender(rs.getString("gender"));
+	            user.setDob(rs.getDate("dob"));
+	            user.setPhone(rs.getString("phone"));
+	            user.setAddress(rs.getString("address"));
+	            user.setNic(rs.getString("nic"));
+	            user.setiAuthority(rs.getString("iAuthority"));
+	            user.setImgIAuthority(rs.getString("imgIAuthority"));
+	            user.setEmail(rs.getString("email"));
+	            user.setPw(rs.getString("password"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return user;
+	}
+	// update info user
+	public Users updateInforUser(int id, String address, String phone, String gender, String avatar, String name, String pwd, String email, String imgIAuthority, String iAuthority, String nic,Date dob) {
+		Users user = null;
+		try (
+				var con = ConnectDB.getConnect();
+		        var cs = con.prepareCall("{call updateInforUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+		    ) {
+				user = new Users();
+		        cs.setInt(1, id);
+		        cs.setString(2, address);
+		        cs.setString(3, phone);
+		        cs.setString(4, gender);
+		        cs.setString(5, avatar);
+		        cs.setString(6, name);
+		        cs.setString(7, pwd);
+		        cs.setString(8, email);
+		        cs.setString(9, imgIAuthority);
+		        cs.setString(10, iAuthority);
+		        cs.setString(11, nic);
+		        cs.setDate(12, dob);
+
+		        var rs = cs.executeQuery();
+		        if (rs.next()) {
+		            user = new Users();
+		            user.setAvatar(rs.getString("avatar"));
+		            user.setName(rs.getString("name"));
+		            user.setGender(rs.getString("gender"));
+		            user.setDob(rs.getDate("dob"));
+		            user.setPhone(rs.getString("phone"));
+		            user.setAddress(rs.getString("address"));
+		            user.setNic(rs.getString("nic"));
+		            user.setiAuthority(rs.getString("iAuthority"));
+		            user.setImgIAuthority(rs.getString("imgIAuthority"));
+		            user.setEmail(rs.getString("email"));
+		            user.setPw(rs.getString("password"));
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		return user;
+		
+	}
+	
+
+	public List<Users> selectRendersFilteredData(String name, String phone, String nic) {
+		List<Users> list = new ArrayList<>();
+		try
+		(
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call filterDataTableRenter(?, ?, ?)}");
+		) 
+		{
+			cs.setString(1, name);
+			cs.setString(2, phone);
+			cs.setString(3, nic);
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				var user = new Users();
+				user.setAvatar(rs.getString("avatar"));
+				user.setName(rs.getString("name"));
+				user.setGender(rs.getString("gender"));
+				user.setDob(rs.getDate("dob"));
+				user.setPhone(rs.getString("phone"));
+				user.setAddress(rs.getString("address"));
+				user.setNic(rs.getString("nic"));
+				user.setiAuthority(rs.getString("iAuthority"));
+				user.setImgIAuthority(rs.getString("imgIAuthority"));
+				list.add(user);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	
+	
+	
+	
+	public List<Object> login(String name, String pass) {
+		var list = new ArrayList<>();
+		try(
+				var con = ConnectDB.getConnect();
+				var cs = con.prepareCall("{call login(?, ?)}");) 
+			{
+			cs.setString(1, name);
+			cs.setString(2, pass);
+			var rs = cs.executeQuery();
+			while (rs.next()) {
+				list.add(rs.getInt("exist"));
+				list.add(rs.getBoolean("is_admin"));
+//				this.userId = rs.getInt("id");
+				Login.setId(rs.getInt("id"));
+	
+	
+			}
+		return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+		
+
+	
+	
+}
