@@ -411,7 +411,7 @@ public class Setting extends JPanel {
 			txtPwd.setText("null");
 			txtiAu.setText("null");
 		}
-		if (info.getAvatar() != null && info.getAvatar() != "") {
+		if (info.getAvatar() != null || info.getAvatar() != "") {
 			ImageIcon originAvatarIcon = new ImageIcon(info.getAvatar());
 			Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 			// Load the image
@@ -430,22 +430,22 @@ public class Setting extends JPanel {
 		}
 		// show imgIAuth
 		String imgNicPaths = info.getImgIAuthority();
-		
+
 		if (imgNicPaths != null) {
 			String[] nicPathArray = imgNicPaths.split(";");
 			if (nicPathArray.length >= 2) {
 				String img1 = nicPathArray[0];
 				String img2 = nicPathArray[1];
-				
+
 				ImageIcon icon1 = new ImageIcon(img2);
 				ImageIcon icon2 = new ImageIcon(img1);
-				
+
 				Image scaledImage1 = icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 				Image scaledImage2 = icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-				
+
 				ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
 				ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
-				
+
 				lblFrontSide.setIcon(scaledIcon1);
 				lblBackSide.setIcon(scaledIcon2);
 			}
@@ -468,16 +468,16 @@ public class Setting extends JPanel {
 			txtPwd.setText(info.getPw() != null ? info.getPw() : "null");
 			if (info.getDob() != null) {
 				txtDob.setText(info.getDob().toString());
-			} else {
-				txtDob.setText("null");
 			}
-			if (info.getGender().equals("female")) {
-				rdbtnFemale.setSelected(true);
-			} else {
-				rdbtnMale.setSelected(true);
+			if (info.getGender() != null) {
+				if (info.getGender().equals("female")) {
+					rdbtnFemale.setSelected(true);
+				} else {
+					rdbtnMale.setSelected(true);
+				}
 			}
-			if (info.getAvatar() != null && info.getAvatar() != "") {
-				ImageIcon originAvatarIcon = new ImageIcon(info.getAvatar());
+			if (info.getAvatar() == null || info.getAvatar().isEmpty()) {
+				ImageIcon originAvatarIcon = new ImageIcon("images/avatarDefaut.jpg");
 				Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 				// Load the image
 				ImageIcon imageIcon = new ImageIcon(imgAvatar);
@@ -485,7 +485,7 @@ public class Setting extends JPanel {
 				// Set the image icon on the label
 				lblAvatar.setIcon(imageIcon);
 			} else {
-				ImageIcon originAvatarIcon = new ImageIcon("images/avatarDefaut.jpg");
+				ImageIcon originAvatarIcon = new ImageIcon(info.getAvatar());
 				Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 				// Load the image
 				ImageIcon imageIcon = new ImageIcon(imgAvatar);
@@ -495,22 +495,22 @@ public class Setting extends JPanel {
 			}
 			// load imgIAuth
 			String imgNicPaths = info.getImgIAuthority();
-			
+
 			if (imgNicPaths != null) {
 				String[] nicPathArray = imgNicPaths.split(";");
 				if (nicPathArray.length >= 2) {
 					String img1 = nicPathArray[0];
 					String img2 = nicPathArray[1];
-					
+
 					ImageIcon icon1 = new ImageIcon(img2);
 					ImageIcon icon2 = new ImageIcon(img1);
-					
+
 					Image scaledImage1 = icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 					Image scaledImage2 = icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-					
+
 					ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
 					ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
-					
+
 					lblFrontSide.setIcon(scaledIcon1);
 					lblBackSide.setIcon(scaledIcon2);
 				}
@@ -528,19 +528,20 @@ public class Setting extends JPanel {
 
 	}
 
-	protected void btnEditInfoActionPerformed(ActionEvent e) {
-		ShowEditSetting JframeShowEditSetting = new ShowEditSetting();
-
-	}
-
 	protected void btnReloadDataActionPerformed(ActionEvent e) {
 		try {
 			loadData();
 			JOptionPane.showMessageDialog(null, "Data loaded successfully!", "Success",
 					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Data loaded faid!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
+
+	}
+
+	protected void btnEditInfoActionPerformed(ActionEvent e) {
+		ShowEditSetting JframeShowEditSetting = new ShowEditSetting();
 
 	}
 }

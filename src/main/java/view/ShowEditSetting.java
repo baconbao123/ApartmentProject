@@ -87,7 +87,7 @@ public class ShowEditSetting extends JFrame {
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
 	private JLabel lblAvatarImg;
-	private JLabel lblFont;
+	private JLabel lblFront;
 	private JLabel lblBack;
 	private String gender;
 	private File lastSelectedFile;
@@ -102,9 +102,9 @@ public class ShowEditSetting extends JFrame {
 	private JLabel lblErrNIC;
 	private JLabel lblErrDob;
 
-	private boolean isEmail=true;
-	private boolean isPhone =true;
-	private boolean isNic= true;
+	private boolean isEmail = true;
+	private boolean isPhone = true;
+	private boolean isNic = true;
 
 	/**
 	 * Launch the application.
@@ -359,14 +359,14 @@ public class ShowEditSetting extends JFrame {
 		{
 			lblAvatarImg = new JLabel("");
 			lblAvatarImg.setBackground(Color.ORANGE);
-			lblAvatarImg.setBounds(270, 379, 82, 81);
+			lblAvatarImg.setBounds(274, 386, 78, 74);
 			panelSub.add(lblAvatarImg);
 		}
 		{
-			lblFont = new JLabel("");
-			lblFont.setBackground(Color.ORANGE);
-			lblFont.setBounds(264, 479, 130, 81);
-			panelSub.add(lblFont);
+			lblFront = new JLabel("");
+			lblFront.setBackground(Color.ORANGE);
+			lblFront.setBounds(264, 479, 130, 81);
+			panelSub.add(lblFront);
 		}
 		{
 			lblBack = new JLabel("");
@@ -420,7 +420,7 @@ public class ShowEditSetting extends JFrame {
 			txtPhone.setText(info.getPhone() != null ? info.getPhone() : "null");
 			txtEmail.setText(info.getEmail() != null ? info.getEmail() : "null");
 			txtPwd.setText(info.getPw() != null ? info.getPw() : "null");
-			txtiAuthority.setText(info.getiAuthority() != null ? info.getiAuthority(): "null" );
+			txtiAuthority.setText(info.getiAuthority() != null ? info.getiAuthority() : "null");
 			if (info.getDob() != null) {
 				dateDob.setDate(info.getDob());
 			} else {
@@ -465,7 +465,7 @@ public class ShowEditSetting extends JFrame {
 					boolean isValueChanged = !currentValue.equals(previousValue);
 					previousValue = currentValue;
 					System.out.println(currentValue);
-					System.out.println("Email: "+isEmail);
+					System.out.println("Email: " + isEmail);
 					if (!Regex.isValidEmail(currentValue)) {
 						lblErrEmail.setVisible(true);
 						isEmail = false;
@@ -529,7 +529,7 @@ public class ShowEditSetting extends JFrame {
 					} else {
 						isNic = true;
 						lblErrNIC.setVisible(false);
-						
+
 					}
 
 				}
@@ -555,15 +555,7 @@ public class ShowEditSetting extends JFrame {
 			});
 
 			// ---------------------------------------------------
-			if (info.getAvatar() != null && info.getAvatar() != "") {
-				ImageIcon originAvatarIcon = new ImageIcon(info.getAvatar());
-				Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-				// Load the image
-				ImageIcon imageIcon = new ImageIcon(imgAvatar);
-
-				// Set the image icon on the label
-				lblAvatarImg.setIcon(imageIcon);
-			} else {
+			if (info.getAvatar() == null || info.getAvatar().equals("") ) {
 				ImageIcon originAvatarIcon = new ImageIcon("images/avatarDefaut.jpg");
 				Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 				// Load the image
@@ -571,25 +563,36 @@ public class ShowEditSetting extends JFrame {
 
 				// Set the image icon on the label
 				lblAvatarImg.setIcon(imageIcon);
+			} else {
+				ImageIcon originAvatarIcon = new ImageIcon(info.getAvatar());
+				Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+				// Load the image
+				ImageIcon imageIcon = new ImageIcon(imgAvatar);
+
+				// Set the image icon on the label
+				lblAvatarImg.setIcon(imageIcon);
 			}
-			String avatarPaths = info.getImgIAuthority();
-			String[] avatarPathArray = avatarPaths.split(";");
+			String imgNicPaths = info.getImgIAuthority();
 
-			if (avatarPathArray.length >= 2) {
-				String img1 = avatarPathArray[0];
-				String img2 = avatarPathArray[1];
+			if (imgNicPaths != null) {
+				String[] nicPathArray = imgNicPaths.split(";");
+				if (nicPathArray.length >= 2) {
 
-				ImageIcon icon1 = new ImageIcon(img2);
-				ImageIcon icon2 = new ImageIcon(img1);
+					String img1 = nicPathArray[0];
+					String img2 = nicPathArray[1];
 
-				Image scaledImage1 = icon1.getImage().getScaledInstance(130, 90, Image.SCALE_SMOOTH);
-				Image scaledImage2 = icon2.getImage().getScaledInstance(130, 90, Image.SCALE_SMOOTH);
+					ImageIcon icon1 = new ImageIcon(img2);
+					ImageIcon icon2 = new ImageIcon(img1);
 
-				ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
-				ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
+					Image scaledImage1 = icon1.getImage().getScaledInstance(130, 90, Image.SCALE_SMOOTH);
+					Image scaledImage2 = icon2.getImage().getScaledInstance(130, 90, Image.SCALE_SMOOTH);
 
-				lblFont.setIcon(scaledIcon1);
-				lblBack.setIcon(scaledIcon2);
+					ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
+					ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
+
+					lblFront.setIcon(scaledIcon1);
+					lblBack.setIcon(scaledIcon2);
+				}
 			}
 
 		} else {
@@ -625,16 +628,22 @@ public class ShowEditSetting extends JFrame {
 		int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure to update the information?", "Confirm",
 				JOptionPane.YES_NO_OPTION);
 		java.util.Date utilDate = dateDob.getDate();
-		Date currentDate = new Date();
-		// Kiểm tra nếu ngày được chọn lớn hơn ngày hiện tại
-		if (utilDate.after(currentDate)) {
-			utilDate = currentDate; // Đặt ngày được chọn thành ngày hiện tại
-			JOptionPane.showMessageDialog(null,"The chosen date of birth is later than the current date.", "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+		java.sql.Date sqlDate = null;
+		if (utilDate != null) {
+			Date currentDate = new Date();
+			// check date of birth is later than the current date
+			if (utilDate.after(currentDate)) {
+				utilDate = currentDate;
+				JOptionPane.showMessageDialog(null, "The chosen date of birth is later than the current date.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+
+			 sqlDate = new java.sql.Date(utilDate.getTime());
+			// Proceed with the rest of your code using sqlDate
+		} 
 		try {
 
-			if (confirmation == JOptionPane.YES_OPTION ) {
+			if (confirmation == JOptionPane.YES_OPTION) {
 				// update info
 				Users info = user.updateInforUser(userId, txtAddress.getText(), txtPhone.getText(), gender,
 						newAvatarPath, txtFullName.getText(), txtPwd.getText(), txtEmail.getText(), imgNicPathsString,
@@ -650,7 +659,6 @@ public class ShowEditSetting extends JFrame {
 			JOptionPane.showMessageDialog(null, "Update Failed!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
-		
 	}
 
 	// upload img Avatar
@@ -701,8 +709,8 @@ public class ShowEditSetting extends JFrame {
 	protected void btnNewButton_2ActionPerformed(ActionEvent e) {
 		JFileChooser fileAvatarChooser = new JFileChooser();
 		fileAvatarChooser.setCurrentDirectory(new File("C:\\Users"));
-		fileAvatarChooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
-		fileAvatarChooser.setMultiSelectionEnabled(true); 
+		fileAvatarChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fileAvatarChooser.setMultiSelectionEnabled(true);
 
 		if (lastSelectedFiles != null) {
 			fileAvatarChooser.setSelectedFiles(lastSelectedFiles);
@@ -718,7 +726,7 @@ public class ShowEditSetting extends JFrame {
 					File file1 = selectedFiles[0];
 					File file2 = selectedFiles.length >= 2 ? selectedFiles[1] : null;
 
-					displayImageOnLabel(file1, lblFont);
+					displayImageOnLabel(file1, lblFront);
 					displayImageOnLabel(file2, lblBack);
 				} else {
 					JOptionPane.showMessageDialog(null, "Please select up to 2 images", "Error",
@@ -730,32 +738,32 @@ public class ShowEditSetting extends JFrame {
 	}
 
 	private void displayImageOnLabel(File file, JLabel label) {
-		  String getFileName = file.getName();
-	        String extension = getFileName.substring(getFileName.lastIndexOf(".") + 1);
+		String getFileName = file.getName();
+		String extension = getFileName.substring(getFileName.lastIndexOf(".") + 1);
 
-	        if (extension.equalsIgnoreCase("png") || extension.equalsIgnoreCase("jpg")) {
-	            String filePath = file.getAbsolutePath();
-	            String newAvatarFilePath = "NIC_" + System.currentTimeMillis() + "." + extension;
+		if (extension.equalsIgnoreCase("png") || extension.equalsIgnoreCase("jpg")) {
+			String filePath = file.getAbsolutePath();
+			String newAvatarFilePath = "NIC_" + System.currentTimeMillis() + "." + extension;
 
-	            String imagesFolderPath = "images/";
-	            String newAvatarPath = imagesFolderPath + newAvatarFilePath;
+			String imagesFolderPath = "images/";
+			String newAvatarPath = imagesFolderPath + newAvatarFilePath;
 
-	            ImageIcon originAvatarIcon = new ImageIcon(filePath);
-	            Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(130, 90, Image.SCALE_SMOOTH);
-	            ImageIcon imgAvatarParse = new ImageIcon(imgAvatar);
-	            label.setIcon(imgAvatarParse);
+			ImageIcon originAvatarIcon = new ImageIcon(filePath);
+			Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(130, 90, Image.SCALE_SMOOTH);
+			ImageIcon imgAvatarParse = new ImageIcon(imgAvatar);
+			label.setIcon(imgAvatarParse);
 
-	            try {
-	                Files.copy(new File(filePath).toPath(), new File(newAvatarPath).toPath(),
-	                        StandardCopyOption.REPLACE_EXISTING);
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
+			try {
+				Files.copy(new File(filePath).toPath(), new File(newAvatarPath).toPath(),
+						StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-	            imgNicPaths.add(newAvatarPath);
-	            System.out.println(imgNicPaths);
-	           imgNicPathsString = String.join(";", imgNicPaths);
-	            System.out.println(imgNicPathsString);
+			imgNicPaths.add(newAvatarPath);
+			System.out.println(imgNicPaths);
+			imgNicPathsString = String.join(";", imgNicPaths);
+			System.out.println(imgNicPathsString);
 		}
 
 	}
