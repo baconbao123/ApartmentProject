@@ -1,5 +1,7 @@
 package dao;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -179,43 +181,43 @@ public class UserDao {
 	// update info user
 	public Users updateInforUser(int id, String address, String phone, String gender, String avatar, String name, String pwd, String email, String imgIAuthority, String iAuthority, String nic,Date dob) {
 		Users user = null;
-		try (
-				var con = ConnectDB.getConnect();
-		        var cs = con.prepareCall("{call updateInforUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
-		    ) {
-				user = new Users();
-		        cs.setInt(1, id);
-		        cs.setString(2, address);
-		        cs.setString(3, phone);
-		        cs.setString(4, gender);
-		        cs.setString(5, avatar);
-		        cs.setString(6, name);
-		        cs.setString(7, pwd);
-		        cs.setString(8, email);
-		        cs.setString(9, imgIAuthority);
-		        cs.setString(10, iAuthority);
-		        cs.setString(11, nic);
-		        cs.setDate(12, dob);
+	    try (
+	        Connection con = ConnectDB.getConnect();
+	        CallableStatement cs = con.prepareCall("{call updateInforUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+	    ) {
+	        cs.setInt(1, id);
+	        cs.setString(2, address);
+	        cs.setString(3, phone);
+	        cs.setString(4, gender);
+	        cs.setString(5, avatar);
+	        cs.setString(6, name);
+	        cs.setString(7, pwd);
+	        cs.setString(8, email);
+	        cs.setString(9, imgIAuthority);
+	        cs.setString(10, iAuthority);
+	        cs.setString(11, nic);
+	        cs.setDate(12, dob);
 
-		        var rs = cs.executeQuery();
-		        if (rs.next()) {
-		            user = new Users();
-		            user.setAvatar(rs.getString("avatar"));
-		            user.setName(rs.getString("name"));
-		            user.setGender(rs.getString("gender"));
-		            user.setDob(rs.getDate("dob"));
-		            user.setPhone(rs.getString("phone"));
-		            user.setAddress(rs.getString("address"));
-		            user.setNic(rs.getString("nic"));
-		            user.setiAuthority(rs.getString("iAuthority"));
-		            user.setImgIAuthority(rs.getString("imgIAuthority"));
-		            user.setEmail(rs.getString("email"));
-		            user.setPw(rs.getString("password"));
-		        }
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		    }
-		return user;
+	        int rowsAffected = cs.executeUpdate();
+	        if (rowsAffected > 0) {
+	            user = new Users();
+	            user.setId(id); // Assuming you have a method to set the user's ID
+	            user.setAddress(address);
+	            user.setPhone(phone);
+	            user.setGender(gender);
+	            user.setAvatar(avatar);
+	            user.setName(name);
+	            user.setPw(pwd);
+	            user.setEmail(email);
+	            user.setImgIAuthority(imgIAuthority);
+	            user.setiAuthority(iAuthority);
+	            user.setNic(nic);
+	            user.setDob(dob);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return user;
 		
 	}
 	

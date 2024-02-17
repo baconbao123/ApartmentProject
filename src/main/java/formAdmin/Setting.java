@@ -429,24 +429,26 @@ public class Setting extends JPanel {
 			lblAvatar.setIcon(imageIcon);
 		}
 		// show imgIAuth
-		String avatarPaths = info.getImgIAuthority();
-		String[] avatarPathArray = avatarPaths.split(";");
-
-		if (avatarPathArray.length >= 2) {
-			String img1 = avatarPathArray[0];
-			String img2 = avatarPathArray[1];
-
-			ImageIcon icon1 = new ImageIcon(img2);
-			ImageIcon icon2 = new ImageIcon(img1);
-
-			Image scaledImage1 = icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-			Image scaledImage2 = icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-
-			ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
-			ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
-
-			lblFrontSide.setIcon(scaledIcon1);
-			lblBackSide.setIcon(scaledIcon2);
+		String imgNicPaths = info.getImgIAuthority();
+		
+		if (imgNicPaths != null) {
+			String[] nicPathArray = imgNicPaths.split(";");
+			if (nicPathArray.length >= 2) {
+				String img1 = nicPathArray[0];
+				String img2 = nicPathArray[1];
+				
+				ImageIcon icon1 = new ImageIcon(img2);
+				ImageIcon icon2 = new ImageIcon(img1);
+				
+				Image scaledImage1 = icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+				Image scaledImage2 = icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+				
+				ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
+				ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
+				
+				lblFrontSide.setIcon(scaledIcon1);
+				lblBackSide.setIcon(scaledIcon2);
+			}
 		}
 	}
 
@@ -492,24 +494,26 @@ public class Setting extends JPanel {
 				lblAvatar.setIcon(imageIcon);
 			}
 			// load imgIAuth
-			String avatarPaths = info.getImgIAuthority();
-			String[] avatarPathArray = avatarPaths.split(";");
-
-			if (avatarPathArray.length >= 2) {
-				String img1 = avatarPathArray[0];
-				String img2 = avatarPathArray[1];
-
-				ImageIcon icon1 = new ImageIcon(img2);
-				ImageIcon icon2 = new ImageIcon(img1);
-
-				Image scaledImage1 = icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-				Image scaledImage2 = icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-
-				ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
-				ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
-
-				lblFrontSide.setIcon(scaledIcon1);
-				lblBackSide.setIcon(scaledIcon2);
+			String imgNicPaths = info.getImgIAuthority();
+			
+			if (imgNicPaths != null) {
+				String[] nicPathArray = imgNicPaths.split(";");
+				if (nicPathArray.length >= 2) {
+					String img1 = nicPathArray[0];
+					String img2 = nicPathArray[1];
+					
+					ImageIcon icon1 = new ImageIcon(img2);
+					ImageIcon icon2 = new ImageIcon(img1);
+					
+					Image scaledImage1 = icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+					Image scaledImage2 = icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+					
+					ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
+					ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
+					
+					lblFrontSide.setIcon(scaledIcon1);
+					lblBackSide.setIcon(scaledIcon2);
+				}
 			}
 		} else {
 			// Set all text fields to display "null"

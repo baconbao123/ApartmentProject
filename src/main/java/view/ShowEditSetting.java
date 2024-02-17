@@ -37,11 +37,14 @@ import javax.swing.ButtonGroup;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
@@ -92,7 +95,8 @@ public class ShowEditSetting extends JFrame {
 	private String getFileName;
 	private String newAvatarPath;
 	private String newAvatarPath1;
-	private String avatarPaths = "";
+	private List<String> imgNicPaths = new ArrayList<>();
+	private String imgNicPathsString;
 	private JLabel lblErrPhone;
 	private JLabel lblErrEmail;
 	private JLabel lblErrNIC;
@@ -416,7 +420,7 @@ public class ShowEditSetting extends JFrame {
 			txtPhone.setText(info.getPhone() != null ? info.getPhone() : "null");
 			txtEmail.setText(info.getEmail() != null ? info.getEmail() : "null");
 			txtPwd.setText(info.getPw() != null ? info.getPw() : "null");
-			txtiAuthority.setText(info.getiAuthority().equals("") ? "null" : info.getiAuthority());
+			txtiAuthority.setText(info.getiAuthority() != null ? info.getiAuthority(): "null" );
 			if (info.getDob() != null) {
 				dateDob.setDate(info.getDob());
 			} else {
@@ -633,7 +637,7 @@ public class ShowEditSetting extends JFrame {
 			if (confirmation == JOptionPane.YES_OPTION ) {
 				// update info
 				Users info = user.updateInforUser(userId, txtAddress.getText(), txtPhone.getText(), gender,
-						newAvatarPath, txtFullName.getText(), txtPwd.getText(), txtEmail.getText(), avatarPaths,
+						newAvatarPath, txtFullName.getText(), txtPwd.getText(), txtEmail.getText(), imgNicPathsString,
 						txtiAuthority.getText(), txtNIC.getText(), sqlDate);
 				JOptionPane.showMessageDialog(null, "Update successfull!", "Success", JOptionPane.INFORMATION_MESSAGE);
 				JFrame frame = (JFrame) SwingUtilities.getWindowAncestor((Component) e.getSource());
@@ -697,8 +701,8 @@ public class ShowEditSetting extends JFrame {
 	protected void btnNewButton_2ActionPerformed(ActionEvent e) {
 		JFileChooser fileAvatarChooser = new JFileChooser();
 		fileAvatarChooser.setCurrentDirectory(new File("C:\\Users"));
-		fileAvatarChooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // Chỉ cho chọn file, không chọn folder
-		fileAvatarChooser.setMultiSelectionEnabled(true); // Cho phép chọn nhiều tệp
+		fileAvatarChooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
+		fileAvatarChooser.setMultiSelectionEnabled(true); 
 
 		if (lastSelectedFiles != null) {
 			fileAvatarChooser.setSelectedFiles(lastSelectedFiles);
@@ -726,36 +730,32 @@ public class ShowEditSetting extends JFrame {
 	}
 
 	private void displayImageOnLabel(File file, JLabel label) {
-		String getFileName = file.getName();
-		String extension = getFileName.substring(getFileName.lastIndexOf(".") + 1);
+		  String getFileName = file.getName();
+	        String extension = getFileName.substring(getFileName.lastIndexOf(".") + 1);
 
-		if (extension.equalsIgnoreCase("png") || extension.equalsIgnoreCase("jpg")) {
-			String filePath = file.getAbsolutePath(); // Retrieve the absolute path of the selected file
-			String newAvatarFilePath = "auth_" + System.currentTimeMillis() + "." + extension; // Create a new file name
-																								// for the avatar
+	        if (extension.equalsIgnoreCase("png") || extension.equalsIgnoreCase("jpg")) {
+	            String filePath = file.getAbsolutePath();
+	            String newAvatarFilePath = "NIC_" + System.currentTimeMillis() + "." + extension;
 
-			String imagesFolderPath = "images/"; // Path to the "images" directory in the project.
-			// "Path to the new file in the "images" folder."
-			newAvatarPath1 = imagesFolderPath + newAvatarFilePath;
-			ImageIcon originAvatarIcon = new ImageIcon(filePath);
-			Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(130, 90, Image.SCALE_SMOOTH);
-			ImageIcon imgAvatarParse = new ImageIcon(imgAvatar);
-			label.setIcon(imgAvatarParse);
-			// Copy the avatar file to the "images" folder.
-			try {
-				Files.copy(new File(filePath).toPath(), new File(newAvatarPath1).toPath(),
-						StandardCopyOption.REPLACE_EXISTING);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
+	            String imagesFolderPath = "images/";
+	            String newAvatarPath = imagesFolderPath + newAvatarFilePath;
 
-			// Add the newAvatarPath to the avatarPaths string
-			if (!avatarPaths.isEmpty()) {
-				avatarPaths += ";"; // Add a semicolon as a delimiter if avatarPaths is not empty
-			}
-			avatarPaths += newAvatarPath1;
-			System.out.println(avatarPaths);
+	            ImageIcon originAvatarIcon = new ImageIcon(filePath);
+	            Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(130, 90, Image.SCALE_SMOOTH);
+	            ImageIcon imgAvatarParse = new ImageIcon(imgAvatar);
+	            label.setIcon(imgAvatarParse);
 
+	            try {
+	                Files.copy(new File(filePath).toPath(), new File(newAvatarPath).toPath(),
+	                        StandardCopyOption.REPLACE_EXISTING);
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+
+	            imgNicPaths.add(newAvatarPath);
+	            System.out.println(imgNicPaths);
+	           imgNicPathsString = String.join(";", imgNicPaths);
+	            System.out.println(imgNicPathsString);
 		}
 
 	}
