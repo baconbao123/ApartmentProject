@@ -33,7 +33,7 @@ public class FeesDao {
 				var cs = con.prepareStatement("{call paginateFees(?,?,?,?,?,?,?)}");
 				)
 		{
-			if(filter) {
+			if(filter) { 
 				cs.setInt(1,pageNumber);
 				cs.setInt(2,rowOfPage);
 				if(room == null) {

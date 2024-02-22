@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Date;
+
 public class Apartment {
 	private int id;
 	private int roomNumber;
@@ -10,6 +12,7 @@ public class Apartment {
 	private String convenient;
 	private String utilities;
 	private int floor;
+	private Date timePayment;
 
 	
 	public int getId() {
@@ -20,7 +23,7 @@ public class Apartment {
 		this.id = id;
 	}
 
-	public int getRoomNumber() {
+	public int getRoomNumber() { 
 		return roomNumber;
 	}
 
@@ -85,8 +88,22 @@ public class Apartment {
 	}
 
 	public Apartment() {};
+	
+	public Apartment(int id, int roomNumber) {
+        this.id = id;
+        this.roomNumber = roomNumber;
+    }
+	public Date getTimePayment() {
+		return timePayment;
+	}
+
+	public void setTimePayment(Date timePayment) {
+		this.timePayment = timePayment;
+	}
+
 	public Apartment(int id, int roomNumber, String type, boolean status, int people, int peopleMaximun,
-			String convenient, String utilities, int floor) {
+			String convenient, String utilities, int floor, Date timePayment) {
+		super();
 		this.id = id;
 		this.roomNumber = roomNumber;
 		this.type = type;
@@ -96,7 +113,15 @@ public class Apartment {
 		this.convenient = convenient;
 		this.utilities = utilities;
 		this.floor = floor;
+		this.timePayment = timePayment;
 	}
 
+	@Override
+    public String toString() {
+        return String.valueOf(roomNumber);
+    }
+	
+	
+	
 	
 }

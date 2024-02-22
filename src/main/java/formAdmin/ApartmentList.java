@@ -13,13 +13,13 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Color;
 import javax.swing.JTextPane;
 import component.CardApartment;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ApartmentList extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JLabel lblLableAvalabel;
-	private JLabel lblRented;
-	private JLabel lblNotYetPaid;
 	private JLabel lblNewLabel;
 	private JTextPane colorPaid;
 	private JLabel lblPaid;
@@ -28,6 +28,7 @@ public class ApartmentList extends JPanel {
 	private JTextPane colorAvailable;
 	private JLabel lblRented_2;
 	private CardApartment cardApartment;
+	private ApartmentList apList;
 
 	/**
 	 * Create the panel.
@@ -35,15 +36,6 @@ public class ApartmentList extends JPanel {
 	public ApartmentList() {
 		setBorder(null);
 		setBounds(0, 0, 1050, 800);
-		
-		lblLableAvalabel = new JLabel("Available Room: " + 123);
-		lblLableAvalabel.setFont(new Font("Arial", Font.PLAIN, 14));
-		
-		lblRented = new JLabel("Rented: " + 1);
-		lblRented.setFont(new Font("Arial", Font.PLAIN, 14));
-		
-		lblNotYetPaid = new JLabel("Not yet paid: " + 0);
-		lblNotYetPaid.setFont(new Font("Arial", Font.PLAIN, 14));
 		
 		lblNewLabel = new JLabel("");
 		lblNewLabel.setBackground(new Color(46, 204, 113));
@@ -72,20 +64,13 @@ public class ApartmentList extends JPanel {
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(33)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED, 1017, Short.MAX_VALUE)
 							.addComponent(lblNewLabel))
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(8)
-									.addComponent(lblLableAvalabel, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(lblRented, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(lblNotYetPaid, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 272, Short.MAX_VALUE)
 									.addComponent(colorPaid, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(lblPaid, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
@@ -96,7 +81,8 @@ public class ApartmentList extends JPanel {
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(colorAvailable, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(lblRented_2, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))
+									.addComponent(lblRented_2, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED))
 								.addComponent(cardApartment, GroupLayout.DEFAULT_SIZE, 986, Short.MAX_VALUE))
 							.addGap(31))))
 		);
@@ -105,37 +91,24 @@ public class ApartmentList extends JPanel {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(39)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblRented_2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+								.addComponent(colorAvailable, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblRented_1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(lblPaid, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(colorRented, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addPreferredGap(ComponentPlacement.RELATED))
+						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(colorPaid, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
 							.addComponent(lblNewLabel)
-							.addGap(28))
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-							.addComponent(lblRented_2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-							.addComponent(colorAvailable, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblRented_1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(lblPaid, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(colorRented, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblNotYetPaid, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblRented, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblLableAvalabel)))
-					.addPreferredGap(ComponentPlacement.RELATED)
+							.addGap(34)))
 					.addComponent(cardApartment, GroupLayout.PREFERRED_SIZE, 671, GroupLayout.PREFERRED_SIZE)
 					.addGap(25))
 		);
 		setLayout(groupLayout);
-		initData();
-	}
-
-	private void initData() {
-		initCardRoomRented();
-		
-	}
-
-	private void initCardRoomRented() {
-		
 		
 	}
 }

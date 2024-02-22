@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -27,7 +28,7 @@ public class UserDao {
 	public void insertRenter(Users user) {
 		try (
 				var con = ConnectDB.getConnect();
-				var cs = con.prepareCall("{call addRenter(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+				var cs = con.prepareCall("{call addRenter(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 			) 
 		{
 			cs.setString(1, user.getAvatar());
@@ -39,9 +40,10 @@ public class UserDao {
 			cs.setString(7, user.getNic());
 			cs.setString(8, user.getiAuthority());
 			cs.setString(9, user.getImgIAuthority());
-			cs.setNull(10, java.sql.Types.NVARCHAR); // email
-			cs.setNull(11, java.sql.Types.NVARCHAR); // password
+			cs.setString(10, user.getEmail()); // email
+			cs.setString(11, "123"); // password
 			cs.setNull(12, java.sql.Types.BIT); // is_active
+			cs.setTimestamp(13, new java.sql.Timestamp(System.currentTimeMillis()));
 			cs.executeUpdate();
 			System.out.println("insert success");
 		} catch (Exception e) {
@@ -51,7 +53,7 @@ public class UserDao {
 	
 	public void updateUser(Users user) {
 		try 
-		(
+		( 
 			var con = ConnectDB.getConnect();
 			var cs = con.prepareCall("{call upUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 		)
@@ -132,6 +134,61 @@ public class UserDao {
 		}
 		return list;
 	}
+	
+	public List<Users> selRenterNameInfor() {
+		List<Users> list = new ArrayList<>();
+		try 
+		(
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call selectRenterName()}");
+		)
+		{
+			
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				var renter = new Users();
+				renter.setId(rs.getInt("id"));
+				renter.setName(rs.getString("name"));
+				renter.setPhone(rs.getString("phone"));
+				renter.setDob(rs.getDate("dob"));
+				renter.setNic(rs.getString("nic"));
+				list.add(renter);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public List<Users> selRoomateInFor(List<Integer> idList) {
+		List<Users> list = new ArrayList<>();
+		try 
+		(
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call selectRenterName()}");
+		)
+		{
+			
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				int roomateId = rs.getInt("id");
+				if(idList.contains(roomateId)) {
+					var renter = new Users();
+					renter.setId(rs.getInt("id"));
+					renter.setName(rs.getString("name"));
+					renter.setPhone(rs.getString("phone"));
+					renter.setDob(rs.getDate("dob"));
+					renter.setNic(rs.getString("nic"));
+					list.add(renter);
+				}
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	
 	public int countRenter() {
 		int count = 0;

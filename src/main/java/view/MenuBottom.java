@@ -12,6 +12,7 @@ import component.Login;
 import dao.UserDao;
 import entity.Users;
 import main.AdminMain;
+import main.UserMain;
 
 import java.awt.Font;
 import java.awt.Graphics;
@@ -32,6 +33,7 @@ public class MenuBottom extends JPanel {
 	private JPanel panel;
 	
 	
+	private int id = Login.getId();
 
 	public JLabel getLblIcon() {
 		return lblIcon;
@@ -82,7 +84,13 @@ public class MenuBottom extends JPanel {
 		lblIcon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				showLoginScreen();
+				if(id == 2) {
+					showLoginScreen();
+				} else {
+					showLoginUser();
+				}
+				
+				
 			}
 
 		});
@@ -123,6 +131,14 @@ public class MenuBottom extends JPanel {
 	    login.setVisible(true);
 	    login.setLocationRelativeTo(main);
 	    main.dispose();
+	}
+	
+	private void showLoginUser() {
+		UserMain main = (UserMain) SwingUtilities.getWindowAncestor(this);
+		Login login = new Login();
+		login.setVisible(true);
+		login.setLocationRelativeTo(null);
+		main.dispose();
 	}
 
 	

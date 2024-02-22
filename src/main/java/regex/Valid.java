@@ -11,4 +11,11 @@ public class Valid {
 		}
 		return fielName + mess;
 	}
+	
+	public static String validateInputWithNOEmpty(String input, String regex, String fielName, String mess) {
+		if(input.isEmpty() || !matchesPattern(input, regex)) {
+			return fielName + mess;
+		}
+		return null;
+	}
 }

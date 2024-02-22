@@ -31,7 +31,7 @@ public class AppStateManager {
         }
         return null;
     }
-
+ 
     public static Map<Integer, RoomState> loadAppState() {
         try (FileInputStream fis = new FileInputStream(FILE_PATH);
              ObjectInputStream ois = new ObjectInputStream(fis)) {

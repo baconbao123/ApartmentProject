@@ -5,6 +5,9 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -40,7 +43,6 @@ public class UserMain extends JFrame {
 	private Menu menu;
 	private Header header;
 	private Animator animator;
-	private AdminMain adMain = new AdminMain();
 	private Login login;
 
 	public Login getLogin() {
@@ -59,10 +61,8 @@ public class UserMain extends JFrame {
 		this.menu = menu;
 	}
 
-	public AdminMain getAdMain() {
-		return adMain;
-	}
-
+	
+ 
 	/**
 	 * Launch the application.
 	 */
@@ -73,7 +73,7 @@ public class UserMain extends JFrame {
 					UserMain frame = new UserMain();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
-					frame.adMain.initMoving(frame);
+					frame.initMoving(frame);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -131,6 +131,7 @@ public class UserMain extends JFrame {
 
 			}
 		});
+		
 		menu.addEventShowPopup(new EventShowPopupMenu() {
 
 			@Override
@@ -182,6 +183,28 @@ public class UserMain extends JFrame {
 				}
 			}
 		});
+		mainForm.showForm(new Home());
 	}
-
+	
+	private int x;
+	private int y;
+	
+	public void initMoving(JFrame frame) {
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent me) {
+				x = me.getXOnScreen() - frame.getX();
+			}
+		});
+		
+		addMouseMotionListener(new MouseMotionListener() {
+			
+			@Override
+			public void mouseMoved(MouseEvent e) {};
+			
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				frame.setLocation(e.getXOnScreen() - x, e.getYOnScreen() - y);
+			}
+		});
+	}
 }

@@ -13,15 +13,15 @@ import javax.swing.border.EmptyBorder;
 
 import dao.ApartmentDao;
 import entity.Apartment;
-import formAdView.ViewRoomApart;
 import formAdView.ViewRoomApartNoBtn;
 import formAdView.ViewRoomRenters;
+import formEnterAd.FrameAddContract;
+import formEnterAd.FrameAddMoney;
 import formEnterAd.FrameAddRenter;
+import formEnterAd.FrameContract;
 import formEnterAd.FrameAddRoom;
+import formUpdateAd.FrameContractDisconnect;
 import formUpdateAd.FrameUpApart;
-import formEnterAd.FormAdd;
-import formEnterAd.FormAddContract;
-import formEnterAd.FormViewAddRoom;
 
 import java.awt.Font;
 import java.awt.GradientPaint;
@@ -29,6 +29,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +47,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class CardRoom extends JPanel {
-
+ 
 	private static final long serialVersionUID = 1L;
 	private JLabel lblIconRoom;
 	private JLabel lblRoomNumber;
@@ -53,7 +56,7 @@ public class CardRoom extends JPanel {
 	private JLabel lblIconMoney;
 	private JLabel lblPrice;
 	private JLabel lblIconPeople;
-	private JLabel lblRenterInRoom;
+	private JLabel lblMaxPeople;
 	public JPanel CardButton;
 	private JPanel CardBtnAvailable;
 	private JButton btnViewRoom;
@@ -69,11 +72,26 @@ public class CardRoom extends JPanel {
 	private int currentApartNum;
 	private int currentapfloor;
 	private int idCurrent;
+	private JLabel lblPeopleInRoom;
+	private String typeRoom;
+	private int peopleMax;
+	private String inforRoomate;
+	private String imgContracts;
+	private Boolean conStatus;
+	private Date fromDateCon;
+	private Date toDateCon;
+	private int idCon;
+	private String idFeeAll;
+//	private int idFee;
+//	private float totalMoneyMoth;
+	private List<LocalDate> timePayment = new ArrayList<>();
+	private List<Float> totalMoneys = new ArrayList<>();
+	private List<Integer> idFees = new ArrayList<Integer>();
 
 	public CardRoom getCardRoom() {
 		return cardRoom;
 	}
-
+ 
 	public void setCardRoom(CardRoom cardRoom) {
 		this.cardRoom = cardRoom;
 	}
@@ -96,7 +114,147 @@ public class CardRoom extends JPanel {
 	public void setIdApartRoom(int idCurrent) {
 		this.idCurrent = idCurrent;
 	}
+	
+	//get Type Room
+	public String getTypeRoom() {
+		return typeRoom;
+	}
+	
+	public void setTypeRoom(String typeRoom) {
+		this.typeRoom = typeRoom;
+	}
+	
+	//get Max People
+	public int getPeopleMax() {
+		return peopleMax;
+	}
 
+	public void setPeopleMax(int peopleMax) {
+		this.peopleMax = peopleMax;
+	}
+	
+	// get id Con
+	public int getIdCon() {
+		return idCon;
+	}
+
+	public void setIdCon(int idCon) {
+		this.idCon = idCon;
+	}
+	
+
+	//get id Roomate
+	public String getInforRoomate() {
+		return inforRoomate;
+	}
+	public void setInforRoomate(String inforRoomate) {
+		this.inforRoomate = inforRoomate;
+	}
+	
+	// get status contract
+	public Boolean getConStatus() {
+		return conStatus;
+	}
+
+	public void setConStatus(Boolean conStatus) {
+		this.conStatus = conStatus;
+	}
+	
+	//get from date contract
+	public Date getFromDateCon() {
+		return fromDateCon;
+	}
+
+	public void setFromDateCon(Date fromDateCon) {
+		this.fromDateCon = fromDateCon;
+	}
+	
+	// get to Date contract
+	public Date getToDateCon() {
+		return toDateCon;
+	}
+
+	public void setToDateCon(Date toDateCon) {
+		this.toDateCon = toDateCon;
+	}
+	
+	
+	//get imgs contract
+	public String getImgContracts() {
+		return imgContracts;
+	}
+
+	public void setImgContracts(String imgContracts) {
+		this.imgContracts = imgContracts;
+	}
+	
+	// get id fee all
+	public String getIdFeeAll() {
+		return idFeeAll;
+	}
+
+	public void setIdFeeAll(String idFeeAll) {
+		this.idFeeAll = idFeeAll;
+	}
+	
+	// get id fee
+	public List<Integer> getIdFees() {
+		return idFees;
+	}
+
+	public void setIdFees(List<Integer> idFees) {
+		this.idFees = idFees;
+	}
+	
+	public void addIDFees(List<Integer> idFee) {
+		for(Integer id: idFee) {
+			if(!idFees.contains(id)) {
+				idFees.add(id);
+			};
+		}
+	}
+
+	// get time payment 
+	public List<LocalDate> getTimePayment() {
+		return timePayment;
+	}
+
+
+
+	public void setTimePayment(List<LocalDate> timePayment) {
+		this.timePayment = timePayment;
+	}
+	
+	public void addPaymentTime(List<LocalDate> paymentTimes) {
+	    for (LocalDate paymentTime : paymentTimes) {
+	        if (!timePayment.contains(paymentTime)) {
+	            timePayment.add(paymentTime);
+	        }
+	    }
+	}
+	
+	// get money payment
+	public void addMoneyPayment(List<Float> moneyPayments) {
+		for (Float paymentTime : moneyPayments) {
+	        if (!totalMoneys.contains(paymentTime)) {
+	        	totalMoneys.add(paymentTime);
+	        }
+	    }
+	}
+	
+	public List<Float> getTotalMoneys() {
+		return totalMoneys;
+	}
+
+	public void setTotalMoneys(List<Float> totalMoneys) {
+		this.totalMoneys = totalMoneys;
+	}
+	
+	
+
+	
+	
+	
 	public CardRoom() {
 		setBackground(Color.WHITE);
 		setBorder(null);
@@ -110,12 +268,12 @@ public class CardRoom extends JPanel {
 		CardButton.setLayout(new CardLayout(0, 0));
 
 		CardBtnAvailable = new JPanel();
-		CardBtnAvailable.setBackground(Color.WHITE);
+		CardBtnAvailable.setBackground(Color.WHITE); 
 		CardButton.add(CardBtnAvailable, "available");
 
 		btnViewRoom = new JButton("View");
 		btnEditRoom = new JButton("Edit");
-		btnAddRenter = new JButton("Add renter");
+		btnAddRenter = new JButton("Add Contract");
 
 		CardBtnRented = new JPanel();
 		CardBtnRented.setBackground(Color.WHITE);
@@ -126,7 +284,18 @@ public class CardRoom extends JPanel {
 		btnPayment = new JButton("Payment");
 
 		initComponent();
+//		callStateCard();
+		
+//		frame.setCardRoom(this);
 	}
+	
+	
+
+	
+
+	
+
+
 
 	// owner name
 	public void setOwnerTex(String ownerName) {
@@ -142,62 +311,52 @@ public class CardRoom extends JPanel {
 	public void setApartmenNumber(int roomNumber) {
 		String roomNumStr = String.valueOf(roomNumber);
 		roomNum.setText(roomNumStr);
-	}
+	} 
 
 	// set people
-	public void setPeopleNumber(int peopleNumber, int peopleMaximum) {
-		lblRenterInRoom.setText(peopleNumber + "/" + peopleMaximum + " renters");
+	public void setPeopleNumber(int peopleMaximum) {
+		lblMaxPeople.setText("/ " + peopleMaximum + " renters");
+	}
+	
+	// people in room
+	public void setPeopleInRoom(String number) {
+		lblPeopleInRoom.setText(number);
 	}
 
 	// -----------------------------Available-------------------------------------------------
 	// btn add renter
 	protected void btnAddRenterActionPerformed(ActionEvent e) {
-		var addForm = new FormAdd();
-		addForm.setVisible(true);
-		addForm.setLocationRelativeTo(null);
-		addForm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		addForm.setNumApart(this);
-
-		FormAddContract formAddContract = addForm.getFormAddContract();
-		if (formAddContract != null) {
-			formAddContract.setApartNumber(String.valueOf(roomNum.getText()));
-			formAddContract.setAparId(String.valueOf(idCurrent));
-		}
-		
-		FormViewAddRoom formViewAdd = addForm.getFormViewAddRoom();
-		if(formViewAdd!=null) {
-			formViewAdd.setFloorApart(String.valueOf(currentapfloor));
-			formViewAdd.setNumApart(String.valueOf(currentApartNum));
-		}
+		var contract = new FrameContract();
+		contract.setVisible(true);
+		contract.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		contract.setLocationRelativeTo(null);
+		contract.setNumApart(String.valueOf(currentApartNum));
+		contract.setApartID(String.valueOf(idCurrent));
+		contract.setCardRoom(this);
 	}
 
 	// btn edit room
 	protected void btnEditRoomActionPerformed(ActionEvent e) {
-		var view = new ViewRoomApart();
-		view.setVisible(true);
-		view.setLocationRelativeTo(null);
-		view.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		view.setRoomNum(currentApartNum);
-		view.setFloorApart(String.valueOf(currentapfloor));
-		view.setIDCurrent(String.valueOf(idCurrent));
+		var add = new FrameAddRoom();
+		add.setVisible(true);
+		add.setLocationRelativeTo(null);
+		add.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		add.setRoomNum(currentApartNum);
+		add.setFloorApart(String.valueOf(currentapfloor));
+		add.setIDCurrent(String.valueOf(idCurrent));
 
-		FrameAddRoom frameRoom = view.getFrameRoom();
-		if (frameRoom != null) {
-			frameRoom.setFloorApartNum(String.valueOf(currentapfloor));
-			System.out.println("Id " + idCurrent);
-		}
-
+		
 		var dao = new ApartmentDao();
 		List<Apartment> apartments = dao.selectApartment();
-		for (Apartment apartment : apartments) {
-			if (apartment.getRoomNumber() == currentApartNum) {
-				view.displayConvenient(apartment.getConvenient());
-				view.showMaxPeople(apartment.getPeopleMaximun());
-				view.showTypeRoom(apartment.getType());
-				view.displayUlti(apartment.getUtilities());
+		for(Apartment apart: apartments) {
+			if(apart.getRoomNumber() == currentApartNum) {
+				add.displayConvenient(apart.getConvenient());
+				add.displayUlti(apart.getUtilities());
 				break;
 			}
+			
 		}
+
 
 	}
 
@@ -210,6 +369,7 @@ public class CardRoom extends JPanel {
 		view.setRoomNum(currentApartNum);
 		view.setFloorApart(String.valueOf(currentapfloor));
 		view.setIDCurrent(String.valueOf(idCurrent));
+		
 
 		var dao = new ApartmentDao();
 		List<Apartment> apartments = dao.selectApartment();
@@ -230,32 +390,53 @@ public class CardRoom extends JPanel {
 	// -----------------------------Rented-------------------------------------------------
 	// btn payment
 	protected void btnPaymentActionPerformed(ActionEvent e) {
-		int roomNum = getCurrentApartNum();
-		int result = JOptionPane.showConfirmDialog(null, "Confirm payment for room number " + roomNum);
-		if (result == JOptionPane.YES_OPTION) {
-			AppStateManager.saveAppState(roomNum, new Color(46, 204, 113), "rented");
-			setBackgroundColor(new Color(46, 204, 113));
-			System.out.println(roomNum);
-			btnPayment.setEnabled(false);
-		}
+		var addPaymen = new FrameAddMoney();
+		addPaymen.setVisible(true);
+		addPaymen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		addPaymen.setLocationRelativeTo(null);
+		
+		System.out.println("id Fee" + idFees);
+		 
+		addPaymen.setTimePayments(timePayment);
+		addPaymen.setTotalMoneys(totalMoneys);
+		addPaymen.setIdFees(idFees);
+		addPaymen.setBtnPayMonthListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            addPaymen.btnPayMonthActionPerformed(null);
+	        }
+	    });
+		
+		addPaymen.setBtnPayAllListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addPaymen.setBtnPayAllListener(null);
+				
+			}
+		});
+		addPaymen.setMoneyAll(Float.parseFloat(lblPrice.getText()));
+		addPaymen.setIdFeeAll(idFeeAll);
 
 	}
-
+ 
 	// btn checkout
 	protected void btnCheckOutActionPerformed(ActionEvent e) {
-		int roomNum = getCurrentApartNum();
-		int result = JOptionPane.showConfirmDialog(null, "Check-out confirmation for Room " + roomNum);
-		if (result == JOptionPane.YES_OPTION) {
-
-			String cardName = "available";
-			AppStateManager.saveAppState(roomNum, new Color(255, 255, 255), cardName);
-			setBackgroundColor(new Color(255, 255, 255));
-
-			CardLayout cardLayout = (CardLayout) CardButton.getLayout();
-			cardLayout.show(CardButton, "available");
-
-		}
-
+		String apartNum = String.valueOf(currentApartNum);
+		
+		var frame = new FrameContractDisconnect();
+		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		frame.setApartNum(apartNum);
+		frame.setOwneraName(lblOwner.getText());
+		frame.setImgCon(imgContracts);
+		frame.setFromDateCon(fromDateCon);
+		frame.setToDateCon(toDateCon);
+		frame.setRoomateRoom(inforRoomate);
+		frame.setIDCon(String.valueOf(idCon));
+		frame.setCardRoom(this);
 	}
 
 	// btn view renter
@@ -265,18 +446,42 @@ public class CardRoom extends JPanel {
 		view.setLocationRelativeTo(null);
 		view.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+		view.setApartNum(String.valueOf(currentApartNum));
+		view.setApartType(typeRoom);
+		view.setMaxPeople(String.valueOf(peopleMax));
+		view.setRoomateInfor(inforRoomate);
 	}
-
+	
+	// money
+	public void setMoneyApart(String money) {
+		lblPrice.setText(money);
+	}
+	
+//	private void callStateCard() {
+//		if(Integer.parseInt(lblPrice.getText()) == 0) {
+//			CardLayout layout = (CardLayout) CardButton.getLayout();
+//		    if ("rented".equals(layout.toString())) { // Kiểm tra nếu layout là "rented"
+//
+//				layout.show(CardButton, "rented");
+////		        setBackgroundColor(Color.PINK);
+//		    	int roomNumber = cardRoom.getCurrentApartNum();
+//		    	System.out.println(cardRoom.getCurrentApartNum());
+//		    	AppStateManager.saveAppState(roomNumber, new Color(46, 204, 113), "rented");
+//		    }
+//		} else if (Integer.parseInt(lblPrice.getText()) > 0){
+//			CardLayout layout = (CardLayout) CardButton.getLayout();
+//			if ("rented".equals(layout.toString())) { 
+//				int roomNumber = cardRoom.getCurrentApartNum();
+//		    	AppStateManager.saveAppState(roomNumber, new Color(39, 158, 255), "rented");
+//			}
+//		}
+//		
+//	}
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
+	 
 	
 	
 	
@@ -361,10 +566,10 @@ public class CardRoom extends JPanel {
 		lblIconPeople = new JLabel("");
 		lblIconPeople.setIcon(new ImageIcon(CardRoom.class.getResource("/icon/users(1).png")));
 
-		lblRenterInRoom = new JLabel("2/4 renter");
-		lblRenterInRoom.setForeground(Color.BLACK);
-		lblRenterInRoom.setFont(new Font("Arial", Font.BOLD, 12));
-		lblRenterInRoom.setBackground(Color.BLACK);
+		lblMaxPeople = new JLabel("/ 4 renters");
+		lblMaxPeople.setForeground(Color.BLACK);
+		lblMaxPeople.setFont(new Font("Arial", Font.BOLD, 12));
+		lblMaxPeople.setBackground(Color.BLACK);
 
 		btnViewRoom.setFocusable(false);
 		btnViewRoom.setFont(new Font("Arial", Font.BOLD, 12));
@@ -431,50 +636,9 @@ public class CardRoom extends JPanel {
 				btnCheckOutActionPerformed(e);
 			}
 		});
-
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout
-				.createSequentialGroup().addContainerGap()
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup().addGap(24)
-								.addComponent(lblIconRoom, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-								.addGap(18).addComponent(lblRoomNumber).addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(roomNum, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup().addGap(24)
-								.addComponent(lblIconOwner, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addComponent(lblOwner, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup().addGap(24)
-								.addComponent(lblIconMoney, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addComponent(lblPrice, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup().addGap(24)
-								.addComponent(lblIconPeople, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-								.addGap(19).addComponent(lblRenterInRoom, GroupLayout.PREFERRED_SIZE, 131,
-										GroupLayout.PREFERRED_SIZE))
-						.addComponent(CardButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
-				.addContainerGap()));
-		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout
-				.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblIconRoom, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblRoomNumber, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-								.addComponent(roomNum, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)))
-				.addGap(21)
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblIconOwner, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-						.addGroup(groupLayout.createSequentialGroup().addGap(2).addComponent(lblOwner)))
-				.addGap(18)
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblIconMoney, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-						.addGroup(groupLayout.createSequentialGroup().addGap(2).addComponent(lblPrice)))
-				.addGap(18)
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblIconPeople, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblRenterInRoom, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
-				.addGap(18).addComponent(CardButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap()));
+		
+		lblPeopleInRoom = new JLabel("2");
+		lblPeopleInRoom.setFont(new Font("Arial", Font.BOLD, 12));
 
 		GroupLayout gl_CardBtnAvailable = new GroupLayout(CardBtnAvailable);
 		gl_CardBtnAvailable.setHorizontalGroup(gl_CardBtnAvailable.createParallelGroup(Alignment.LEADING)
@@ -490,7 +654,6 @@ public class CardRoom extends JPanel {
 						.addComponent(btnEditRoom, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnAddRenter, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)));
 		CardBtnAvailable.setLayout(gl_CardBtnAvailable);
-		setLayout(groupLayout);
 
 		GroupLayout gl_CardBtnRented = new GroupLayout(CardBtnRented);
 		gl_CardBtnRented.setHorizontalGroup(
@@ -508,6 +671,70 @@ public class CardRoom extends JPanel {
 								.addComponent(btnView, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 								.addComponent(btnPayment, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)));
 		CardBtnRented.setLayout(gl_CardBtnRented);
+		GroupLayout groupLayout = new GroupLayout(this);
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(34)
+					.addComponent(lblIconRoom)
+					.addGap(18)
+					.addComponent(lblRoomNumber)
+					.addGap(6)
+					.addComponent(roomNum, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(34)
+					.addComponent(lblIconOwner)
+					.addGap(18)
+					.addComponent(lblOwner, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(34)
+					.addComponent(lblIconMoney)
+					.addGap(18)
+					.addComponent(lblPrice, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(34)
+					.addComponent(lblIconPeople)
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(10)
+							.addComponent(lblMaxPeople, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblPeopleInRoom, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(10)
+					.addComponent(CardButton, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+					.addGap(10))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(11)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblIconRoom)
+						.addComponent(lblRoomNumber, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+						.addComponent(roomNum, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
+					.addGap(21)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblIconOwner)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(2)
+							.addComponent(lblOwner)))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblIconMoney)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(2)
+							.addComponent(lblPrice)))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblIconPeople)
+						.addComponent(lblMaxPeople, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblPeopleInRoom, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(CardButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(7))
+		);
+		setLayout(groupLayout);
 	}
 
 }

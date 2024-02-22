@@ -26,8 +26,9 @@ public class RoomsDao {
 		
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		} 
 		
 		return list;
 	}
 }
+ 

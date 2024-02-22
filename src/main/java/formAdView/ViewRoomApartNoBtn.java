@@ -9,7 +9,6 @@ import javax.swing.border.EmptyBorder;
 import dao.ApartmentDao;
 import entity.Apartment;
 import formEnterAd.FrameAddContract;
-import formEnterAd.FrameAddRoom;
 import view.CardRoom;
 
 import javax.swing.GroupLayout;
@@ -54,14 +53,11 @@ public class ViewRoomApartNoBtn extends JFrame {
 	private JLabel lblUtilities;
 	private JLabel lblOccupants;
 	private JLabel ReadNumPeople;
-	private JLabel lblStatus;
-	private JRadioButton rdbRented;
-	private JRadioButton rdbAvailable;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JLabel lblType;
 	private JLabel ReadApartType;
 
-	private FrameAddRoom frameRoom;
+ 
 	private JLabel lblReadApNum;
 	private JLabel lblID;
 	private JLabel ReadID;
@@ -72,13 +68,6 @@ public class ViewRoomApartNoBtn extends JFrame {
 	private JScrollPane scrollUlti;
 	private JPanel panelUtilities;
 
-	public FrameAddRoom getFrameRoom() {
-		return frameRoom;
-	}
-
-	public void setFrameRoom(FrameAddRoom frameRoom) {
-		this.frameRoom = frameRoom;
-	}
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -99,7 +88,7 @@ public class ViewRoomApartNoBtn extends JFrame {
 	public ViewRoomApartNoBtn() {
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 565, 504);
+		setBounds(100, 100, 565, 455);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -115,12 +104,6 @@ public class ViewRoomApartNoBtn extends JFrame {
 		
 		// number people in room
 		ReadNumPeople = new JLabel("0");
-
-		rdbRented = new JRadioButton("Rented");
-		buttonGroup.add(rdbRented);
-
-		rdbAvailable = new JRadioButton("Available");
-		buttonGroup.add(rdbAvailable);
 		
 		scrollUlti = new JScrollPane();
 		panelUtilities = new JPanel();
@@ -332,22 +315,9 @@ public class ViewRoomApartNoBtn extends JFrame {
 		lblUtilities = new JLabel("Utilities");
 		lblUtilities.setFont(new Font("Arial", Font.BOLD, 14));
 		ReadNumPeople.setFont(new Font("Arial", Font.PLAIN, 14));
-		rdbRented.setFocusable(false);
-		rdbAvailable.setFocusable(false);
 
 		lblOccupants = new JLabel("Occupants count");
 		lblOccupants.setFont(new Font("Arial", Font.BOLD, 14));
-
-		lblStatus = new JLabel("Status");
-		lblStatus.setFont(new Font("Arial", Font.BOLD, 14));
-
-		rdbRented.setBackground(Color.WHITE);
-		rdbRented.setBorder(null);
-		rdbRented.setFont(new Font("Arial", Font.PLAIN, 14));
-
-		rdbAvailable.setFont(new Font("Arial", Font.PLAIN, 14));
-		rdbAvailable.setBorder(null);
-		rdbAvailable.setBackground(Color.WHITE);
 
 		lblType = new JLabel("Type");
 		lblType.setFont(new Font("Arial", Font.BOLD, 14));
@@ -399,34 +369,28 @@ public class ViewRoomApartNoBtn extends JFrame {
 							.addComponent(ReadNumFloor, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(5)
-							.addComponent(lblOccupants, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(ReadNumPeople)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(ReadNumOccupants_1, GroupLayout.PREFERRED_SIZE, 8, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(ReadMaxPeople, GroupLayout.PREFERRED_SIZE, 8, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(5)
-							.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-							.addGap(27)
-							.addComponent(rdbRented)
-							.addGap(18)
-							.addComponent(rdbAvailable, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(5)
-							.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-							.addGap(27)
-							.addComponent(ReadApartType, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(5)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblConvenient, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblUtilities, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))
 							.addGap(44)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(scrollUlti, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE))))
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(5)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
+									.addGap(27)
+									.addComponent(ReadApartType, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblOccupants, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(ReadNumPeople)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(ReadNumOccupants_1, GroupLayout.PREFERRED_SIZE, 8, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(ReadMaxPeople, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)))))
 					.addContainerGap(24, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -464,16 +428,11 @@ public class ViewRoomApartNoBtn extends JFrame {
 							.addComponent(ReadNumPeople)
 							.addComponent(ReadNumOccupants_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 							.addComponent(ReadMaxPeople, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-						.addComponent(rdbRented, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-						.addComponent(rdbAvailable, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 						.addComponent(ReadApartType, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-					.addGap(96))
+					.addGap(75))
 		);
 		
 		

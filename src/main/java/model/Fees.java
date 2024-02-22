@@ -11,13 +11,23 @@ public class Fees {
 	private float water;
 	private float electric;
 	private float rent;
-	private float other;
+	private float other; 
 	private float total;
 	private int water_id;
 	private int electric_id;
 	private int rent_id;
 	private int other_id;
 	private int total_int;
+	
+	private String idFeeAll;
+	
+	public String getIdFeeAll() {
+		return idFeeAll;
+	}
+	public void setIdFeeAll(String idFeeAll) {
+		this.idFeeAll = idFeeAll;
+	}
+	
 	public Fees(Integer id, Integer room, LocalDate time, String note, Boolean status, float water, float electric,
 			float rent, float other, float total, int water_id, int electric_id, int rent_id, int other_id,
 			int total_int) {

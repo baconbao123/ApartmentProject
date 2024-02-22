@@ -29,7 +29,7 @@ public class Rooms {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public String getType() {
+	public String getType() { 
 		return type;
 	}
 	public void setType(String type) {
@@ -56,7 +56,7 @@ public class Rooms {
 		this.type = type;
 		this.address = address;
 		this.floor = floor;
-	}
+	} 
 	public int getRooms() {
 		return rooms;
 	}

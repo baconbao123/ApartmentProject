@@ -93,7 +93,7 @@ public class Bill extends JPanel {
 	private static JTable tableReport = new JTable();
 	private static JTextField inputId;
 	/*
-	 * Create the panel.
+	 * Create the panel. 
 	 */
 	public Bill() {
 		setBackground(new Color(240, 240, 240));

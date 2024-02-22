@@ -26,6 +26,8 @@ import dao.UserDao;
 import entity.Users;
 import event.EventTableRenterAction;
 import formAdView.ViewInfoRenter;
+import formAdmin.ContractList.CenterRenderer;
+import formEnterAd.FrameAddRenter;
 import formUpdateAd.FrameUpRenter;
 import scrollbar.ModernScrollBarUI;
 import scrollbar.ScrollBarCustom;
@@ -89,6 +91,7 @@ public class RenterList extends JPanel {
 	private JComboBox cbbData;
 	private JLabel txtPageNumber;
 	private JButton btnReset;
+	private JButton btnAddRenter;
 //	private RenterList renterList;
 	
 	
@@ -131,6 +134,7 @@ public class RenterList extends JPanel {
 		});
 		
 		
+		
 		initComponent();
 		loadTable();
 	}
@@ -165,6 +169,7 @@ public class RenterList extends JPanel {
 		model.addColumn("Img Authority");
 		model.addColumn("Action");	
 		
+		
 		var dao = new UserDao();
 		totalOfRow = dao.countRenter();
 		totalPage = Math.ceil(totalOfRow.doubleValue()/rowOfPage.doubleValue());
@@ -175,7 +180,7 @@ public class RenterList extends JPanel {
 				if (renter.getAvatar() != null) {
 				    avatarIcon = new ImageIcon(renter.getAvatar());
 				} else {
-				    avatarIcon = new ImageIcon("images/account.png");
+				    avatarIcon = null;
 				}
 				
 			model.addRow(new Object[] {
@@ -319,23 +324,25 @@ public class RenterList extends JPanel {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
 		filterUsers.forEach(renter -> {
-			Image avatarIcon;
-			if (renter.getAvatar() != null) {
-			    avatarIcon = new ImageIcon(renter.getAvatar()).getImage(); 
-			} else {
-			    avatarIcon = new ImageIcon("images/account.png").getImage();
-			}
-		
-	        model.addRow(new Object[] {
-	        	renter.getId(),
-	        	avatarIcon,
-	            renter.getName(),
-	            renter.getGender(),
-	            renter.getPhone(),
-	            renter.getDob(),
-	            renter.getAddress(),
-	            renter.getNic()
-	        });
+				ImageIcon avatarIcon;
+				if (renter.getAvatar() != null) {
+				    avatarIcon = new ImageIcon(renter.getAvatar());
+				} else {
+				    avatarIcon = null;
+				}
+				
+			model.addRow(new Object[] {
+					renter.getId(),
+					avatarIcon,
+					renter.getName(),
+					renter.getGender(),
+					renter.getPhone(),
+					renter.getDob(),
+					renter.getAddress(),
+					renter.getNic(),
+					renter.getiAuthority(),
+					renter.getImgIAuthority(),
+			});
 		});
 	}
 	
@@ -373,7 +380,14 @@ public class RenterList extends JPanel {
 		loadTable();
 	}
 	
-	
+	protected void btnAddRenterActionPerformed(ActionEvent e) {
+		var add = new FrameAddRenter();
+		add.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		add.setVisible(true);
+		add.setLocationRelativeTo(null);
+		
+		
+	}
 	
 	
 	
@@ -485,6 +499,18 @@ public class RenterList extends JPanel {
 		btnReset.setFont(new Font("Arial", Font.BOLD, 15));
 		btnReset.setBorder(null);
 		btnReset.setBackground(new Color(143, 188, 143));
+		
+		btnAddRenter = new JButton("Add Renter");
+		btnAddRenter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnAddRenterActionPerformed(e);
+			}
+		});
+		btnAddRenter.setForeground(SystemColor.text);
+		btnAddRenter.setFont(new Font("Arial", Font.BOLD, 15));
+		btnAddRenter.setFocusable(false);
+		btnAddRenter.setBorder(null);
+		btnAddRenter.setBackground(new Color(100, 149, 237));
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -509,7 +535,9 @@ public class RenterList extends JPanel {
 							.addComponent(txtNIC, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 298, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+							.addComponent(btnAddRenter, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnHistory, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)))
 					.addGap(19))
 				.addGroup(groupLayout.createSequentialGroup()
@@ -530,7 +558,8 @@ public class RenterList extends JPanel {
 							.addComponent(txtNIC, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(btnHistory, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnAddRenter, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(TablePanel, GroupLayout.PREFERRED_SIZE, 652, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
@@ -541,8 +570,8 @@ public class RenterList extends JPanel {
 						.addComponent(btnPrevious, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 					.addGap(16))
 		);
-		groupLayout.linkSize(SwingConstants.VERTICAL, new Component[] {btnHistory, btnReset});
 		groupLayout.linkSize(SwingConstants.VERTICAL, new Component[] {btnPrevious, Next, cbbData});
+		groupLayout.linkSize(SwingConstants.VERTICAL, new Component[] {btnHistory, btnReset});
 		groupLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {btnPrevious, Next});
 		
 		
@@ -567,7 +596,5 @@ public class RenterList extends JPanel {
 
 	    return new ImageIcon(roundedImage);
 	}
-
-
-
+	
 }

@@ -1,4 +1,4 @@
-package main;
+	package main;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -128,7 +128,7 @@ public class AdminMain extends JFrame {
 				case 0: {
 					 mainForm.showForm(new Dashboard());
 					 break;
-				}
+				} 
 				case 1: {
 					switch (subMenuIndex) {
 					case 0: {
