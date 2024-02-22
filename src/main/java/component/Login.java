@@ -335,7 +335,7 @@ public class Login extends JFrame {
 			useMain.setVisible(true);
 			useMain.setLogin(this);
 			useMain.setLocationRelativeTo(null);
-			useMain.initMoving(useMain);
+//			useMain.initMoving(useMain);
 			this.setVisible(false);
 		}
 		

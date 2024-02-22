@@ -1,3 +1,15 @@
 /META-INF/
 /formAdmin/
 /formUser/
+/action/
+/component/
+/dao/
+/entity/
+/event/
+/icon/
+/main/
+/menu/
+/model/
+/table/
+/view/
+/common/
