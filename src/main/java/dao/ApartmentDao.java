@@ -8,7 +8,18 @@ import common.ConnectDB;
 import entity.Apartment;
 
 public class ApartmentDao {
+	private String module = "Management Apartment";
+	
+	public String getModule() {
+		return module;
+	}
+
+	public void setModule(String module) {
+		this.module = module;
+	}
+	
 	public void insertApart(Apartment apart) {
+		
 		try 
 		(
 			var con = ConnectDB.getConnect();
@@ -45,7 +56,7 @@ public class ApartmentDao {
 				var apart = new Apartment();
 				apart.setRoomNumber(rs.getInt("rooms"));
 				apart.setType(rs.getString("type"));
-				apart.setStatus(rs.getBoolean("status"));
+//				apart.setStatus(rs.getBoolean("status"));
 				apart.setPeople(rs.getInt("people"));
 				apart.setPeopleMaximun(rs.getInt("peopleMaximum"));
 				apart.setConvenient(rs.getString("convenient"));

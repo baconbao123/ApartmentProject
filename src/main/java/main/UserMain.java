@@ -40,7 +40,7 @@ public class UserMain extends JFrame {
 	private Menu menu;
 	private Header header;
 	private Animator animator;
-	private AdminMain adMain;
+	private AdminMain adMain = new AdminMain();
 	private Login login;
 
 	public Login getLogin() {

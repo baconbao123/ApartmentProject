@@ -46,18 +46,29 @@ import model.TableActionEvent;
 import model.tableBillEditor;
 import model.tableBillRender;
 import view.History;
+import view.ReportFee;
 import view.ShowEditFees;
 import view.ShowPayment;
+import view.TableReport;
 
 import java.awt.event.InputMethodListener;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
+import java.text.MessageFormat;
 import java.awt.event.InputMethodEvent;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
 import com.toedter.calendar.JDateChooser;
+
+
+
 import javax.swing.border.LineBorder;
+import javax.swing.border.EtchedBorder;
+
+import javax.swing.*;
+import javax.swing.text.*;
+import java.awt.*;
 
 public class Bill extends JPanel {
 
@@ -79,6 +90,8 @@ public class Bill extends JPanel {
 	private static JDateChooser to;
 	private static JDateChooser from;
 	private static GroupLayout groupLayout;
+	private static JTable tableReport = new JTable();
+	private static JTextField inputId;
 	/*
 	 * Create the panel.
 	 */
@@ -89,7 +102,7 @@ public class Bill extends JPanel {
 		setBounds(0, 0, 1100, 800);
 		
 		lblTitle = new JLabel("Payment Management");
-		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
 		
 		JButton btnHistory = new JButton("History");
 		btnHistory.setForeground(new Color(255, 255, 255));
@@ -180,7 +193,7 @@ public class Bill extends JPanel {
 		});
 		btnLast.setFont(new Font("Dialog", Font.BOLD, 15));
 		
-		 lblDisplay = new JLabel("Display");
+		lblDisplay = new JLabel("Display");
 		lblDisplay.setFont(new Font("Dialog", Font.BOLD, 15));
 		
 		JComboBox comboBox = new JComboBox();
@@ -228,13 +241,62 @@ public class Bill extends JPanel {
 				rowOfPage = 20;
 				pageNumber = 1;
 				filter = false;
+				selectStatus.setSelectedIndex(0);
 				loadData();
+				to.setDate(null);
+				from.setDate(null);
+				inputRoom.setText(null);
+				inputId.setText("");
 			}
 		});
 		btnReset.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		
+		JButton view = new JButton("View");
+		view.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				var frame = new JFrame();
+				JDialog popup = new JDialog(frame, "Report fees ", true);
+				var reportForm = new TableReport(tableReport);
+				popup.getContentPane().add(reportForm);
+				popup.setSize(1000, 480);
+		        popup.setLocationRelativeTo(frame);
+		        popup.setVisible(true);
+			}
+		});
+		view.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		
+		inputId = new JTextField();
+		 ((AbstractDocument) inputId.getDocument()).setDocumentFilter(new DocumentFilter() {
+	            @Override
+	            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+	                String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+	                if (newText.matches("\\d*")) { // chỉ cho phép nhập số
+	                    super.replace(fb, offset, length, text, attrs);
+	                } else {
+	                    Toolkit.getDefaultToolkit().beep(); // phát âm thanh cảnh báo khi nhập không hợp lệ
+	                }
+	            }
+
+	            @Override
+	            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+	                String newText = fb.getDocument().getText(0, fb.getDocument().getLength()) + string;
+	                if (newText.matches("\\d*")) { // chỉ cho phép nhập số
+	                    super.insertString(fb, offset, string, attr);
+	                } else {
+	                    Toolkit.getDefaultToolkit().beep(); // phát âm thanh cảnh báo khi nhập không hợp lệ
+	                }
+	            }
+	        });
+		inputId.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		inputId.setColumns(10);
+		inputId.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Id", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
@@ -248,52 +310,69 @@ public class Bill extends JPanel {
 							.addComponent(btnLast, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(34)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblTitle, GroupLayout.PREFERRED_SIZE, 381, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(inputRoom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(34)
-									.addComponent(selectStatus, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addComponent(from, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-									.addGap(29)
-									.addComponent(to, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 194, Short.MAX_VALUE)
-									.addComponent(btnFilter, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
-									.addGap(24)
-									.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
-									.addGap(30)
-									.addComponent(btnHistory, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblDisplay, GroupLayout.PREFERRED_SIZE, 234, GroupLayout.PREFERRED_SIZE)
 									.addGap(197)
 									.addComponent(inputPage, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED, 435, Short.MAX_VALUE)
 									.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE))
-								.addComponent(scrollTable, GroupLayout.DEFAULT_SIZE, 1031, Short.MAX_VALUE))))
+								.addComponent(scrollTable, GroupLayout.PREFERRED_SIZE, 1031, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(inputId, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+									.addGap(28)
+									.addComponent(inputRoom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(selectStatus, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(from, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(to, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(view, GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnFilter, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnReset, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnHistory, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)))))
 					.addGap(35))
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addGap(454)
+					.addComponent(lblTitle, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+					.addGap(460))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(55)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblTitle)
-							.addGap(33)
+							.addGap(67)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-									.addComponent(btnFilter, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+									.addComponent(btnHistory, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
 									.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
-									.addComponent(btnHistory, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
+									.addComponent(btnFilter, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
 								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-									.addComponent(from, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-									.addComponent(to, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))))
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(inputRoom, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
-							.addComponent(selectStatus, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)))
-					.addGap(38)
-					.addComponent(scrollTable, GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
+									.addComponent(to, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+									.addComponent(from, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(64)
+									.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(selectStatus, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(4)
+											.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+												.addComponent(inputRoom, GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+												.addComponent(inputId, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))))))
+							.addGap(38))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(37)
+							.addComponent(lblTitle, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addGap(76)
+							.addComponent(view, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+							.addGap(39)))
+					.addComponent(scrollTable, GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
 					.addGap(41)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(btnNext, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -322,6 +401,16 @@ public class Bill extends JPanel {
 	
 	@SuppressWarnings("null")
 	public  void init() {
+		var modelReport = new DefaultTableModel();
+		modelReport.addColumn("Room");
+		modelReport.addColumn("Total");
+		modelReport.addColumn("Electric fee");
+		modelReport.addColumn("Water fee");
+		modelReport.addColumn("Rental fee");
+		modelReport.addColumn("Other fee");
+		modelReport.addColumn("Time");
+		modelReport.addColumn("Note");
+		modelReport.addColumn("Status");
 		var model = new DefaultTableModel(){
 			@Override
 			 public Class<?> getColumnClass(int column){
@@ -366,11 +455,13 @@ public class Bill extends JPanel {
 		totalOfPage = Math.ceil(totalOfRow.doubleValue() / rowOfPage.doubleValue());
 		lblDisplay.setText("Display  "+(pageNumber*rowOfPage-rowOfPage)+" to "+((pageNumber*rowOfPage)>totalOfRow? totalOfRow :pageNumber*rowOfPage)+ " in "+ totalOfRow + " rows");
 		inputPage.setText(pageNumber.toString());
-		dao.getFees(pageNumber, rowOfPage, null,  null,  null,  null, filter).stream().forEach(fee-> {
+		dao.getFees(pageNumber, rowOfPage, null,  null,  null,  null, filter, null).stream().forEach(fee-> {
 			model.addRow(new Object[] {fee.getId(),fee.getRoom(),fee.getTotal(),fee.getElectric(),fee.getWater(),fee.getRent(),fee.getOther(),fee.getTime(),fee.getNote(),fee.getStatus(),"Action"});
+			modelReport.addRow(new Object[] {fee.getRoom(),fee.getTotal(),fee.getElectric(),fee.getWater(),fee.getRent(),fee.getOther(),fee.getTime(),fee.getNote(),fee.getStatus()?"Finished":"Haven't finished"});
 		});
 		
 		tableBill.setModel(model);
+		tableReport.setModel(modelReport);
 		event = new TableActionEvent() {
 			
 			@Override
@@ -392,29 +483,44 @@ public class Bill extends JPanel {
 				frame.setVisible(true);
 				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 			}
+			@Override 
+			public void report(int row) {
+				Integer id = (Integer) tableBill.getValueAt(row, 0);
+				JFrame frame = new JFrame();
+				showReport(frame,id);
+				frame.setVisible(true);
+				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+			}
 		};
 		tableBill.getColumnModel().getColumn(10).setCellEditor(new tableBillEditor(event));
 		tableBill.getColumnModel().getColumn(10).setCellRenderer(new tableBillRender());
-		tableBill.getColumnModel().getColumn(10).setPreferredWidth(133);
+		tableBill.getColumnModel().getColumn(10).setPreferredWidth(220);
 		tableBill.setRowHeight(50);
+		
 	}
 	
 	public static void loadData () {
 		var model =(DefaultTableModel) tableBill.getModel();	
+		var modelReport =(DefaultTableModel) tableReport.getModel();
 		var status = selectStatus.getSelectedItem().toString().equals("finished") ? "1":"0";
 		model.setRowCount(0);
+		modelReport.setRowCount(0);
 		var dao = new FeesDao();
 		totalOfRow = dao.total(inputRoom.getText(),status, from.getDate(), to.getDate(),filter);
 		totalOfPage = Math.ceil(totalOfRow.doubleValue() / rowOfPage.doubleValue());
 		lblDisplay.setText("Display  "+(pageNumber*rowOfPage-rowOfPage)+" to "+((pageNumber*rowOfPage)>totalOfRow? totalOfRow :pageNumber*rowOfPage)+ " in "+ totalOfRow + " rows");
-		dao.getFees(pageNumber, rowOfPage,  inputRoom.getText(),status, from.getDate(), to.getDate(),filter).stream().forEach(fee-> {
+		var id = inputId.getText().isEmpty() ? null : Integer.parseInt(inputId.getText());
+		dao.getFees(pageNumber, rowOfPage,  inputRoom.getText(),status, from.getDate(), to.getDate(),filter, id).stream().forEach(fee-> {
 			model.addRow(new Object[] {fee.getId(),fee.getRoom(),fee.getTotal(),fee.getElectric(),fee.getWater(),fee.getRent(),fee.getOther(),fee.getTime(),fee.getNote(),fee.getStatus(),"Action"});
+			modelReport.addRow(new Object[] {fee.getRoom(),fee.getTotal(),fee.getElectric(),fee.getWater(),fee.getRent(),fee.getOther(),fee.getTime(),fee.getNote(),fee.getStatus()?"Finished":"Haven't finished"});
 		});
 		tableBill.setModel(model);
+		tableReport.setModel(modelReport);
+
 		inputPage.setText(pageNumber.toString());
 		tableBill.getColumnModel().getColumn(10).setCellEditor(new tableBillEditor(event));
 		tableBill.getColumnModel().getColumn(10).setCellRenderer(new tableBillRender());
-		tableBill.getColumnModel().getColumn(10).setPreferredWidth(133);
+		tableBill.getColumnModel().getColumn(10).setPreferredWidth(220);
 		tableBill.setRowHeight(50);
 	}
 	
@@ -450,15 +556,22 @@ public class Bill extends JPanel {
 	        popup.setVisible(true);
 	}
 	
+	public static void showReport(Frame frameParent , int id) {
+		 JDialog popup = new JDialog(frameParent, "View report ", true);
+		   	var popupPanel = new ReportFee(id);
+	        popup.getContentPane().add(popupPanel);
+	        popup.setSize(800, 420);
+	        popup.setLocationRelativeTo(frameParent);
+	        popup.setVisible(true);
+	}
+	
 	public void syncFees() {
 		var feeDao = new FeesDao();
 		
-		LocalDate currentDate = LocalDate.now();
-//		LocalDate currentDate = LocalDate.parse("2023-11-29",DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//		LocalDate currentDate = LocalDate.now();
+		LocalDate currentDate = LocalDate.parse("2023-01-29",DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate futureDate = currentDate.plus(5,ChronoUnit.DAYS);
 		boolean isNewMonth = futureDate.getMonth() != currentDate.getMonth();
-		var dao = new RoomsDao();
-		dao.getRooms();
 		if(isNewMonth) {
 			feeDao.syncNewFeeMonth(futureDate);
 		}

@@ -1,6 +1,10 @@
 /META-INF/
-/common/
 /formAdmin/
-/icon/
-/view/
 /dao/
+/view/
+/model/
+/main/
+/menu/
+/formUser/
+/component/
+/event/

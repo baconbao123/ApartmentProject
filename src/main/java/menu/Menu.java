@@ -134,8 +134,7 @@ public class Menu extends JPanel {
 		addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/icon/group.png")), "Resident Management",
 				"Resident List", "Contract"));
 		addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/icon/love.png")), "Apartment Management"));
-		addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/icon/online-payment.png")), "Payment Management",
-				"Bills", "Reccuring Bill", "RI History"));
+		addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/icon/online-payment.png")), "Payment Management"));
 		addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/icon/notification.png")), "Notifications",
 				"All Notifications", "Sent", "Compose"));
 		addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/icon/cogwheel.png")), "Settings"));
