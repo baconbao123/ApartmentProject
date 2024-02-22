@@ -33,10 +33,13 @@ import javax.swing.border.SoftBevelBorder;
 import dao.UserDao;
 import main.AdminMain;
 import main.UserMain;
+import view.ShowForgetPwd;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
+import javax.swing.event.AncestorListener;
+import javax.swing.event.AncestorEvent;
 
 public class Login extends JFrame {
 
@@ -61,6 +64,7 @@ public class Login extends JFrame {
 	private JLabel lblStatusLoad;
 	private JLabel lblStatus;
 	private  static Integer id;
+	private JLabel lblNewLabel;
 	
 
 	
@@ -164,6 +168,7 @@ public class Login extends JFrame {
 		lblPassword.setFont(new Font("Arial", Font.BOLD, 13));
 		
 		btnSignIn = new JButton("Sign In");
+		btnSignIn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnSignIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnSignInActionPerformed(e);
@@ -186,44 +191,52 @@ public class Login extends JFrame {
 		lblStatusLoad.setForeground(Color.RED);
 		lblStatusLoad.setFont(new Font("Arial", Font.BOLD, 15));
 		
-		lblStatus = new JLabel("Status");
+		lblStatus = new JLabel("Status:");
 		lblStatus.setFont(new Font("Arial", Font.BOLD, 16));
 		lblStatus.setForeground(new Color(81, 162, 162));
+		lblNewLabel = new JLabel("Forgot Password ?");
+		lblNewLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabelMouseClicked(e);
+			}
+		});
+		
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(panelPic, GroupLayout.PREFERRED_SIZE, 501, GroupLayout.PREFERRED_SIZE)
+					.addGap(20)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(20)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addPreferredGap(ComponentPlacement.RELATED, 445, Short.MAX_VALUE)
+							.addComponent(lblLogoutLogin, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(95)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+									.addGroup(gl_contentPane.createSequentialGroup()
+										.addComponent(lblLable, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)
+										.addGap(18)
+										.addComponent(lblLogo, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE))
+									.addComponent(lblSign, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)
+									.addComponent(lblEnterYourEmail, GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+									.addComponent(lblUsername, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)
+									.addComponent(txtUser, GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+									.addComponent(lblPassword, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE))
+								.addComponent(txtPass, GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+								.addComponent(btnSignIn, GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+								.addComponent(lblStatusNoti, GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED, 445, Short.MAX_VALUE)
-									.addComponent(lblLogoutLogin, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(95)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-											.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(lblLable, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)
-												.addGap(18)
-												.addComponent(lblLogo, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE))
-											.addComponent(lblSign, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblEnterYourEmail, GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-											.addComponent(lblUsername, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)
-											.addComponent(txtUser, GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
-											.addComponent(lblPassword, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE))
-										.addComponent(txtPass, GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
-										.addComponent(btnSignIn, GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
-										.addComponent(lblStatusNoti, GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE))
-									.addGap(106))))
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblStatusLoad, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
-							.addGap(159))))
+									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
+									.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblStatusLoad, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)))
+							.addGap(106))))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -253,11 +266,13 @@ public class Login extends JFrame {
 					.addComponent(lblStatusNoti, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblStatusLoad, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-					.addGap(23)
+						.addComponent(lblStatusLoad, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+							.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)))
+					.addGap(32)
 					.addComponent(btnSignIn, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
 					.addComponent(lblLogoutLogin, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE))
 		);
 		
@@ -321,7 +336,9 @@ public class Login extends JFrame {
 		}
 		
 	}
-	
-	
-	
+
+	protected void lblNewLabelMouseClicked(MouseEvent e) {
+		ShowForgetPwd JframeForgetPwd = new ShowForgetPwd();
+		JframeForgetPwd.setVisible(true);
+	}
 }

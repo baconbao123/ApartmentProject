@@ -19,21 +19,27 @@ import component.Login;
 import dao.UserDao;
 import entity.Users;
 import view.ShowEditSetting;
+import view.ShowChangePwd;
 
 import java.awt.Color;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import java.awt.Cursor;
 
 public class Setting extends JPanel {
 
@@ -65,13 +71,12 @@ public class Setting extends JPanel {
 	private JLabel lblIa;
 	private JTextField txtiAu;
 	private JLabel lblImgauthority;
-	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_3;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JButton btnReloadData;
 	private JLabel lblAvatar;
 	private JLabel lblFrontSide;
 	private JLabel lblBackSide;
+	private JButton btnNewButton;
 
 	/**
 	 * Create the panel.
@@ -140,6 +145,19 @@ public class Setting extends JPanel {
 				lblAvatar.setBackground(new Color(255, 255, 255));
 				lblAvatar.setBounds(118, 124, 150, 150);
 				panel.add(lblAvatar);
+			}
+			{
+				btnNewButton = new JButton("Change password");
+				btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
+				btnNewButton.setBackground(new Color(135, 206, 250));
+				btnNewButton.setBounds(129, 402, 140, 34);
+				panel.add(btnNewButton);
+				btnNewButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						btnNewButtonActionPerformed(e);
+					}
+				});
 			}
 		}
 		{
@@ -263,6 +281,7 @@ public class Setting extends JPanel {
 		}
 		{
 			lblGender = new JLabel("Gender:");
+			lblGender.setBackground(new Color(30, 144, 255));
 			lblGender.setForeground(new Color(128, 128, 128));
 			lblGender.setHorizontalAlignment(SwingConstants.LEFT);
 			lblGender.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -287,6 +306,7 @@ public class Setting extends JPanel {
 		}
 		{
 			btnEditInfo = new JButton("Edit infor");
+			btnEditInfo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			btnEditInfo.setIcon(new ImageIcon(Setting.class.getResource("/icon/edit.png")));
 			btnEditInfo.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			btnEditInfo.addActionListener(new ActionListener() {
@@ -332,19 +352,8 @@ public class Setting extends JPanel {
 			panel_2.add(lblImgauthority);
 		}
 		{
-			lblNewLabel_2 = new JLabel("Front side");
-			lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_2.setBounds(579, 503, 74, 14);
-			panel_2.add(lblNewLabel_2);
-		}
-		{
-			lblNewLabel_3 = new JLabel("Back side");
-			lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_3.setBounds(763, 503, 74, 14);
-			panel_2.add(lblNewLabel_3);
-		}
-		{
 			btnReloadData = new JButton("Reload data");
+			btnReloadData.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			btnReloadData.setIcon(new ImageIcon(Setting.class.getResource("/icon/reload.png")));
 			btnReloadData.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -359,11 +368,13 @@ public class Setting extends JPanel {
 		}
 		{
 			lblFrontSide = new JLabel("");
+			lblFrontSide.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			lblFrontSide.setBounds(533, 407, 178, 92);
 			panel_2.add(lblFrontSide);
 		}
 		{
 			lblBackSide = new JLabel("");
+			lblBackSide.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			lblBackSide.setBounds(738, 407, 178, 92);
 			panel_2.add(lblBackSide);
 		}
@@ -374,16 +385,16 @@ public class Setting extends JPanel {
 		Users info = user.selUser(userId);
 
 		if (info != null) {
-			lblNameUser.setText(info.getName() != null ? info.getName().toUpperCase() : "null");
-			txtFullName.setText(info.getName() != null ? info.getName() : "null");
-			txtAddress.setText(info.getAddress() != null ? info.getAddress() : "null");
-			txtNIC.setText(info.getNic() != null ? info.getNic() : "null");
-			txtPhone.setText(info.getPhone() != null ? info.getPhone() : "null");
-			txtiAu.setText(info.getiAuthority() != null ? info.getiAuthority() : "null");
+			lblNameUser.setText(info.getName() != null ? info.getName().toUpperCase() : "");
+			txtFullName.setText(info.getName() != null ? info.getName() : "");
+			txtAddress.setText(info.getAddress() != null ? info.getAddress() : "");
+			txtNIC.setText(info.getNic() != null ? info.getNic() : "");
+			txtPhone.setText(info.getPhone() != null ? info.getPhone() : "");
+			txtiAu.setText(info.getiAuthority() != null ? info.getiAuthority() : "");
 			if (info.getDob() != null) {
 				txtDob.setText(info.getDob().toString());
 			} else {
-				txtDob.setText("null");
+				txtDob.setText("");
 			}
 			// check gender
 			String gender = info.getGender();
@@ -398,21 +409,21 @@ public class Setting extends JPanel {
 				rdbtnFemale.setSelected(false);
 			}
 
-			txtEmail.setText(info.getEmail() != null ? info.getEmail() : "null");
-			txtPwd.setText(info.getPw() != null ? info.getPw() : "null");
+			txtEmail.setText(info.getEmail() != null ? info.getEmail() : "");
+			txtPwd.setText(info.getPw() != null ? info.getPw() : "");
 		} else {
-			// Set all text fields to display "null"
-			txtFullName.setText("null");
-			txtAddress.setText("null");
-			txtNIC.setText("null");
-			txtPhone.setText("null");
-			txtDob.setText("null");
-			txtEmail.setText("null");
-			txtPwd.setText("null");
-			txtiAu.setText("null");
+			// Set all text fields to display ""
+			txtFullName.setText("");
+			txtAddress.setText("");
+			txtNIC.setText("");
+			txtPhone.setText("");
+			txtDob.setText("");
+			txtEmail.setText("");
+			txtPwd.setText("");
+			txtiAu.setText("");
 		}
-		if (info.getAvatar() != null || info.getAvatar() != "") {
-			ImageIcon originAvatarIcon = new ImageIcon(info.getAvatar());
+		if (info.getAvatar() == null || info.getAvatar().isEmpty()) {
+			ImageIcon originAvatarIcon = new ImageIcon("images/avatarDefaut.jpg");
 			Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 			// Load the image
 			ImageIcon imageIcon = new ImageIcon(imgAvatar);
@@ -420,7 +431,7 @@ public class Setting extends JPanel {
 			// Set the image icon on the label
 			lblAvatar.setIcon(imageIcon);
 		} else {
-			ImageIcon originAvatarIcon = new ImageIcon("images/avatarDefaut.jpg");
+			ImageIcon originAvatarIcon = new ImageIcon(info.getAvatar());
 			Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 			// Load the image
 			ImageIcon imageIcon = new ImageIcon(imgAvatar);
@@ -437,8 +448,8 @@ public class Setting extends JPanel {
 				String img1 = nicPathArray[0];
 				String img2 = nicPathArray[1];
 
-				ImageIcon icon1 = new ImageIcon(img2);
-				ImageIcon icon2 = new ImageIcon(img1);
+				ImageIcon icon1 = new ImageIcon(img1);
+				ImageIcon icon2 = new ImageIcon(img2);
 
 				Image scaledImage1 = icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 				Image scaledImage2 = icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
@@ -448,8 +459,24 @@ public class Setting extends JPanel {
 
 				lblFrontSide.setIcon(scaledIcon1);
 				lblBackSide.setIcon(scaledIcon2);
+				addMouseListenerImg(lblFrontSide, icon1);
+				addMouseListenerImg(lblBackSide, icon2);
 			}
 		}
+	}
+	private void addMouseListenerImg(JLabel label, ImageIcon img) {
+		label.addMouseListener((MouseListener) new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JDialog dialog = new JDialog();
+				JLabel imgLabel = new JLabel(new ImageIcon(img.getImage().getScaledInstance(600, 600, Image.SCALE_SMOOTH)));
+				dialog.getContentPane().add(imgLabel);
+				dialog.pack();
+				dialog.setVisible(true);
+				dialog.setLocationRelativeTo(null);
+				super.mouseClicked(e);
+			}
+		});
 	}
 
 	protected void loadData() {
@@ -458,14 +485,14 @@ public class Setting extends JPanel {
 		Users info = user.selUser(userId);
 		if (info != null) {
 
-			lblNameUser.setText(info.getName() != null ? info.getName().toUpperCase() : "null");
-			txtFullName.setText(info.getName() != null ? info.getName() : "null");
-			txtAddress.setText(info.getAddress() != null ? info.getAddress() : "null");
-			txtNIC.setText(info.getNic() != null ? info.getNic() : "null");
-			txtPhone.setText(info.getPhone() != null ? info.getPhone() : "null");
-			txtiAu.setText(info.getiAuthority() != null ? info.getiAuthority() : "null");
-			txtEmail.setText(info.getEmail() != null ? info.getEmail() : "null");
-			txtPwd.setText(info.getPw() != null ? info.getPw() : "null");
+			lblNameUser.setText(info.getName() != null ? info.getName().toUpperCase() : "");
+			txtFullName.setText(info.getName() != null ? info.getName() : "");
+			txtAddress.setText(info.getAddress() != null ? info.getAddress() : "");
+			txtNIC.setText(info.getNic() != null ? info.getNic() : "");
+			txtPhone.setText(info.getPhone() != null ? info.getPhone() : "");
+			txtiAu.setText(info.getiAuthority() != null ? info.getiAuthority() : "");
+			txtEmail.setText(info.getEmail() != null ? info.getEmail() : "");
+			txtPwd.setText(info.getPw() != null ? info.getPw() : "");
 			if (info.getDob() != null) {
 				txtDob.setText(info.getDob().toString());
 			}
@@ -517,13 +544,13 @@ public class Setting extends JPanel {
 			}
 		} else {
 			// Set all text fields to display "null"
-			txtFullName.setText("null");
-			txtAddress.setText("null");
-			txtNIC.setText("null");
-			txtPhone.setText("null");
-			txtDob.setText("null");
-			txtEmail.setText("null");
-			txtPwd.setText("null");
+			txtFullName.setText("");
+			txtAddress.setText("");
+			txtNIC.setText("");
+			txtPhone.setText("");
+			txtDob.setText("");
+			txtEmail.setText("");
+			txtPwd.setText("");
 		}
 
 	}
@@ -542,6 +569,10 @@ public class Setting extends JPanel {
 
 	protected void btnEditInfoActionPerformed(ActionEvent e) {
 		ShowEditSetting JframeShowEditSetting = new ShowEditSetting();
-
+		JframeShowEditSetting.setVisible(true);
+	}
+	protected void btnNewButtonActionPerformed(ActionEvent e) {
+		ShowChangePwd JFrameshowChangePwd = new ShowChangePwd();
+		JFrameshowChangePwd.setVisible(true);
 	}
 }

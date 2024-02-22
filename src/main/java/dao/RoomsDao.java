@@ -17,7 +17,7 @@ public class RoomsDao {
 				){
 			while(rs.next()) {
 				var room = new Rooms();
-				room.setRooms(rs.getInt("rooms"));
+				room.setRooms(rs.getInt("id"));
 				room.setConvenient(rs.getString("convenient"));
 				room.setAddress(rs.getString("address"));
 				room.setStatus(rs.getInt("status"));

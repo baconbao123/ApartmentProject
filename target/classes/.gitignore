@@ -1,6 +1,8 @@
-/META-INF/
-/common/
 /formAdmin/
-/icon/
+/table/
+/event/
+/action/
 /view/
 /dao/
+/META-INF/
+/entity/

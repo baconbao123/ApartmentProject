@@ -9,10 +9,13 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingUtilities;
 
 import component.Login;
+import dao.UserDao;
+import entity.Users;
 import main.AdminMain;
 
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
@@ -22,10 +25,11 @@ import java.awt.Cursor;
 public class MenuBottom extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private MenuImageAvatar menuImageAvatar;
 	private JLabel LblName;
 	private JLabel LblStatus;
 	private JLabel lblIcon;
+	private JLabel lblAvatar;
+	private JPanel panel;
 	
 	
 
@@ -40,22 +44,41 @@ public class MenuBottom extends JPanel {
 		setOpaque(false);
 		setBounds(0, 0, 230, 65);
 		
-		
-		
-		menuImageAvatar = new MenuImageAvatar();
-		menuImageAvatar.setIcon(new ImageIcon(MenuBottom.class.getResource("/icon/avatar7.png")));
+		panel = new JPanel();
+		panel.setBackground(new Color(255, 255, 255));
+		GroupLayout groupLayout = new GroupLayout(this);
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 54, Short.MAX_VALUE))
+		);
+		panel.setLayout(null);
 		
 		LblName = new JLabel("Baconbao");
+		LblName.setBounds(77, 5, 72, 19);
+		panel.add(LblName);
 		LblName.setForeground(SystemColor.controlShadow);
-		LblName.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 15));
+		LblName.setFont(new Font("Tahoma", Font.BOLD, 15));
 		
 		LblStatus = new JLabel("Admin");
+		LblStatus.setBounds(77, 27, 46, 19);
+		panel.add(LblStatus);
 		LblStatus.setForeground(SystemColor.controlShadow);
 		LblStatus.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
 		
 		lblIcon = new JLabel("");
+		lblIcon.setBounds(182, 0, 24, 46);
+		panel.add(lblIcon);
 		lblIcon.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblIcon.setIcon(new ImageIcon(MenuBottom.class.getResource("/icon/logout_1.png")));
+		lblAvatar = new JLabel("");
+		lblAvatar.setBounds(10, 5, 46, 41);
+		panel.add(lblAvatar);
 		lblIcon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -63,38 +86,34 @@ public class MenuBottom extends JPanel {
 			}
 
 		});
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(2)
-					.addComponent(menuImageAvatar, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
-					.addGap(10)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(LblName)
-						.addComponent(LblStatus, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-					.addComponent(lblIcon)
-					.addContainerGap())
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(1)
-					.addComponent(menuImageAvatar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(5))
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblIcon, GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(LblName)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(LblStatus, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
-		);
 		setLayout(groupLayout);
 		
+		UserDao user = new UserDao();
+		Integer userId = Login.getId();
+		Users info = user.selUser(userId);
+		if (info != null) {
+
+			LblName.setText(info.getEmail() != null ? info.getEmail() : "");
+			
+			if (info.getAvatar() == null || info.getAvatar().isEmpty()) {
+				ImageIcon originAvatarIcon = new ImageIcon("images/avatarDefaut.jpg");
+				Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+				// Load the image
+				ImageIcon imageIcon = new ImageIcon(imgAvatar);
+
+				// Set the image icon on the label
+				lblAvatar.setIcon(imageIcon);
+			} else {
+				ImageIcon originAvatarIcon = new ImageIcon(info.getAvatar());
+				Image imgAvatar = originAvatarIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+				// Load the image
+				ImageIcon imageIcon = new ImageIcon(imgAvatar);
+
+				// Set the image icon on the label
+				lblAvatar.setIcon(imageIcon);
+			}
+			
+		} 
 		
 	}
 

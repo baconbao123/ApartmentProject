@@ -30,8 +30,10 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
+import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.ButtonGroup;
 import java.awt.event.ActionListener;
@@ -43,6 +45,7 @@ import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -52,6 +55,10 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.Cursor;
 
 public class ShowEditSetting extends JFrame {
 
@@ -68,8 +75,6 @@ public class ShowEditSetting extends JFrame {
 	private JLabel lblDob;
 	private JLabel lblEmail;
 	private JTextField txtEmail;
-	private JLabel lblPwd;
-	private JTextField txtPwd;
 	private JLabel lblGender;
 	private JRadioButton rdbtnMale;
 	private JRadioButton rdbtnFemale;
@@ -127,7 +132,7 @@ public class ShowEditSetting extends JFrame {
 	 */
 	public ShowEditSetting() {
 		setTitle("Edit info");
-		setBounds(300, 150, 600, 803);
+		setBounds(300, 150, 600, 763);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		// create new Jpanel
 		JPanel panelSub = new JPanel();
@@ -167,7 +172,7 @@ public class ShowEditSetting extends JFrame {
 			lblNIC.setForeground(new Color(128, 128, 128));
 			lblNIC.setHorizontalAlignment(SwingConstants.LEFT);
 			lblNIC.setFont(new Font("Arial", Font.PLAIN, 12));
-			lblNIC.setBounds(28, 580, 24, 14);
+			lblNIC.setBounds(28, 550, 24, 14);
 		}
 		{
 			JTextField textField_3 = new JTextField();
@@ -208,18 +213,6 @@ public class ShowEditSetting extends JFrame {
 			txtEmail.setBounds(148, 284, 394, 31);
 		}
 		{
-			lblPwd = new JLabel("Password:");
-			lblPwd.setForeground(new Color(128, 128, 128));
-			lblPwd.setHorizontalAlignment(SwingConstants.LEFT);
-			lblPwd.setFont(new Font("Arial", Font.PLAIN, 12));
-			lblPwd.setBounds(28, 350, 59, 14);
-		}
-		{
-			txtPwd = new JTextField();
-			txtPwd.setColumns(10);
-			txtPwd.setBounds(148, 347, 394, 31);
-		}
-		{
 			lblGender = new JLabel("Gender:");
 			lblGender.setForeground(new Color(128, 128, 128));
 			lblGender.setHorizontalAlignment(SwingConstants.LEFT);
@@ -251,14 +244,12 @@ public class ShowEditSetting extends JFrame {
 		panelSub.add(lblDob);
 		panelSub.add(lblEmail);
 		panelSub.add(txtEmail);
-		panelSub.add(lblPwd);
-		panelSub.add(txtPwd);
 		panelSub.add(lblGender);
 		panelSub.add(rdbtnMale);
 		panelSub.add(rdbtnFemale);
 		{
 			txtNIC = new JTextField();
-			txtNIC.setBounds(148, 572, 394, 31);
+			txtNIC.setBounds(148, 542, 394, 31);
 			panelSub.add(txtNIC);
 			txtNIC.setColumns(10);
 		}
@@ -273,7 +264,7 @@ public class ShowEditSetting extends JFrame {
 			btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 12));
 			btnNewButton.setBackground(new Color(0, 128, 0));
 			btnNewButton.setForeground(new Color(255, 255, 255));
-			btnNewButton.setBounds(409, 681, 133, 37);
+			btnNewButton.setBounds(409, 651, 133, 37);
 			panelSub.add(btnNewButton);
 		}
 		{
@@ -287,7 +278,7 @@ public class ShowEditSetting extends JFrame {
 			lblAvatar.setHorizontalAlignment(SwingConstants.LEFT);
 			lblAvatar.setForeground(Color.GRAY);
 			lblAvatar.setFont(new Font("Arial", Font.PLAIN, 12));
-			lblAvatar.setBounds(31, 390, 59, 14);
+			lblAvatar.setBounds(33, 368, 59, 14);
 			panelSub.add(lblAvatar);
 		}
 		{
@@ -299,7 +290,7 @@ public class ShowEditSetting extends JFrame {
 			});
 			btnNewButton_1.setFont(new Font("Dialog", Font.PLAIN, 12));
 			btnNewButton_1.setBackground(new Color(238, 238, 238));
-			btnNewButton_1.setBounds(149, 386, 89, 23);
+			btnNewButton_1.setBounds(151, 364, 89, 23);
 			panelSub.add(btnNewButton_1);
 		}
 		{
@@ -307,7 +298,7 @@ public class ShowEditSetting extends JFrame {
 			lblImgauthority.setHorizontalAlignment(SwingConstants.LEFT);
 			lblImgauthority.setForeground(Color.GRAY);
 			lblImgauthority.setFont(new Font("Arial", Font.PLAIN, 12));
-			lblImgauthority.setBounds(31, 479, 82, 14);
+			lblImgauthority.setBounds(31, 450, 82, 14);
 			panelSub.add(lblImgauthority);
 		}
 		{
@@ -319,7 +310,7 @@ public class ShowEditSetting extends JFrame {
 			});
 			btnNewButton_2.setFont(new Font("Dialog", Font.PLAIN, 12));
 			btnNewButton_2.setBackground(new Color(238, 238, 238));
-			btnNewButton_2.setBounds(151, 476, 89, 23);
+			btnNewButton_2.setBounds(151, 447, 89, 23);
 			panelSub.add(btnNewButton_2);
 		}
 		{
@@ -327,51 +318,54 @@ public class ShowEditSetting extends JFrame {
 			lblIauthority.setHorizontalAlignment(SwingConstants.LEFT);
 			lblIauthority.setForeground(Color.GRAY);
 			lblIauthority.setFont(new Font("Arial", Font.PLAIN, 12));
-			lblIauthority.setBounds(28, 649, 101, 14);
+			lblIauthority.setBounds(28, 619, 101, 14);
 			panelSub.add(lblIauthority);
 		}
 		{
 			txtiAuthority = new JTextField();
 			txtiAuthority.setColumns(10);
-			txtiAuthority.setBounds(148, 638, 394, 31);
+			txtiAuthority.setBounds(148, 608, 394, 31);
 			panelSub.add(txtiAuthority);
 		}
 		{
 			dateDob = new JDateChooser();
 			dateDob.setDateFormatString("yyyy-MM-dd");
 			dateDob.setBounds(148, 189, 394, 31);
+			dateDob.getJCalendar().setMaxSelectableDate(Calendar.getInstance().getTime());
 			panelSub.add(dateDob);
 		}
 		{
 			lblNewLabel_1 = new JLabel("(Up to 1 image(.png or .jpg))");
 			lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 12));
 			lblNewLabel_1.setForeground(new Color(192, 192, 192));
-			lblNewLabel_1.setBounds(25, 417, 176, 16);
+			lblNewLabel_1.setBounds(27, 395, 176, 16);
 			panelSub.add(lblNewLabel_1);
 		}
 		{
 			lblNewLabel_2 = new JLabel("(Up to 2 image(.png or .jpg))");
 			lblNewLabel_2.setForeground(Color.LIGHT_GRAY);
 			lblNewLabel_2.setFont(new Font("Arial", Font.PLAIN, 12));
-			lblNewLabel_2.setBounds(27, 511, 176, 16);
+			lblNewLabel_2.setBounds(28, 484, 176, 16);
 			panelSub.add(lblNewLabel_2);
 		}
 		{
 			lblAvatarImg = new JLabel("");
 			lblAvatarImg.setBackground(Color.ORANGE);
-			lblAvatarImg.setBounds(274, 386, 78, 74);
+			lblAvatarImg.setBounds(272, 345, 89, 76);
 			panelSub.add(lblAvatarImg);
 		}
 		{
 			lblFront = new JLabel("");
+			lblFront.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			lblFront.setBackground(Color.ORANGE);
-			lblFront.setBounds(264, 479, 130, 81);
+			lblFront.setBounds(250, 432, 138, 86);
 			panelSub.add(lblFront);
 		}
 		{
 			lblBack = new JLabel("");
+			lblBack.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			lblBack.setBackground(Color.ORANGE);
-			lblBack.setBounds(412, 479, 130, 81);
+			lblBack.setBounds(398, 432, 138, 86);
 			panelSub.add(lblBack);
 		}
 		{
@@ -395,7 +389,7 @@ public class ShowEditSetting extends JFrame {
 			lblErrNIC.setVisible(false);
 			lblErrNIC.setForeground(Color.RED);
 			lblErrNIC.setFont(new Font("Arial", Font.PLAIN, 12));
-			lblErrNIC.setBounds(147, 608, 176, 16);
+			lblErrNIC.setBounds(147, 578, 176, 16);
 			panelSub.add(lblErrNIC);
 		}
 		{
@@ -414,13 +408,12 @@ public class ShowEditSetting extends JFrame {
 		Users info = user.selUser(userId);
 
 		if (info != null) {
-			txtFullName.setText(info.getName() != null ? info.getName() : "null");
-			txtAddress.setText(info.getAddress() != null ? info.getAddress() : "null");
-			txtNIC.setText(info.getNic() != null ? info.getNic() : "null");
-			txtPhone.setText(info.getPhone() != null ? info.getPhone() : "null");
-			txtEmail.setText(info.getEmail() != null ? info.getEmail() : "null");
-			txtPwd.setText(info.getPw() != null ? info.getPw() : "null");
-			txtiAuthority.setText(info.getiAuthority() != null ? info.getiAuthority() : "null");
+			txtFullName.setText(info.getName() != null ? info.getName() : "");
+			txtAddress.setText(info.getAddress() != null ? info.getAddress() : "");
+			txtNIC.setText(info.getNic() != null ? info.getNic() : "");
+			txtPhone.setText(info.getPhone() != null ? info.getPhone() : "");
+			txtEmail.setText(info.getEmail() != null ? info.getEmail() : "");
+			txtiAuthority.setText(info.getiAuthority() != null ? info.getiAuthority() : "");
 			if (info.getDob() != null) {
 				dateDob.setDate(info.getDob());
 			} else {
@@ -485,7 +478,6 @@ public class ShowEditSetting extends JFrame {
 					boolean isValueChanged = !currentValue.equals(previousValue);
 					previousValue = currentValue;
 					System.out.println(currentValue);
-					System.out.println("ph" + isPhone);
 					if (!Regex.isValidNumber(currentValue)) {
 						lblErrPhone.setVisible(true);
 						isPhone = false;
@@ -592,18 +584,19 @@ public class ShowEditSetting extends JFrame {
 
 					lblFront.setIcon(scaledIcon1);
 					lblBack.setIcon(scaledIcon2);
+					addMouseListenerImg(lblFront, icon1);
+					addMouseListenerImg(lblBack, icon2);
 				}
 			}
 
 		} else {
 			// Set all text fields to display "null"
-			txtFullName.setText("null");
-			txtAddress.setText("null");
-			txtNIC.setText("null");
-			txtPhone.setText("null");
+			txtFullName.setText("");
+			txtAddress.setText("");
+			txtNIC.setText("");
+			txtPhone.setText("");
 			dateDob.setDate(null);
-			txtEmail.setText("null");
-			txtPwd.setText("null");
+			txtEmail.setText("");
 		}
 
 		rdbtnMale.addActionListener(new ActionListener() {
@@ -646,7 +639,7 @@ public class ShowEditSetting extends JFrame {
 			if (confirmation == JOptionPane.YES_OPTION) {
 				// update info
 				Users info = user.updateInforUser(userId, txtAddress.getText(), txtPhone.getText(), gender,
-						newAvatarPath, txtFullName.getText(), txtPwd.getText(), txtEmail.getText(), imgNicPathsString,
+						newAvatarPath, txtFullName.getText(), null, txtEmail.getText(), imgNicPathsString,
 						txtiAuthority.getText(), txtNIC.getText(), sqlDate);
 				JOptionPane.showMessageDialog(null, "Update successfull!", "Success", JOptionPane.INFORMATION_MESSAGE);
 				JFrame frame = (JFrame) SwingUtilities.getWindowAncestor((Component) e.getSource());
@@ -767,5 +760,18 @@ public class ShowEditSetting extends JFrame {
 		}
 
 	}
-
+	private void addMouseListenerImg(JLabel label, ImageIcon img) {
+		label.addMouseListener((MouseListener) new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JDialog dialog = new JDialog();
+				JLabel imgLabel = new JLabel(new ImageIcon(img.getImage().getScaledInstance(600, 600, Image.SCALE_SMOOTH)));
+				dialog.getContentPane().add(imgLabel);
+				dialog.pack();
+				dialog.setVisible(true);
+				dialog.setLocationRelativeTo(null);
+				super.mouseClicked(e);
+			}
+		});
+	}
 }

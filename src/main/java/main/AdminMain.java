@@ -24,6 +24,7 @@ import event.EventShowPopupMenu;
 import formAdmin.Bill;
 import formAdmin.ContractList;
 import formAdmin.Dashboard;
+import formAdmin.Notification;
 import formAdmin.RenterList;
 import formUser.*;
 
@@ -150,6 +151,18 @@ public class AdminMain extends JFrame {
 					case 0:
 					{
 						mainForm.showForm(new Bill());
+						break;
+					}
+					default:
+						break;
+					}
+					break;
+				}
+				case 4: {
+					switch (subMenuIndex) {
+					case 0:
+					{
+						mainForm.showForm(new Notification());
 						break;
 					}
 					default:

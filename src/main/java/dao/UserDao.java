@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 
 import common.ConnectDB;
 import component.Login;
+import entity.UsersOtherId;
 import entity.Users;
 
 public class UserDao {
@@ -221,7 +222,51 @@ public class UserDao {
 		
 	}
 	
-
+	// selAllUser
+	public List<Users> selAllUser() {
+		List<Users> listUser = new ArrayList<>();
+		try {
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call selAllUser}");
+			var rs = cs.executeQuery();
+			{
+				while (rs.next()) {
+					var user = new Users();
+					user.setName(rs.getString("name"));
+					user.setEmail(rs.getString("email"));
+					user.setPw(rs.getString("password"));
+					listUser.add(user);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listUser;
+	}
+	// selAllUserOtherID
+	public List<UsersOtherId> selAllUserOtherId(int id) {
+		List<UsersOtherId> listUser = new ArrayList<>();
+		try {
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call selAllUserOtherId(?)}");{
+				 cs.setInt(1, id);
+			};
+			var rs = cs.executeQuery();
+			{
+				while (rs.next()) {
+					var user = new UsersOtherId();
+					user.setReceiver_email(rs.getString("receiver_email"));
+					user.setName(rs.getString("name"));
+					user.setNumRoom(rs.getInt("rooms"));
+					user.setId(rs.getInt("id"));
+					listUser.add(user);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listUser;
+	}
 	public List<Users> selectRendersFilteredData(String name, String phone, String nic) {
 		List<Users> list = new ArrayList<>();
 		try
@@ -283,6 +328,7 @@ public class UserDao {
 		}
 		return list;
 	}
+	
 		
 
 	
