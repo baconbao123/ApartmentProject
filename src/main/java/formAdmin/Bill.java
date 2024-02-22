@@ -519,7 +519,8 @@ public class Bill extends JPanel {
 		totalOfPage = Math.ceil(totalOfRow.doubleValue() / rowOfPage.doubleValue());
 		lblDisplay.setText("Display  "+(pageNumber*rowOfPage-rowOfPage)+" to "+((pageNumber*rowOfPage)>totalOfRow? totalOfRow :pageNumber*rowOfPage)+ " in "+ totalOfRow + " rows");
 		var id = inputId.getText().isEmpty() ? null : Integer.parseInt(inputId.getText());
-		dao.getFees(pageNumber, rowOfPage,  inputRoom.getText(),status, from.getDate(), to.getDate(),filter, id).stream().forEach(fee-> {
+		var room = inputRoom.getText().isEmpty() ? null : inputRoom.getText();
+		dao.getFees(pageNumber, rowOfPage,  room,status, from.getDate(), to.getDate(),filter, id).stream().forEach(fee-> {
 			model.addRow(new Object[] {fee.getId(),fee.getRoom(),fee.getTotal(),fee.getElectric(),fee.getWater(),fee.getRent(),fee.getOther(),fee.getTime(),fee.getNote(),fee.getStatus(),"Action"});
 			modelReport.addRow(new Object[] {fee.getRoom(),fee.getTotal(),fee.getElectric(),fee.getWater(),fee.getRent(),fee.getOther(),fee.getTime(),fee.getNote(),fee.getStatus()?"Finished":"Haven't finished"});
 		});
@@ -548,7 +549,21 @@ public class Bill extends JPanel {
 		popup.setLocationRelativeTo(frameParent);
 		popup.setVisible(true);
 	}
-	
+	public static void showPay(Frame frameParent, int id) {
+		JDialog popup = new JDialog(frameParent, "What's status of the payment ? ", true);
+		var eventLoad = new EventLoadTable() {
+
+			@Override
+			public void loadDataTable() {
+				loadData();
+			}
+		};
+		var popupPanel = new ShowPayment(id, eventLoad);
+		popup.getContentPane().add(popupPanel);
+		popup.setSize(300, 100);
+		popup.setLocationRelativeTo(frameParent);
+		popup.setVisible(true);
+	}
 	public static void showReport(Frame frameParent , int id) {
 		 JDialog popup = new JDialog(frameParent, "View report ", true);
 		   	var popupPanel = new ReportFee(id);
