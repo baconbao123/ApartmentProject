@@ -108,7 +108,6 @@ public class ShowEditFees extends JPanel {
 					 JOptionPane.showMessageDialog(null, "Update note of fee failed", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				else {
-					JOptionPane.showMessageDialog(null, Login.getId());
 					var user_id = Login.getId();
 					history.insertHistory(dao.getModule(), "updated id "+id,user_id );
 					JOptionPane.showMessageDialog(null, "Update success");

@@ -14,8 +14,8 @@ public class ConnectDB {
 	private static String dbName = "apartment";
 	private static String user = "sa";
 //	private static String pw="1234567";
-//	private static String pw = "1564";
-	private static String pw = "11";
+	private static String pw = "1564";
+//	private static String pw = "11";
 	
 	private static String getConnectURL() {
 		return url + serverName + ":" + port + ";databaseName=" + dbName + ";user=" + user + ";password=" + pw;

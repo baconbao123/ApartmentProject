@@ -17,6 +17,7 @@ public class ActionFees extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JButton btnEdit;
 	private JButton btnPay;
+	private JButton report;
 	/**
 	 * Create the panel.
 	 */
@@ -27,6 +28,8 @@ public class ActionFees extends JPanel {
 		
 		btnPay = new JButton("Pay");
 		
+		report = new JButton("Report");
+		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -35,7 +38,9 @@ public class ActionFees extends JPanel {
 					.addComponent(btnPay)
 					.addGap(10)
 					.addComponent(btnEdit)
-					.addContainerGap(20, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(report)
+					.addContainerGap(229, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -43,8 +48,9 @@ public class ActionFees extends JPanel {
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnEdit)
-						.addComponent(btnPay))
-					.addContainerGap(13, Short.MAX_VALUE))
+						.addComponent(btnPay)
+						.addComponent(report))
+					.addContainerGap(266, Short.MAX_VALUE))
 		);
 		setLayout(groupLayout);
 
@@ -62,6 +68,12 @@ public class ActionFees extends JPanel {
 				event.edit(row);
 			}
 		});
+		report.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				event.report(row);
+			}
+		});
+		
 		
 	}
 

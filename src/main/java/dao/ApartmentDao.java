@@ -8,7 +8,18 @@ import common.ConnectDB;
 import entity.Apartment;
 
 public class ApartmentDao {
+	private String module = "Management Apartment";
+	
+	public String getModule() {
+		return module;
+	}
+
+	public void setModule(String module) {
+		this.module = module;
+	}
+	
 	public void insertApart(Apartment apart) {
+		
 		try 
 		(
 			var con = ConnectDB.getConnect();

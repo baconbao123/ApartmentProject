@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /formAdmin/
 /table/
 /event/
@@ -6,3 +7,15 @@
 /dao/
 /META-INF/
 /entity/
+=======
+/META-INF/
+/formAdmin/
+/dao/
+/view/
+/model/
+/main/
+/menu/
+/formUser/
+/component/
+/event/
+>>>>>>> feature/codingHistory&Report

@@ -147,15 +147,7 @@ public class AdminMain extends JFrame {
 					mainForm.showForm(new ApartmentList());
 					break;
 				case 3: {
-					switch (subMenuIndex) {
-					case 0:
-					{
-						mainForm.showForm(new Bill());
-						break;
-					}
-					default:
-						break;
-					}
+					mainForm.showForm(new Bill());
 					break;
 				}
 				case 4: {
