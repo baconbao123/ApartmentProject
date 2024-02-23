@@ -33,6 +33,7 @@ import javax.swing.border.SoftBevelBorder;
 import dao.UserDao;
 import main.AdminMain;
 import main.UserMain;
+import view.MenuBottom;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -60,6 +61,8 @@ public class Login extends JFrame {
 	private JLabel lblStatusNoti;
 	private JLabel lblStatusLoad;
 	private JLabel lblStatus;
+	
+	
 	private  static Integer id;
 	
 
@@ -291,6 +294,7 @@ public class Login extends JFrame {
 		
 		String pass = String.valueOf(txtPass.getPassword());
 		String userName =  txtUser.getText();
+		
 		var rs =  dao.login(userName, pass);
 		if(!rs.isEmpty()) {
 			lblStatusLoad.setText("Success");
@@ -316,7 +320,7 @@ public class Login extends JFrame {
 			useMain.setVisible(true);
 			useMain.setLogin(this);
 			useMain.setLocationRelativeTo(null);
-			useMain.getAdMain().initMoving(useMain);
+			useMain.initMoving(useMain);
 			this.setVisible(false);
 		}
 		

@@ -28,6 +28,7 @@ import table.ImgContractRender;
 import table.TableActionCellEditor;
 import table.TableActionCellRender;
 import table.TableHeader;
+import view.CardRoom;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -74,7 +75,7 @@ public class ContractList extends JPanel {
 	private JComboBox cbbData;
 	private JButton btnReset;
 
-	/**
+	/** 
 	 * Create the panel.
 	 */
 	public ContractList() {
@@ -151,7 +152,7 @@ public class ContractList extends JPanel {
 		model.addColumn("Action");
 		
 		
-
+ 
 		var dao = new ContractDao();
 		Set<String> statusSet = new HashSet<>(); //cbb
 		totalOfRow = dao.countContract();
@@ -258,7 +259,8 @@ public class ContractList extends JPanel {
 	}
 
 	protected void btnAddContractActionPerformed(ActionEvent e) {
-		var form = new FrameAddContract();
+		CardRoom cardRoom = new CardRoom();
+		var form = new FrameAddContract(cardRoom);
 		form.setVisible(true);
 		form.setLocationRelativeTo(null);
 		form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -370,8 +372,10 @@ public class ContractList extends JPanel {
 		var dao = new ContractDao();
 		DefaultTableModel model = (DefaultTableModel) tableConstract.getModel();
 		model.setRowCount(0);
+		Set<String> statusSet = new HashSet<>(); //cbb
 		filterContract.forEach(contract -> {
 			String statusContract = contract.isStatus() ? "On" : "Off";
+			statusSet.add(statusContract);//add to cbb
 			String roomateNamesString = "";
 		    if (contract.getRoomates() != null) {
 		    	System.out.println(contract.getRoomates());
@@ -383,7 +387,7 @@ public class ContractList extends JPanel {
 
 			model.addRow(new Object[] { contract.getId(), contract.getApartNum(), contract.getOwnerName(),
 					contract.getImgContracs(), statusContract, contract.getFormDate(), contract.getToDate(),
-					roomateNamesString, contract.getRoomates()});
+					roomateNamesString, contract.getRoomates(), contract.getOwnerID()});
 		});
 	}
 	

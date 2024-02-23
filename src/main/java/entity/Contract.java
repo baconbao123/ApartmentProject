@@ -111,6 +111,13 @@ public class Contract {
 		this.idRoom = idRoom;
 	}
 
+	@Override
+	public String toString() {
+		return "Contract [id=" + id + ", apartNum=" + apartNum + ", ownerID=" + ownerID + ", ownerName=" + ownerName
+				+ ", imgContracs=" + imgContracs + ", status=" + status + ", formDate=" + formDate + ", toDate="
+				+ toDate + ", roomates=" + roomates + ", idRoom=" + idRoom + "]";
+	}
+
 	
 
 	

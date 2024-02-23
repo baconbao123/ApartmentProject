@@ -33,6 +33,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import java.awt.Component;
+import java.awt.Cursor;
+
 import javax.swing.JScrollPane;
 
 public class ViewRoomContract extends JFrame {
@@ -120,6 +122,7 @@ public class ViewRoomContract extends JFrame {
 		String[] imgPathArr = imgPaths.split(";");
 		for (String imgPath : imgPathArr) {
 			var imgJLabel = new JLabel();
+			imgJLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			ImageIcon icon = new ImageIcon(imgPath);
 			Image image = icon.getImage();
 			Image imageResize = image.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
@@ -161,8 +164,11 @@ public class ViewRoomContract extends JFrame {
 			roomateInfo.forEach(info -> {
 		        formattedInfo.append(info.replace(",", ",<br>")).append(",<br>");
 		    });
-
-			allRoommateInfo.append("<html>").append(formattedInfo.toString()).append("</html>");
+			String formInforRep = formattedInfo.toString();
+			if (formInforRep.endsWith(",<br>")) {
+				formInforRep = formInforRep.substring(0, formInforRep.length() - 6); 
+			}
+			allRoommateInfo.append("<html>").append(formInforRep).append("</html>");
 		});
 		JLabel allRoommateLabel = new JLabel(allRoommateInfo.toString());
 		allRoommateLabel.setAlignmentX(Component.LEFT_ALIGNMENT); // Để căn trái trong FlowLayout

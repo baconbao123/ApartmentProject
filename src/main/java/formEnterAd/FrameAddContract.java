@@ -33,8 +33,11 @@ import com.toedter.calendar.JDateChooser;
 import dao.ApartmentDao;
 import dao.ContractDao;
 import dao.UserDao;
+import entity.Apartment;
 import entity.Contract;
 import entity.Users;
+import view.AppStateManager;
+import view.CardRoom;
 
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -85,13 +88,13 @@ public class FrameAddContract extends JFrame {
 	private JRadioButton rdbtnOffContract;
 	private JLabel lblFromDate;
 	private JDateChooser dateFromDate;
-	private JLabel lblToDate;
+	private JLabel lblToDate; 
 	private JDateChooser dateToDate;
 	private JLabel lblRoomates;
 	private JComboBox cbbRoomates;
 	private JLabel lblInfoRoomates1;
 	private JLabel lblInfoRoomates2;
-	private JLabel lblInfoRoomates3;
+	private JLabel lblInfoRoomates3; 
 	private JLabel lblInfoRoomates4;
 	private List<String> roomatesList = new ArrayList<>();
 	private JButton btnSave;
@@ -127,10 +130,19 @@ public class FrameAddContract extends JFrame {
 	private JLabel lblBtnDelete3_1;
 	private JLabel lblBtnDelete4_1;
 	private JLabel lblBtnDelete4_2;
+	private CardRoom cardRoom;
+	
+	public void setCardRoom(CardRoom cardRoom) {
+		this.cardRoom = cardRoom;
+	}
+	
+	public FrameAddContract(CardRoom cardRoom) {
+        this.cardRoom = cardRoom;	
+        initCode();
+    }
 
-	/**
-	 * Launch the application.
-	 */
+	
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -147,8 +159,8 @@ public class FrameAddContract extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-//	public FrameAddContract() {};
-	public FrameAddContract() {
+	
+	private void initCode() {
 		setBackground(SystemColor.window);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 510, 589);
@@ -157,30 +169,147 @@ public class FrameAddContract extends JFrame {
 		contentPane.setBackground(SystemColor.window);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
+
 		var dao = new ApartmentDao();
 		var daoUser = new UserDao();
 
 		// apart number
 		cbbApart = new JComboBox();
 		cbbApart.setBounds(163, 43, 315, 19);
-		
-		List<Integer> apartNumber = dao.selectApartNum();
-		for (Integer number : apartNumber) {
-			cbbApart.addItem(number.toString());
+
+		List<Apartment> apartNumber = dao.selectApartNum(); 
+		for (Apartment number : apartNumber) {
+			cbbApart.addItem(number);
 		}
+		
 
 		// onwer name
+		Map<Integer, Users> renterMapOwner = new HashMap<>();
+		Map<Integer, Users> renterMapRoomate = new HashMap<>();
+
 		cbbOwner = new JComboBox();
 		cbbOwner.setBounds(163, 82, 315, 19);
 		cbbOwner.setModel(new DefaultComboBoxModel(new String[] { "" }));
-		
+
 		List<Object> renterInfo = daoUser.selRenterName();
 
 		for (Object renter : renterInfo) {
-			cbbOwner.addItem(renter);
+			if (renter instanceof Users) {
+				Users renterObject = (Users) renter;
+				cbbOwner.addItem(renterObject.getId() + "-" + renterObject.getName() + "-" + renterObject.getPhone()
+						+ "-" + renterObject.getDob() + "-" + renterObject.getNic());
+				renterMapOwner.put(renterObject.getId(), renterObject);
+			}
 		}
-		
+
+		cbbOwner.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				JComboBox combobox = (JComboBox) e.getSource();
+				String selectRoomates = (String) cbbOwner.getSelectedItem();
+				String[] parts = selectRoomates.split("-");
+				int roomatesID = Integer.parseInt(parts[0]);
+				
+				// Xóa chủ sở hữu trước đó khỏi danh sách roomatesList
+				if (!roomatesList.isEmpty()) {
+				    roomatesList.remove(0); // Xóa owner trước đó khỏi danh sách
+				}
+		        
+				lblInfoRoomates1.setText(selectRoomates);
+				roomatesList.add(String.valueOf(roomatesID));
+
+			}
+		});
+
+		// roomate 
+		panelRoomate = new JPanel();
+		panelRoomate.setLayout(new CardLayout(0, 0));
+
+		FourRoomate = new JPanel();
+		FourRoomate.setBackground(Color.LIGHT_GRAY);
+		panelRoomate.add(FourRoomate, "fourRoomate");
+
+		FiveRoomate = new JPanel();
+		FiveRoomate.setBackground(Color.LIGHT_GRAY);
+		panelRoomate.add(FiveRoomate, "fiveRoomate");
+		FiveRoomate.setLayout(null);
+
+		CardLayout layout = (CardLayout) panelRoomate.getLayout();
+		layout.show(panelRoomate, "fourRoomate");
+
+		cbbRoomates = new JComboBox();
+		cbbRoomates.setBounds(163, 291, 315, 19);
+
+		cbbRoomates.setModel(new DefaultComboBoxModel(new String[] { "" }));
+		for (Object renter : renterInfo) {
+			Users renterObject = (Users) renter;
+			cbbRoomates.addItem(renterObject.getId() + "-" + renterObject.getName() + renterObject.getPhone() + "-"
+					+ renterObject.getDob() + "-" + renterObject.getNic());
+			renterMapRoomate.put(renterObject.getId(), renterObject);
+		}
+		cbbRoomates.addActionListener(new ActionListener() {
+			int selectCount = 1;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JComboBox combobox = (JComboBox) e.getSource();
+				String selectRoomates = (String) cbbRoomates.getSelectedItem();
+				String[] parts = selectRoomates.split("-");
+
+				if (selectCount < 3) {
+					int roomatesID = Integer.parseInt(parts[0]);
+
+					switch (selectCount) {
+					case 1: {
+						lblInfoRoomates2.setText(selectRoomates);
+						lblBtnDelete2.setVisible(true);
+						lblBtnDelete2.addMouseListener(new MouseAdapter() {
+							public void mouseClicked(java.awt.event.MouseEvent e) {
+								lblInfoRoomates2.setText("");
+								lblBtnDelete2.setVisible(false);
+								selectCount = 1;
+								roomatesList.remove(String.valueOf(roomatesID));
+							};
+						});
+						break;
+					}
+					case 2: {
+						lblInfoRoomates3.setText(selectRoomates);
+						lblBtnDelete3.setVisible(true);
+						lblBtnDelete3.addMouseListener(new MouseAdapter() {
+							public void mouseClicked(java.awt.event.MouseEvent e) {
+								lblInfoRoomates3.setText("");
+								lblBtnDelete3.setVisible(false);
+								selectCount = 2;
+								roomatesList.remove(String.valueOf(roomatesID));
+							};
+						});
+						break;
+					}
+					case 3: {
+						lblInfoRoomates4.setText(selectRoomates);
+						lblBtnDelete4.setVisible(true);
+						lblBtnDelete4.addMouseListener(new MouseAdapter() {
+							public void mouseClicked(java.awt.event.MouseEvent e) {
+								lblInfoRoomates4.setText("");
+								lblBtnDelete4.setVisible(false);
+								selectCount = 3;
+								roomatesList.remove(String.valueOf(roomatesID));
+							};
+						});
+						break;
+					}
+					}
+					roomatesList.add(String.valueOf(roomatesID));
+					selectCount++;
+				}
+
+			}
+
+		});
+
 		// contract img
 		btnUploadContract = new JButton("Upload");
 		btnUploadContract.setBounds(163, 119, 55, 38);
@@ -206,214 +335,152 @@ public class FrameAddContract extends JFrame {
 		dateFromDate.setBounds(163, 216, 315, 19);
 		dateFromDate.setDateFormatString("yyyy-MM-dd");
 		dateFromDate.setName("JDateFromDate");
-		dateFromDate.getJCalendar().setMinSelectableDate(Calendar.getInstance().getTime()); // Allow selecting dates from today onwards
-		
+		dateFromDate.getJCalendar().setMinSelectableDate(Calendar.getInstance().getTime()); // Allow selecting dates
+																							// from today onwards
+
 		dateFromDate.addPropertyChangeListener("date", new PropertyChangeListener() {
-			
+
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if(dateFromDate.getDate()!=null && dateToDate.getDate()!=null) {
-					if(dateFromDate.getDate().after(dateToDate.getDate())) {
+				if (dateFromDate.getDate() != null && dateToDate.getDate() != null) {
+					if (dateFromDate.getDate().after(dateToDate.getDate())) {
 						JOptionPane.showMessageDialog(null, "The check-out date cannot be after the check-in date");
 						dateFromDate.setDate(dateToDate.getDate());
 					}
 				}
-				
+
 			}
 		});
-		
+
 		dateToDate = new JDateChooser();
 		dateToDate.setBounds(163, 253, 315, 19);
 		dateToDate.setDateFormatString("yyyy-MM-dd");
 		dateToDate.setName("JDateToDate");
 		dateToDate.getJCalendar().setMinSelectableDate(Calendar.getInstance().getTime());
-		
+
 		dateToDate.addPropertyChangeListener("date", new PropertyChangeListener() {
-		    @Override
-		    public void propertyChange(PropertyChangeEvent evt) {
-		        if (dateFromDate.getDate() != null && dateToDate.getDate() != null) {
-		            if (dateToDate.getDate().before(dateFromDate.getDate())) {
-		                
-		                JOptionPane.showMessageDialog(null, "The check-out date cannot be before the check-in date");
-		                dateToDate.setDate(dateFromDate.getDate());
-		            }
-		        }
-		    }
-		});
-		
-		
-		
-		//roomate
-		panelRoomate = new JPanel();
-		panelRoomate.setLayout(new CardLayout(0, 0));
-		
-		
-		FourRoomate = new JPanel();
-		FourRoomate.setBackground(Color.LIGHT_GRAY);
-		panelRoomate.add(FourRoomate, "fourRoomate");
-		
-		FiveRoomate = new JPanel();
-		FiveRoomate.setBackground(Color.LIGHT_GRAY);
-		panelRoomate.add(FiveRoomate, "fiveRoomate");
-		FiveRoomate.setLayout(null);
-		
-		CardLayout layout = (CardLayout) panelRoomate.getLayout();
-		layout.show(panelRoomate, "fourRoomate");
-		
-		
-		
-		
-		
-		Map<Integer, Users> renterMap = new HashMap<>();
-		cbbRoomates = new JComboBox();
-		cbbRoomates.setBounds(163, 291, 315, 19);
-
-		cbbRoomates.setModel(new DefaultComboBoxModel(new String[] { "" }));
-		for (Object renter : renterInfo) {
-			Users renterObject = (Users) renter;
-			cbbRoomates.addItem(renterObject.getId() + "-" + renterObject.getName() + "-" + renterObject.getPhone()
-					+ "-" + renterObject.getDob() + "-" + renterObject.getNic());
-			renterMap.put(renterObject.getId(), renterObject);
-		}
-		cbbRoomates.addActionListener(new ActionListener() {
-			int selectCount = 0;
-
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				JComboBox combobox = (JComboBox) e.getSource();
-				String selectRoomates = (String) cbbRoomates.getSelectedItem();
-				String[] parts = selectRoomates.split("-");
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (dateFromDate.getDate() != null && dateToDate.getDate() != null) {
+					if (dateToDate.getDate().before(dateFromDate.getDate())) {
 
-				if (selectCount < 4) {
-					int roomatesID = Integer.parseInt(parts[0]);
-
-					switch (selectCount) {
-						case 0: {
-							lblInfoRoomates1.setText(selectRoomates);
-							lblBtnDelete1.setVisible(true);
-							lblBtnDelete1.addMouseListener(new MouseAdapter() {
-								public void mouseClicked(java.awt.event.MouseEvent e) {
-									lblInfoRoomates1.setText("");
-									lblBtnDelete1.setVisible(false);
-									selectCount = 0;
-									roomatesList.remove(String.valueOf(roomatesID));
-								};
-							});
-							break;
-						}
-						case 1: {
-							lblInfoRoomates2.setText(selectRoomates);
-							lblBtnDelete2.setVisible(true);
-							lblBtnDelete2.addMouseListener(new MouseAdapter() {
-								public void mouseClicked(java.awt.event.MouseEvent e) {
-									lblInfoRoomates2.setText("");
-									lblBtnDelete2.setVisible(false);
-									selectCount = 1;
-									roomatesList.remove(String.valueOf(roomatesID));
-								};
-							});
-							break;
-						}
-						case 2: {
-							lblInfoRoomates3.setText(selectRoomates);
-							lblBtnDelete3.setVisible(true);
-							lblBtnDelete3.addMouseListener(new MouseAdapter() {
-								public void mouseClicked(java.awt.event.MouseEvent e) {
-									lblInfoRoomates3.setText("");
-									lblBtnDelete3.setVisible(false);
-									selectCount = 2;
-									roomatesList.remove(String.valueOf(roomatesID));
-								};
-							});
-							break;
-						}
-						case 3: {
-							lblInfoRoomates4.setText(selectRoomates);
-							lblBtnDelete4.setVisible(true);
-							lblBtnDelete4.addMouseListener(new MouseAdapter() {
-								public void mouseClicked(java.awt.event.MouseEvent e) {
-									lblInfoRoomates4.setText("");
-									lblBtnDelete4.setVisible(false);
-									selectCount = 3;
-									roomatesList.remove(String.valueOf(roomatesID));
-								};
-							});
-							break;
-						}
+						JOptionPane.showMessageDialog(null, "The check-out date cannot be before the check-in date");
+						dateToDate.setDate(dateFromDate.getDate());
 					}
-					roomatesList.add(String.valueOf(roomatesID));
-					selectCount++;
 				}
-
 			}
+		}); 
 
+		btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				var contract = new Contract();
+				var dao = new ContractDao();
+
+				Apartment selectedApartment = (Apartment) cbbApart.getSelectedItem();
+				int selectedApartId = selectedApartment.getId();
+
+				if (dateFromDate.getDate() == null || dateToDate.getDate() == null) {
+					JOptionPane.showMessageDialog(FrameAddContract.this, "Please enter from date or to date",
+							"Invalid Input", JOptionPane.ERROR_MESSAGE);
+
+				} else {
+					java.sql.Date sqlFromDate = new java.sql.Date(dateFromDate.getDate().getTime());
+					java.sql.Date sqlToDate = new java.sql.Date(dateToDate.getDate().getTime());
+
+					// regex
+					if(!rdbOnContract.isSelected() && !rdbtnOffContract.isSelected()) {
+						JOptionPane.showMessageDialog(FrameAddContract.this, "Please choose status", "Invalid Input",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					if(lblImgCon1.getIcon()==null || lblImgCon2.getIcon()==null || lblImgCon3.getIcon()==null || lblImgCon4.getIcon()==null) {
+						JOptionPane.showMessageDialog(FrameAddContract.this, "Please select at least 4 contract photos", "Invalid Input",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					if (cbbOwner.getSelectedItem() == null || cbbOwner.getSelectedItem().toString().isEmpty()
+							|| cbbOwner.getSelectedItem().toString().trim().equalsIgnoreCase("")) {
+						JOptionPane.showMessageDialog(FrameAddContract.this, "Please choose an owner", "Invalid Input",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					} else {
+						String selectedOwnerInfo = (String) cbbOwner.getSelectedItem();
+						int ownerID = Integer.parseInt(selectedOwnerInfo.split("-")[0]);
+						Users ownerApart = renterMapOwner.get(ownerID);
+
+						// save to db
+						if (ownerApart != null) {
+							contract.setOwnerID(ownerID);
+						}
+						contract.setApartNum(selectedApartId);
+						if (rdbOnContract.isSelected()) {
+							contract.setStatus(true);
+						} else {
+							contract.setStatus(false);
+						}
+
+						contract.setFormDate(sqlFromDate);
+						contract.setToDate(sqlToDate);
+
+						String romateString = String.join(";", roomatesList);
+						contract.setRoomates(romateString);
+
+						String imgFilePathString = String.join(";", newAvatarFilePathList);
+						contract.setImgContracs(imgFilePathString);
+						dao.insertContract(contract);
+
+						System.out.println("success insert contract");
+
+						for (int i = 0; i < Math.min(filePathList.size(), 5); i++) {
+							try {
+								Files.copy(new File(filePathList.get(i)).toPath(),
+										new File(newAvatarFilePathList.get(i)).toPath(),
+										StandardCopyOption.REPLACE_EXISTING);
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+						}
+						
+						if(cardRoom!=null) {
+							int selectedApartNum = selectedApartment.getRoomNumber();
+							System.out.println("Apartment num" + selectedApartNum);
+							cardRoom.setBackgroundColor(new Color(39, 158, 255));
+							
+							CardLayout layout = (CardLayout) cardRoom.CardButton.getLayout();
+							layout.show(cardRoom.CardButton, "rented");
+							cardRoom.setBackgroundColor(new Color(39, 158, 255));
+							cardRoom.repaint();
+							AppStateManager.saveAppState(selectedApartNum, new Color(39, 158, 255), "rented");
+						} else if (cardRoom == null) {
+							System.out.println("card room null");
+						}
+						
+						dispose();
+					}
+				}
+			}
 		});
 
 		initComponent();
-	}
-
-	protected void btnSaveActionPerformed(ActionEvent e) {
-		var contract = new Contract();
-		var dao = new ContractDao();
-
-		String selectedApartNumStr = (String) cbbApart.getSelectedItem();
-		int selectApartNum = Integer.parseInt(selectedApartNumStr);
-
-		
-		
-		if(dateFromDate.getDate() == null || dateToDate.getDate() == null) {
-			JOptionPane.showMessageDialog(FrameAddContract.this, "Please enter from date or to date", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-			
-		} else {
-			java.sql.Date sqlFromDate = new java.sql.Date(dateFromDate.getDate().getTime());
-			java.sql.Date sqlToDate = new java.sql.Date(dateToDate.getDate().getTime());
-			
-			//regex
-			if (cbbOwner.getSelectedItem() == null || cbbOwner.getSelectedItem().toString().isEmpty() || cbbOwner.getSelectedItem().toString().trim().equalsIgnoreCase("")) {
-				JOptionPane.showMessageDialog(FrameAddContract.this, "Please choose an owner", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-			} else {
-			    Users ownerApart = (Users) cbbOwner.getSelectedItem();
-			    int ownerID = ownerApart.getId();
-			    
-			 // save to db
-			    contract.setOwnerID(ownerID);
-			    contract.setApartNum(selectApartNum);
-				if (rdbOnContract.isSelected()) {
-					contract.setStatus(true);
-				} else {
-					contract.setStatus(false);
-				}
-				
-				contract.setFormDate(sqlFromDate);
-				contract.setToDate(sqlToDate);
-				
-				String romateString = String.join(";", roomatesList);
-				contract.setRoomates(romateString);
-				
-				String imgFilePathString = String.join(";", newAvatarFilePathList);
-				contract.setImgContracs(imgFilePathString);
-				dao.insertContract(contract);
-
-				System.out.println("success insert contract");
-
-				for (int i = 0; i < Math.min(filePathList.size(), 5); i++) {
-					try {
-						Files.copy(new File(filePathList.get(i)).toPath(), new File(newAvatarFilePathList.get(i)).toPath(),
-								StandardCopyOption.REPLACE_EXISTING);
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-				}
-				dispose();
-			}
-		}
-
-		
-		
-		
 		
 	}
 
+	public FrameAddContract() {
+		setBackground(SystemColor.window);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 510, 589);
+		contentPane = new JPanel();
+		contentPane.setFont(new Font("Arial", Font.PLAIN, 11));
+		contentPane.setBackground(SystemColor.window);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+
+
+	}
+ 
 	protected void btnUploadContractActionPerformed(ActionEvent e) {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setMultiSelectionEnabled(true);
@@ -424,6 +491,10 @@ public class FrameAddContract extends JFrame {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File[] selectedFiles = fileChooser.getSelectedFiles();
 
+
+			filePathList.clear();
+			newAvatarFilePathList.clear();
+			 
 			for (int i = 0; i < Math.min(selectedFiles.length, 5); i++) {
 				File file = selectedFiles[i];
 				String fileName = file.getName();
@@ -440,6 +511,8 @@ public class FrameAddContract extends JFrame {
 					lblImgCon1.setIcon(new ImageIcon(icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 					lblImgCon1.setCursor(new Cursor(Cursor.HAND_CURSOR));
 					addMouseListenerImg(lblImgCon1, icon);
+					
+					
 					break;
 
 				case 1:
@@ -474,13 +547,14 @@ public class FrameAddContract extends JFrame {
 			}
 		}
 	}
-	
+
 	private void addMouseListenerImg(JLabel label, ImageIcon img) {
 		label.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				var dialog = new JDialog();
-				var labelImg = new JLabel(new ImageIcon(img.getImage().getScaledInstance(600, 600, Image.SCALE_SMOOTH)));
+				var labelImg = new JLabel(
+						new ImageIcon(img.getImage().getScaledInstance(600, 600, Image.SCALE_SMOOTH)));
 				dialog.getContentPane().add(labelImg);
 				dialog.pack();
 				dialog.setVisible(true);
@@ -490,88 +564,6 @@ public class FrameAddContract extends JFrame {
 		});
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	private void initComponent() {
 		lblAddContract = new JLabel("Add Contract");
 		lblAddContract.setBounds(191, 5, 111, 26);
@@ -669,13 +661,8 @@ public class FrameAddContract extends JFrame {
 		cbbRoomates.setBorder(null);
 		cbbRoomates.setBackground(SystemColor.window);
 
-		btnSave = new JButton("Save");
 		btnSave.setBounds(191, 494, 133, 29);
-		btnSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnSaveActionPerformed(e);
-			}
-		});
+
 		btnSave.setFocusable(false);
 		btnSave.setForeground(SystemColor.window);
 		btnSave.setFont(new Font("Arial", Font.BOLD, 12));
@@ -710,36 +697,34 @@ public class FrameAddContract extends JFrame {
 		contentPane.add(cbbApart);
 		contentPane.add(btnSave);
 		contentPane.add(lblAddContract);
-		
-		
+
 		panelRoomate.setBounds(163, 330, 315, 145);
 		contentPane.add(panelRoomate);
-		
-		
-		
-		
-			lblInfoRoomates1 = new JLabel("");
-			lblInfoRoomates1.setBounds(10, 0, 279, 24);
-			lblInfoRoomates1.setBackground(Color.LIGHT_GRAY);
-			lblInfoRoomates1.setOpaque(true);
-	
-			lblInfoRoomates2 = new JLabel("");
-			lblInfoRoomates2.setBounds(10, 30, 279, 24);
-			lblInfoRoomates2.setBackground(Color.LIGHT_GRAY);
-			lblInfoRoomates2.setOpaque(true);
-	
-			lblInfoRoomates3 = new JLabel("");
-			lblInfoRoomates3.setBounds(10, 60, 279, 24);
-			lblInfoRoomates3.setBackground(Color.LIGHT_GRAY);
-			lblInfoRoomates3.setOpaque(true);
-	
-			lblInfoRoomates4 = new JLabel("");
-			lblInfoRoomates4.setBounds(10, 90, 279, 24);
-			lblInfoRoomates4.setBackground(Color.LIGHT_GRAY);
-			lblInfoRoomates4.setOpaque(true);
+
+		lblInfoRoomates1 = new JLabel("");
+		lblInfoRoomates1.setBounds(10, 0, 279, 24);
+		lblInfoRoomates1.setBackground(Color.LIGHT_GRAY);
+		lblInfoRoomates1.setOpaque(true);
+
+		lblInfoRoomates2 = new JLabel("");
+		lblInfoRoomates2.setBounds(10, 30, 279, 24);
+		lblInfoRoomates2.setBackground(Color.LIGHT_GRAY);
+		lblInfoRoomates2.setOpaque(true);
+
+		lblInfoRoomates3 = new JLabel("");
+		lblInfoRoomates3.setBounds(10, 60, 279, 24);
+		lblInfoRoomates3.setBackground(Color.LIGHT_GRAY);
+		lblInfoRoomates3.setOpaque(true);
+
+		lblInfoRoomates4 = new JLabel("");
+		lblInfoRoomates4.setBounds(10, 90, 279, 24);
+		lblInfoRoomates4.setBackground(Color.LIGHT_GRAY);
+		lblInfoRoomates4.setOpaque(true);
 		FourRoomate.setLayout(null);
-		
+
 		lblBtnDelete1 = new JLabel("");
+		lblBtnDelete1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblBtnDelete1.setVisible(false);
 		lblBtnDelete1.setIcon(new ImageIcon(FrameAddContract.class.getResource("/icon/cross.png")));
 		lblBtnDelete1.setBounds(295, 0, 20, 24);
 		FourRoomate.add(lblBtnDelete1);
@@ -747,83 +732,92 @@ public class FrameAddContract extends JFrame {
 		FourRoomate.add(lblInfoRoomates2);
 		FourRoomate.add(lblInfoRoomates3);
 		FourRoomate.add(lblInfoRoomates4);
-		
+
 		lblBtnDelete2 = new JLabel("");
+		lblBtnDelete2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblBtnDelete2.setVisible(false);
 		lblBtnDelete2.setIcon(new ImageIcon(FrameAddContract.class.getResource("/icon/cross.png")));
 		lblBtnDelete2.setBounds(295, 30, 20, 24);
 		FourRoomate.add(lblBtnDelete2);
-		
+
 		lblBtnDelete3 = new JLabel("");
+		lblBtnDelete3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblBtnDelete3.setVisible(false);
 		lblBtnDelete3.setIcon(new ImageIcon(FrameAddContract.class.getResource("/icon/cross.png")));
 		lblBtnDelete3.setBounds(295, 60, 20, 24);
 		FourRoomate.add(lblBtnDelete3);
-		
+
 		lblBtnDelete4 = new JLabel("");
+		lblBtnDelete4.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblBtnDelete4.setVisible(false);
 		lblBtnDelete4.setIcon(new ImageIcon(FrameAddContract.class.getResource("/icon/cross.png")));
 		lblBtnDelete4.setBounds(295, 90, 20, 24);
 		FourRoomate.add(lblBtnDelete4);
-		
-		
+
 		lblInfoRoomates1_1 = new JLabel("");
 		lblInfoRoomates1_1.setOpaque(true);
 		lblInfoRoomates1_1.setBackground(Color.LIGHT_GRAY);
 		lblInfoRoomates1_1.setBounds(10, 0, 279, 24);
 		FiveRoomate.add(lblInfoRoomates1_1);
-		
+
 		lblInfoRoomates2_6 = new JLabel("");
 		lblInfoRoomates2_6.setOpaque(true);
 		lblInfoRoomates2_6.setBackground(Color.LIGHT_GRAY);
 		lblInfoRoomates2_6.setBounds(10, 30, 279, 24);
 		FiveRoomate.add(lblInfoRoomates2_6);
-		
+
 		lblInfoRoomates3_1 = new JLabel("");
 		lblInfoRoomates3_1.setOpaque(true);
 		lblInfoRoomates3_1.setBackground(Color.LIGHT_GRAY);
 		lblInfoRoomates3_1.setBounds(10, 60, 279, 24);
 		FiveRoomate.add(lblInfoRoomates3_1);
-		
+
 		lblInfoRoomates4_1 = new JLabel("");
 		lblInfoRoomates4_1.setOpaque(true);
 		lblInfoRoomates4_1.setBackground(Color.LIGHT_GRAY);
 		lblInfoRoomates4_1.setBounds(10, 90, 279, 24);
 		FiveRoomate.add(lblInfoRoomates4_1);
-		
+
 		lblInfoRoomates4_2 = new JLabel("");
 		lblInfoRoomates4_2.setOpaque(true);
 		lblInfoRoomates4_2.setBackground(Color.LIGHT_GRAY);
 		lblInfoRoomates4_2.setBounds(10, 121, 279, 24);
 		FiveRoomate.add(lblInfoRoomates4_2);
-		
+
 		lblBtnDelete1_1 = new JLabel("");
+		lblBtnDelete1_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblBtnDelete1_1.setVisible(false);
 		lblBtnDelete1_1.setIcon(new ImageIcon(FrameAddContract.class.getResource("/icon/cross.png")));
 		lblBtnDelete1_1.setBounds(295, 0, 20, 24);
 		FiveRoomate.add(lblBtnDelete1_1);
-		
+
 		lblBtnDelete2_6 = new JLabel("");
+		lblBtnDelete2_6.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblBtnDelete2_6.setVisible(false);
 		lblBtnDelete2_6.setIcon(new ImageIcon(FrameAddContract.class.getResource("/icon/cross.png")));
 		lblBtnDelete2_6.setBounds(295, 30, 20, 24);
 		FiveRoomate.add(lblBtnDelete2_6);
-		
+
 		lblBtnDelete3_1 = new JLabel("");
+		lblBtnDelete3_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblBtnDelete3_1.setVisible(false);
 		lblBtnDelete3_1.setIcon(new ImageIcon(FrameAddContract.class.getResource("/icon/cross.png")));
 		lblBtnDelete3_1.setBounds(295, 60, 20, 24);
 		FiveRoomate.add(lblBtnDelete3_1);
-		
+
 		lblBtnDelete4_1 = new JLabel("");
+		lblBtnDelete4_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblBtnDelete4_1.setVisible(false);
 		lblBtnDelete4_1.setIcon(new ImageIcon(FrameAddContract.class.getResource("/icon/cross.png")));
 		lblBtnDelete4_1.setBounds(295, 90, 20, 24);
 		FiveRoomate.add(lblBtnDelete4_1);
-		
+
 		lblBtnDelete4_2 = new JLabel("");
+		lblBtnDelete4_2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblBtnDelete4_2.setVisible(false);
 		lblBtnDelete4_2.setIcon(new ImageIcon(FrameAddContract.class.getResource("/icon/cross.png")));
 		lblBtnDelete4_2.setBounds(295, 121, 20, 24);
 		FiveRoomate.add(lblBtnDelete4_2);
-		
-		
+
 	}
 }

@@ -16,7 +16,7 @@ public class ContractDao {
 	public void insertContract(Contract contract) {
 		try 
 		(	var con = ConnectDB.getConnect();
-			var cs = con.prepareCall("{call addContract(?, ?, ?, ?, ?, ?, ?)}");
+			var cs = con.prepareCall("{call addContract(?, ?, ?, ?, ?, ?, ?, ?)}");
 		)	
 		{
 			cs.setInt(1, contract.getApartNum());
@@ -26,13 +26,14 @@ public class ContractDao {
 			cs.setDate(5, (Date) contract.getFormDate());
 			cs.setDate(6, (Date) contract.getToDate());
 			cs.setString(7, contract.getRoomates());
+			cs.setTimestamp(8, new java.sql.Timestamp(System.currentTimeMillis()));
 			cs.executeUpdate();
 			System.out.println("contract insert success");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+	 
 	public void updateContract(Contract contract) {
 		try 
 		(	var con = ConnectDB.getConnect();
@@ -53,6 +54,22 @@ public class ContractDao {
 		}
 	}
 	
+	public void updateConStatus(Contract contract) {
+		try 
+		(
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call upConStatus(?, ?)}")
+		)
+		{
+			cs.setInt(1, contract.getId());
+			cs.setBoolean(2, contract.isStatus());
+			cs.executeUpdate();
+			System.out.println("contract status update success");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	 
 	public List<Contract> selContract(int pageNumber, int rowOfPage) {
 		List<Contract> list = new ArrayList<>();
 		try 
@@ -248,7 +265,7 @@ public class ContractDao {
 			while(rs.next()) {
 				var contract = new Contract();
 				contract.setId(rs.getInt("id"));
-				contract.setApartNum(rs.getInt("room_id"));
+				contract.setApartNum(rs.getInt("rooms"));
 				contract.setOwnerName(rs.getString("ownerName"));
 				contract.setImgContracs(rs.getString("pic"));
 				contract.setStatus(rs.getBoolean("status"));
@@ -275,11 +292,11 @@ public class ContractDao {
 			var rs = cs.executeQuery();
 			while(rs.next()) {
 				var contract = new Contract();
-				contract.setId(rs.getInt("id"));
 				contract.setApartNum(rs.getInt("rooms"));
-				contract.setIdRoom(rs.getInt("room_id"));
 				contract.setOwnerName(rs.getString("ownerName"));
+				contract.setRoomates(rs.getString("total_roommates"));
 				list.add(contract);
+				System.out.println("list coasda" + list);
 			}
 			
 		} catch (Exception e) {
