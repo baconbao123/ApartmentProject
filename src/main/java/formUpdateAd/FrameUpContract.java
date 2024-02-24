@@ -16,6 +16,8 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 
@@ -38,6 +40,7 @@ import dao.ContractDao;
 import dao.UserDao;
 import entity.Contract;
 import entity.Users;
+import event.EventLoadTable;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -46,6 +49,7 @@ import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -108,6 +112,8 @@ public class FrameUpContract extends JFrame {
 	private JLabel lblDelete2_5;
 
 	private List<String> roomatesList = new ArrayList<>();
+	
+	private EventLoadTable eventLoad; 
 	/**
 	 * Launch the application.
 	 */
@@ -128,7 +134,8 @@ public class FrameUpContract extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameUpContract() {};
-	public FrameUpContract(Integer id, String apartNum, Date dateFrom, Date dateTo, Boolean status, Integer ownerID) {
+	public FrameUpContract(Integer id, String apartNum, Date dateFrom, Date dateTo, Boolean status, Integer ownerID, EventLoadTable event) {
+		this.eventLoad = event;
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 504, 663);
@@ -140,24 +147,59 @@ public class FrameUpContract extends JFrame {
 		var daoAp = new ApartmentDao();
 		var daoUser = new UserDao();
 		
-		List<Object> renterInfor = daoUser.selRenterName();
+		
 				
 		lblReadNum = new JLabel("101");
 		
-		
-		
-
 		//owner
+		Map<Integer, Users> renterMapOwner = new HashMap<>();
+		Map<Integer, Users> renterMapRoomate = new HashMap<>();
+		
+		List<Object> renterInfor = daoUser.selRenterName();
+		
 		cbbOwner = new JComboBox();
 		cbbOwner.setModel(new DefaultComboBoxModel());
+		
+//		List<Object> renterInfor = daoUser.selRenterName();
+		
 		for(Object renter: renterInfor) {
-			Users renterObj = (Users) renter; 
-	        cbbOwner.addItem(renterObj); 
-	        if (renterObj.getId() == ownerID) {
-	            cbbOwner.setSelectedItem(renterObj); 
-	        }
+			if(renter instanceof Users) {
+				Users renterObj = (Users) renter;
+				cbbOwner.addItem(renterObj.getId() + "-" + renterObj.getName() + "-" + renterObj.getPhone() + 
+						"-" + renterObj.getDob() + "-" + renterObj.getNic());
+				renterMapOwner.put(renterObj.getId(), renterObj);
+				
+			}
 		}
-
+		
+		cbbOwner.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JComboBox cbbx = (JComboBox) e.getSource();
+				String selectRoomate = (String) cbbOwner.getSelectedItem();
+				String[] parts = selectRoomate.split("-");
+				int roomatesID = Integer.parseInt(parts[0]);
+				
+				if(!roomatesList.isEmpty()) {
+					roomatesList.remove(0);
+				}
+				
+				lblInfoRoomates1.setText(selectRoomate);
+				lblDelete1.setVisible(true);
+				lblDelete1.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						super.mouseClicked(e);
+						lblInfoRoomates1.setText("");
+						lblDelete1.setVisible(false);
+						roomatesList.remove(String.valueOf(roomatesID));
+						
+					}
+				});
+				roomatesList.add(String.valueOf(roomatesID));
+			}
+		});
 		
 		btnUploadContract = new JButton("Upload");
 		btnUploadContract.addActionListener(new ActionListener() {
@@ -192,17 +234,18 @@ public class FrameUpContract extends JFrame {
 		dateToDate.setDateFormatString("yyyy-MM-dd");
 		
 		//roomate
-		Map<Integer, Users> renterMap = new HashMap<>();
+//		Map<Integer, Users> renterMap = new HashMap<>();
 		cbbRoomates = new JComboBox();
 		cbbRoomates.setModel(new DefaultComboBoxModel(new String[] {""}));
 		for(Object renter: renterInfor) {
 			Users renterObject = (Users) renter;
 			cbbRoomates.addItem(renterObject.getId() + "-" + renterObject.getName() + "-" + renterObject.getPhone()
 				+ "-" + renterObject.getDob() + "-" + renterObject.getNic());
+			renterMapRoomate.put(renterObject.getId(), renterObject);
 		}
 		
 		cbbRoomates.addActionListener(new ActionListener() {
-		int selectCount = 0;
+		int selectCount = 1;
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -210,23 +253,23 @@ public class FrameUpContract extends JFrame {
 			String selectRoomates = (String) cbbRoomates.getSelectedItem();
 			String[] parts = selectRoomates.split("-");
 
-			if (selectCount < 4) {
+			if (selectCount < 3) {
 				int roomatesID = Integer.parseInt(parts[0]);
 
 				switch (selectCount) {
-					case 0: {
-						lblInfoRoomates1.setText(selectRoomates);
-						lblDelete1.setVisible(true);
-						lblDelete1.addMouseListener(new MouseAdapter() {
-							public void mouseClicked(java.awt.event.MouseEvent e) {
-								lblInfoRoomates1.setText("");
-								lblDelete1.setVisible(false);
-								selectCount = 0;
-								roomatesList.remove(String.valueOf(roomatesID));
-							};
-						});
-						break;
-					}
+//					case 0: {
+//						lblInfoRoomates1.setText(selectRoomates);
+//						lblDelete1.setVisible(true);
+//						lblDelete1.addMouseListener(new MouseAdapter() {
+//							public void mouseClicked(java.awt.event.MouseEvent e) {
+//								lblInfoRoomates1.setText("");
+//								lblDelete1.setVisible(false);
+//								selectCount = 0;
+//								roomatesList.remove(String.valueOf(roomatesID));
+//							};
+//						});
+//						break;
+//					}
 					case 1: {
 						lblInfoRoomates2.setText(selectRoomates);
 						lblDelete2.setVisible(true);
@@ -295,8 +338,11 @@ public class FrameUpContract extends JFrame {
 				var contract = new Contract();
 				var dao = new ContractDao();
 				
-				Users ownerApUsers = (Users) cbbOwner.getSelectedItem();
-				int ownerID = ownerApUsers.getId();
+//				Users ownerApUsers = (Users) cbbOwner.getSelectedItem();
+				String selectedOwnerInfo = (String) cbbOwner.getSelectedItem();
+//				int ownerID = ownerApUsers.getId();
+				int ownerID = Integer.parseInt(selectedOwnerInfo.split("-")[0]);
+				Users ownerApart = renterMapOwner.get(ownerID);
 				
 				java.sql.Date sqlFromDate = new java.sql.Date(dateFromDate.getDate().getTime());
 				java.sql.Date sqlToDate = new java.sql.Date(dateToDate.getDate().getTime());
@@ -319,7 +365,7 @@ public class FrameUpContract extends JFrame {
 				contract.setImgContracs(imgFilePathString);
 				
 				dao.updateContract(contract);
-				System.out.println("success insert contract");
+				JOptionPane.showMessageDialog(null, "Successful Update Contract");
 				
 				for (int i = 0; i < Math.min(conPathList.size(), 5); i++) {
 					try {
@@ -330,6 +376,7 @@ public class FrameUpContract extends JFrame {
 					}
 				}
 				dispose();
+				event.loadDataTable();
 			}
 			
 		});
@@ -356,43 +403,49 @@ public class FrameUpContract extends JFrame {
 		if(result==JFileChooser.APPROVE_OPTION) {
 			File[] selectedFiles = chooser.getSelectedFiles();
 			
-			for(int i=0; i<Math.min(selectedFiles.length, 5); i++) {
-				File file = selectedFiles[i];
-				String filename = file.getName();
-				String extension = filename.substring(filename.lastIndexOf(".")+1);
-				String newConFilePath = "images/contract_" + System.currentTimeMillis() + "." + extension;
-				String filePath = file.getAbsolutePath();
-				
-				conPathList.add(filePath);
-				conImgList.add(newConFilePath);
-				
-				switch (i) {
-					case 0:
-						lblImgCon1.setIcon(new ImageIcon(
-								new ImageIcon(filePath).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-						break;
-	
-					case 1:
-						lblImgCon2.setIcon(new ImageIcon(
-								new ImageIcon(filePath).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-						break;
-	
-					case 2:
-						lblImgCon3.setIcon(new ImageIcon(
-								new ImageIcon(filePath).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-						break;
-	
-					case 3:
-						lblImgCon4.setIcon(new ImageIcon(
-								new ImageIcon(filePath).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-						break;
-	
-					case 4:
-						lblImgCon5.setIcon(new ImageIcon(
-								new ImageIcon(filePath).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-						break;
+			if(selectedFiles.length!=4) {
+				JOptionPane.showMessageDialog(null, "Please upload 4 photos of your contract", "Input Invalid",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				for(int i=0; i<Math.min(selectedFiles.length, 5); i++) {
+					File file = selectedFiles[i];
+					String filename = file.getName();
+					String extension = filename.substring(filename.lastIndexOf(".")+1);
+					String newConFilePath = "images/contract_" + System.currentTimeMillis() + "." + extension;
+					String filePath = file.getAbsolutePath();
+					
+					conPathList.add(filePath);
+					conImgList.add(newConFilePath);
+					
+					switch (i) {
+						case 0:
+							lblImgCon1.setIcon(new ImageIcon(
+									new ImageIcon(filePath).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+							break;
+		
+						case 1:
+							lblImgCon2.setIcon(new ImageIcon(
+									new ImageIcon(filePath).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+							break;
+		
+						case 2:
+							lblImgCon3.setIcon(new ImageIcon(
+									new ImageIcon(filePath).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+							break;
+		
+						case 3:
+							lblImgCon4.setIcon(new ImageIcon(
+									new ImageIcon(filePath).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+							break;
+		
+						case 4:
+							lblImgCon5.setIcon(new ImageIcon(
+									new ImageIcon(filePath).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+							break;
+					}
 				}
 			}
+			
 		}
 	}
 	

@@ -218,7 +218,7 @@ public class ViewRoomRenters extends JFrame {
 		txtApNum.setFont(new Font("Arial", Font.BOLD, 12));
 		txtApNum.setColumns(10);
 		
-		txtNumRenters.setBounds(633, 48, 71, 18);
+		txtNumRenters.setBounds(633, 48, 98, 18);
 		txtNumRenters.setFont(new Font("Arial", Font.BOLD, 12));
 		txtNumRenters.setEnabled(false);
 		txtNumRenters.setEditable(false);

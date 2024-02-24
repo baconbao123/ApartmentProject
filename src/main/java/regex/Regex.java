@@ -1,7 +1,8 @@
 package regex;
 
 public class Regex {
-	public static final String CHAR = "[a-zA-Z\\s]+$";
+	public static final String CHAR = "[\\p{L}\\s]+$";
+	public static final String CHAR_NUM_UP = "^[\\p{L}\\d\\s/]*$";
 	public static final String NUM = "[0-9]+";
 	public static final String DATE_REGEX = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$";
 	public static final String FLOAT = "[0-9]+(\\.[0-9]+)?";

@@ -144,7 +144,6 @@ public class Menu extends JPanel {
 	public void initUserMenu() {
 		addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/icon/dashboards.png")), "Home"));
 		addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/icon/group.png")), "Payment Management"));
-		addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/icon/love.png")), "Report"));
 		addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/icon/notification.png")), "Notifications"));
 		addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/icon/cogwheel.png")), "Settings"));
 	}

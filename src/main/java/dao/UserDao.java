@@ -50,18 +50,23 @@ public class UserDao {
 	}
 
 	public void updateUser(Users user) {
-		try (var con = ConnectDB.getConnect();
-				var cs = con.prepareCall("{call upUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");) {
+		try 
+		( 
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call upUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+		)
+		{
 			cs.setInt(1, user.getId());
 			cs.setString(2, user.getAvatar());
 			cs.setString(3, user.getName());
-			cs.setString(4, user.getGender());
-			cs.setString(5, user.getPhone());
-			cs.setDate(6, (Date) user.getDob());
-			cs.setString(7, user.getAddress());
-			cs.setString(8, user.getNic());
-			cs.setString(9, user.getiAuthority());
-			cs.setString(10, user.getImgIAuthority());
+			cs.setString(4, user.getEmail());
+			cs.setString(5, user.getGender());
+			cs.setString(6, user.getPhone());
+			cs.setDate(7, (Date) user.getDob());
+			cs.setString(8, user.getAddress());
+			cs.setString(9, user.getNic());
+			cs.setString(10, user.getiAuthority());
+			cs.setString(11, user.getImgIAuthority());
 			cs.executeUpdate();
 			System.out.println("Update renter success");
 		} catch (Exception e) {
@@ -82,6 +87,7 @@ public class UserDao {
 				renter.setId(rs.getInt("id"));
 				renter.setAvatar(rs.getString("avatar"));
 				renter.setName(rs.getString("name"));
+				renter.setEmail(rs.getString("email"));
 				renter.setGender(rs.getString("gender"));
 				renter.setDob(rs.getDate("dob"));
 				renter.setPhone(rs.getString("phone"));
@@ -334,7 +340,7 @@ public class UserDao {
 				list.add(rs.getBoolean("is_admin"));
 //				this.userId = rs.getInt("id");
 				Login.setId(rs.getInt("id"));
-
+				JOptionPane.showMessageDialog(null, list.toString());
 			}
 			return list;
 
@@ -343,6 +349,7 @@ public class UserDao {
 		}
 		return list;
 	}
+	
 	public List<Object> emailExist(String email) {
 		var list = new ArrayList<>();
 		try (var con = ConnectDB.getConnect(); var cs = con.prepareCall("{call emailExist(?)}");) {
@@ -358,6 +365,5 @@ public class UserDao {
 		}
 		return list;
 	}
-
 
 }

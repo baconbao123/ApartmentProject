@@ -22,6 +22,7 @@ import formEnterAd.FrameContract;
 import formEnterAd.FrameAddRoom;
 import formUpdateAd.FrameContractDisconnect;
 import formUpdateAd.FrameUpApart;
+import model.Fees;
 
 import java.awt.Font;
 import java.awt.GradientPaint;
@@ -83,10 +84,18 @@ public class CardRoom extends JPanel {
 	private int idCon;
 	private String idFeeAll;
 //	private int idFee;
-//	private float totalMoneyMoth;
-	private List<LocalDate> timePayment = new ArrayList<>();
-	private List<Float> totalMoneys = new ArrayList<>();
-	private List<Integer> idFees = new ArrayList<Integer>();
+	private float totalMoneyMoth;
+	private String nameCard;
+	
+	
+	// name Card
+	public String getNameCard() {
+		return nameCard;
+	}
+
+	public void setNameCard(String nameCard) {
+		this.nameCard = nameCard;
+	}
 
 	public CardRoom getCardRoom() {
 		return cardRoom;
@@ -197,64 +206,8 @@ public class CardRoom extends JPanel {
 		this.idFeeAll = idFeeAll;
 	}
 	
-	// get id fee
-	public List<Integer> getIdFees() {
-		return idFees;
-	}
-
-	public void setIdFees(List<Integer> idFees) {
-		this.idFees = idFees;
-	}
-	
-	public void addIDFees(List<Integer> idFee) {
-		for(Integer id: idFee) {
-			if(!idFees.contains(id)) {
-				idFees.add(id);
-			};
-		}
-	}
-
-	// get time payment 
-	public List<LocalDate> getTimePayment() {
-		return timePayment;
-	}
-
-
-
-	public void setTimePayment(List<LocalDate> timePayment) {
-		this.timePayment = timePayment;
-	}
-	
-	public void addPaymentTime(List<LocalDate> paymentTimes) {
-	    for (LocalDate paymentTime : paymentTimes) {
-	        if (!timePayment.contains(paymentTime)) {
-	            timePayment.add(paymentTime);
-	        }
-	    }
-	}
-	
-	// get money payment
-	public void addMoneyPayment(List<Float> moneyPayments) {
-		for (Float paymentTime : moneyPayments) {
-	        if (!totalMoneys.contains(paymentTime)) {
-	        	totalMoneys.add(paymentTime);
-	        }
-	    }
-	}
-	
-	public List<Float> getTotalMoneys() {
-		return totalMoneys;
-	}
-
-	public void setTotalMoneys(List<Float> totalMoneys) {
-		this.totalMoneys = totalMoneys;
-	}
-	
 	
 
-	
-	
-	
 	public CardRoom() {
 		setBackground(Color.WHITE);
 		setBorder(null);
@@ -285,8 +238,27 @@ public class CardRoom extends JPanel {
 
 		initComponent();
 //		callStateCard();
+		JOptionPane.showMessageDialog(null, nameCard);
 		
-//		frame.setCardRoom(this);
+		if(Float.parseFloat(lblPrice.getText()) == 0 || Float.parseFloat(lblPrice.getText()) == 0.0) {
+			CardLayout layout = (CardLayout) CardButton.getLayout();
+		    if ("rented".equals(layout.toString())) { // Kiểm tra nếu layout là "rented"
+
+				layout.show(CardButton, "rented");
+		        setBackgroundColor(Color.PINK);
+		    	int roomNumber = cardRoom.getCurrentApartNum();
+		    	System.out.println(cardRoom.getCurrentApartNum());
+		    	AppStateManager.saveAppState(roomNumber, new Color(46, 204, 113), "rented");
+		    }
+		}
+		
+//		} else if (Integer.parseInt(lblPrice.getText()) > 0){
+//			CardLayout layout = (CardLayout) CardButton.getLayout();
+//			if ("rented".equals(layout.toString())) { 
+//				int roomNumber = cardRoom.getCurrentApartNum();
+//		    	AppStateManager.saveAppState(roomNumber, new Color(39, 158, 255), "rented");
+//			}
+//		}
 	}
 	
 	
@@ -394,12 +366,7 @@ public class CardRoom extends JPanel {
 		addPaymen.setVisible(true);
 		addPaymen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		addPaymen.setLocationRelativeTo(null);
-		
-		System.out.println("id Fee" + idFees);
-		 
-		addPaymen.setTimePayments(timePayment);
-		addPaymen.setTotalMoneys(totalMoneys);
-		addPaymen.setIdFees(idFees);
+		addPaymen.setCurrentCardRoom(currentApartNum);
 		addPaymen.setBtnPayMonthListener(new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
@@ -423,7 +390,7 @@ public class CardRoom extends JPanel {
 	// btn checkout
 	protected void btnCheckOutActionPerformed(ActionEvent e) {
 		String apartNum = String.valueOf(currentApartNum);
-		
+		String priceStr = lblPrice.getText();
 		var frame = new FrameContractDisconnect();
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -437,6 +404,7 @@ public class CardRoom extends JPanel {
 		frame.setRoomateRoom(inforRoomate);
 		frame.setIDCon(String.valueOf(idCon));
 		frame.setCardRoom(this);
+		frame.setPriceStr(priceStr);
 	}
 
 	// btn view renter
@@ -560,7 +528,7 @@ public class CardRoom extends JPanel {
 
 		lblIconMoney = new JLabel("");
 		lblIconMoney.setIcon(new ImageIcon(CardRoom.class.getResource("/icon/payment(1).png")));
-		lblPrice.setForeground(Color.BLACK);
+		lblPrice.setForeground(new Color(244, 0, 0));
 		lblPrice.setFont(new Font("Arial", Font.BOLD, 12));
 
 		lblIconPeople = new JLabel("");

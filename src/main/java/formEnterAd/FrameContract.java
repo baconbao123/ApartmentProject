@@ -30,6 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JRadioButton;
 import com.toedter.calendar.JDateChooser;
 
+import component.CardApartment;
 import dao.ApartmentDao;
 import dao.ContractDao;
 import dao.UserDao;
@@ -429,6 +430,7 @@ public class FrameContract extends JFrame {
 						JOptionPane.showMessageDialog(null, "Save success");
 						
 						dispose();
+						
 						 
 						
 						if(cardRoom!=null) {

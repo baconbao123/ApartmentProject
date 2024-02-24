@@ -21,6 +21,7 @@ import dao.ApartmentDao;
 import dao.ContractDao;
 import scrollbar.ScrollBarCustom;
 import view.AppStateManager;
+import view.AppStateManager.RoomState;
 import view.CardRoom;
 import entity.*;
 import formEnterAd.FrameAddRoom;
@@ -56,7 +57,6 @@ public class CardApartment extends JPanel {
 		var daoAp = new ApartmentDao();
 		List<Apartment> apartments = daoAp.selectApartment();
 		
-		System.out.println("apartments" +apartments);
 
 		Map<Integer, AppStateManager.RoomState> roomColors = AppStateManager.loadAppState();
 
@@ -93,13 +93,14 @@ public class CardApartment extends JPanel {
 					AppStateManager.RoomState roomState = roomColors.get(apartments.get(i - 1).getRoomNumber());
 					Color savedColor = roomState.getColor();
 					String cardLayoutState = roomState.getCardLayoutState();
-
+					
 					cardRoom.setBackgroundColor(savedColor);
 
 					CardLayout cardLayout = (CardLayout) cardRoom.CardButton.getLayout();
 					cardLayout.show(cardRoom.CardButton, cardLayoutState);
+					
+					
 				}
-
 				cardRoom.setApartmenNumber(apartments.get(i - 1).getRoomNumber());
 				cardRoom.setPeopleNumber(apartments.get(i - 1).getPeopleMaximun());
 				cardRoom.setCurrentApartNum(apartments.get(i - 1).getRoomNumber());
@@ -142,23 +143,9 @@ public class CardApartment extends JPanel {
 					cardRoom.setMoneyApart("0");
 				}
 				
-				// fee Month
-				Fees matchFeeMoth = findFeeForApartment(feeMonth, apartments.get(i-1).getRoomNumber());
-				if(matchFeeMoth!=null) {
-					List<LocalDate> paymentTimes = new ArrayList<>();
-					List<Float> totalMoneys = new ArrayList<>();
-					List<Integer> idFees = new ArrayList<>();
-					for (Fees fee : feeMonth) {
-			            paymentTimes.add(fee.getTime());
-			            totalMoneys.add(fee.getTotal());
-			            idFees.add(fee.getId());
-				    }
+				
+				
 					
-					cardRoom.addPaymentTime(paymentTimes);
-					cardRoom.addMoneyPayment(totalMoneys);
-					cardRoom.addIDFees(idFees);
-					
-				}
 			}
 
 
@@ -189,7 +176,12 @@ public class CardApartment extends JPanel {
 	}
 	
 
-	
+//	public void refreshApartments() {
+//	    panel.removeAll(); // Remove all components from the panel
+//	    panel.revalidate(); // Revalidate the panel to reflect the changes
+//	    panel.repaint(); // Repaint the panel to update the display
+//	    // Add the code inside your `CardApartment` constructor that populates the panel with updated data
+//	}
 	
 	
 

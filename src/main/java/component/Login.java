@@ -18,6 +18,7 @@ import java.awt.RenderingHints;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ImageIcon;
 import java.awt.Cursor;
@@ -64,6 +65,12 @@ public class Login extends JFrame {
 	private JLabel lblStatusNoti;
 	private JLabel lblStatusLoad;
 	private JLabel lblStatus;
+	
+	
+	private  static Integer id;
+	private JLabel lblNewLabel;
+	
+	private static Boolean isAdmin; 
 
 	private static Integer id;
 	private JLabel lblNewLabel;
@@ -76,6 +83,14 @@ public class Login extends JFrame {
 
 	public final static void setIsAdmin(Boolean isAdmin) {
 		Login.isAdmin = isAdmin;
+	}
+
+	public final static Boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public final static void setIsAdmin(Boolean value) {
+		isAdmin = value;
 	}
 
 	public final static Integer getId() {
@@ -313,10 +328,10 @@ public class Login extends JFrame {
 		var rs = dao.login(userName, pass);
 		if (!rs.isEmpty()) {
 			lblStatusLoad.setText("Success");
-			showDashboardScreen((boolean) rs.get(1));
-			setIsAdmin((boolean) rs.get(1));
-			System.out.println("Login "+Login.getIsAdmin());
-
+			showDashboardScreen( (boolean) rs.get(1));
+			isAdmin = (boolean) rs.get(1);
+			MenuBottom.getAdmin();
+			System.out.println(rs.toString());
 		} else {
 			lblStatusLoad.setText("Fail");
 			lblStatusNoti.setText("Username or Password is incorrect");

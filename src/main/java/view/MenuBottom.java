@@ -5,6 +5,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingUtilities;
 
@@ -33,7 +34,11 @@ public class MenuBottom extends JPanel {
 	private JPanel panel;
 	
 	
-	private int id = Login.getId();
+	private static Boolean isAdmin;
+	
+	public static void getAdmin() {
+		isAdmin = Login.getIsAdmin();
+	}
 
 	public JLabel getLblIcon() {
 		return lblIcon;
@@ -45,6 +50,7 @@ public class MenuBottom extends JPanel {
 	public MenuBottom() {
 		setOpaque(false);
 		setBounds(0, 0, 230, 65);
+		System.out.println("isAddmin: " + Login.getIsAdmin());
 		
 		panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
@@ -88,7 +94,7 @@ public class MenuBottom extends JPanel {
 		lblIcon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(isAdmin != null && isAdmin) {
+				if(isAdmin) {
 					showLoginScreen();
 					
 				} else {
@@ -147,7 +153,7 @@ public class MenuBottom extends JPanel {
 		UserMain main = (UserMain) SwingUtilities.getWindowAncestor(this);
 		Login login = new Login();
 		login.setVisible(true);
-		login.setLocationRelativeTo(null);
+		login.setLocationRelativeTo(main);
 		main.dispose();
 	}
 
