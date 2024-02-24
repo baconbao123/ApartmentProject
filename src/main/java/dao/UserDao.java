@@ -340,7 +340,6 @@ public class UserDao {
 				list.add(rs.getBoolean("is_admin"));
 //				this.userId = rs.getInt("id");
 				Login.setId(rs.getInt("id"));
-				JOptionPane.showMessageDialog(null, list.toString());
 			}
 			return list;
 

@@ -238,7 +238,7 @@ public class CardRoom extends JPanel {
 
 		initComponent();
 //		callStateCard();
-		JOptionPane.showMessageDialog(null, nameCard);
+//		JOptionPane.showMessageDialog(null, nameCard);
 		
 		if(Float.parseFloat(lblPrice.getText()) == 0 || Float.parseFloat(lblPrice.getText()) == 0.0) {
 			CardLayout layout = (CardLayout) CardButton.getLayout();

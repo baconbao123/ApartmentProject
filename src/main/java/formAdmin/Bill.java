@@ -403,6 +403,7 @@ public class Bill extends JPanel {
 
 	@SuppressWarnings("null")
 	public  void init() {
+		filter = false;
 		var modelReport = new DefaultTableModel();
 		modelReport.addColumn("Room");
 		modelReport.addColumn("Total");
@@ -514,12 +515,13 @@ public class Bill extends JPanel {
 		var status = selectStatus.getSelectedItem().toString().equals("finished") ? "1":"0";
 		model.setRowCount(0);
 		modelReport.setRowCount(0);
+		var room = inputRoom.getText().isEmpty() ? null : inputRoom.getText();
 		var dao = new FeesDao();
-		totalOfRow = dao.total(inputRoom.getText(), status, from.getDate(), to.getDate(), filter);
+		totalOfRow = dao.total(room, status, from.getDate(), to.getDate(), filter);
 		totalOfPage = Math.ceil(totalOfRow.doubleValue() / rowOfPage.doubleValue());
 		lblDisplay.setText("Display  "+(pageNumber*rowOfPage-rowOfPage)+" to "+((pageNumber*rowOfPage)>totalOfRow? totalOfRow :pageNumber*rowOfPage)+ " in "+ totalOfRow + " rows");
 		var id = inputId.getText().isEmpty() ? null : Integer.parseInt(inputId.getText());
-		var room = inputRoom.getText().isEmpty() ? null : inputRoom.getText();
+		
 		dao.getFees(pageNumber, rowOfPage,  room,status, from.getDate(), to.getDate(),filter, id).stream().forEach(fee-> {
 			model.addRow(new Object[] {fee.getId(),fee.getRoom(),fee.getTotal(),fee.getElectric(),fee.getWater(),fee.getRent(),fee.getOther(),fee.getTime(),fee.getNote(),fee.getStatus(),"Action"});
 			modelReport.addRow(new Object[] {fee.getRoom(),fee.getTotal(),fee.getElectric(),fee.getWater(),fee.getRent(),fee.getOther(),fee.getTime(),fee.getNote(),fee.getStatus()?"Finished":"Haven't finished"});

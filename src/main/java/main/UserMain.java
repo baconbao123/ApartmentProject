@@ -124,12 +124,10 @@ public class UserMain extends JFrame {
 				} else if (menuIndex == 1) {
 					mainForm.showForm(new PaymentUser());
 				} else if (menuIndex == 2) {
-					mainForm.showForm(new Report());
-				} else if (menuIndex == 3) {
 					mainForm.showForm(new Notification());
-				} else if (menuIndex == 4) {
+				} else if (menuIndex == 3) {
 					mainForm.showForm(new Setting());
-				}
+				} 
 			}
 		});
 		

@@ -33,6 +33,7 @@ public class FeesDao {
 				var cs = con.prepareStatement("{call paginateFees(?,?,?,?,?,?,?)}");
 				)
 		{
+			JOptionPane.showMessageDialog(null, filter);
 			if(filter) { 
 				cs.setInt(1,pageNumber);
 				cs.setInt(2,rowOfPage);

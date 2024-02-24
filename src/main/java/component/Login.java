@@ -67,23 +67,14 @@ public class Login extends JFrame {
 	private JLabel lblStatus;
 	
 	
-	private  static Integer id;
-	private JLabel lblNewLabel;
 	
-	private static Boolean isAdmin; 
 
 	private static Integer id;
 	private JLabel lblNewLabel;
 
 	private static Boolean isAdmin;
 
-	public final static Boolean getIsAdmin() {
-		return isAdmin;
-	}
 
-	public final static void setIsAdmin(Boolean isAdmin) {
-		Login.isAdmin = isAdmin;
-	}
 
 	public final static Boolean getIsAdmin() {
 		return isAdmin;
@@ -331,7 +322,6 @@ public class Login extends JFrame {
 			showDashboardScreen( (boolean) rs.get(1));
 			isAdmin = (boolean) rs.get(1);
 			MenuBottom.getAdmin();
-			System.out.println(rs.toString());
 		} else {
 			lblStatusLoad.setText("Fail");
 			lblStatusNoti.setText("Username or Password is incorrect");
