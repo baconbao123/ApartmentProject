@@ -19,6 +19,7 @@ import component.Login;
 import dao.UserDao;
 import entity.Users;
 import view.ShowEditSetting;
+import view.ShowEditSettingUser;
 import view.ShowChangePwd;
 
 import java.awt.Color;
@@ -379,6 +380,13 @@ public class Setting extends JPanel {
 			panel_2.add(lblBackSide);
 		}
 		setLayout(groupLayout);
+		Boolean isAdmin = Login.getIsAdmin();
+		if(isAdmin) {
+			lblAdmin.setText("ADMIN");
+		}else {
+			lblAdmin.setText("RENTER");
+		}
+		
 		// show info
 		UserDao user = new UserDao();
 		Integer userId = Login.getId();
@@ -529,8 +537,8 @@ public class Setting extends JPanel {
 					String img1 = nicPathArray[0];
 					String img2 = nicPathArray[1];
 
-					ImageIcon icon1 = new ImageIcon(img2);
-					ImageIcon icon2 = new ImageIcon(img1);
+					ImageIcon icon1 = new ImageIcon(img1);
+					ImageIcon icon2 = new ImageIcon(img2);
 
 					Image scaledImage1 = icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 					Image scaledImage2 = icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
@@ -568,8 +576,15 @@ public class Setting extends JPanel {
 	}
 
 	protected void btnEditInfoActionPerformed(ActionEvent e) {
-		ShowEditSetting JframeShowEditSetting = new ShowEditSetting();
+		Boolean isAdmin = Login.getIsAdmin();
+		if(isAdmin) {
+			ShowEditSetting JframeShowEditSetting = new ShowEditSetting();
 		JframeShowEditSetting.setVisible(true);
+		}else {
+			ShowEditSettingUser JframeShowEditSetting1 = new ShowEditSettingUser();
+			JframeShowEditSetting1.setVisible(true);
+		}
+		
 	}
 	protected void btnNewButtonActionPerformed(ActionEvent e) {
 		ShowChangePwd JFrameshowChangePwd = new ShowChangePwd();

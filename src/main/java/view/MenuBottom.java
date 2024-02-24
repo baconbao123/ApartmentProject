@@ -67,8 +67,8 @@ public class MenuBottom extends JPanel {
 		LblName.setForeground(SystemColor.controlShadow);
 		LblName.setFont(new Font("Tahoma", Font.BOLD, 15));
 		
-		LblStatus = new JLabel("Admin");
-		LblStatus.setBounds(77, 27, 46, 19);
+		LblStatus = new JLabel("");
+		LblStatus.setBounds(77, 27, 72, 19);
 		panel.add(LblStatus);
 		LblStatus.setForeground(SystemColor.controlShadow);
 		LblStatus.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
@@ -81,27 +81,37 @@ public class MenuBottom extends JPanel {
 		lblAvatar = new JLabel("");
 		lblAvatar.setBounds(10, 5, 46, 41);
 		panel.add(lblAvatar);
+		
+		var isAdmin = Login.getIsAdmin();
+		System.out.println("Menu "+isAdmin);
+		System.out.println("Id "+Login.getId());
 		lblIcon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(id == 2) {
+				if(isAdmin != null && isAdmin) {
 					showLoginScreen();
+					
 				} else {
 					showLoginUser();
+					
 				}
 				
 				
 			}
 
 		});
+		
+		
 		setLayout(groupLayout);
 		
 		UserDao user = new UserDao();
 		Integer userId = Login.getId();
 		Users info = user.selUser(userId);
+		
 		if (info != null) {
 
 			LblName.setText(info.getEmail() != null ? info.getEmail() : "");
+		
 			
 			if (info.getAvatar() == null || info.getAvatar().isEmpty()) {
 				ImageIcon originAvatarIcon = new ImageIcon("images/avatarDefaut.jpg");
