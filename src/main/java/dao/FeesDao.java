@@ -110,7 +110,7 @@ public class FeesDao {
 		
 		{
 			if(filter) {
-				if(room.isEmpty()) {
+				if(room == null) {
 					cs.setNull(1, java.sql.Types.INTEGER);
 				}
 				else {
