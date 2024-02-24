@@ -71,6 +71,17 @@ public class FrameContractDisconnect extends JFrame {
 	private JLabel lblContractId;
 	private JLabel ReadIdCon;
 	private CardRoom cardRoom;
+	private String priceStr;
+	
+	
+
+	public String getPriceStr() {
+		return priceStr;
+	}
+
+	public void setPriceStr(String priceStr) {
+		this.priceStr = priceStr;
+	}
 
 	public void setCardRoom(CardRoom cardRoom) {
 		this.cardRoom = cardRoom;
@@ -238,30 +249,35 @@ public class FrameContractDisconnect extends JFrame {
 	protected void btnSaveActionPerformed(ActionEvent e) {
 		int result = JOptionPane.showConfirmDialog(null, "Check-out confirmation for Room " + ReadApNum.getText());
 		if (result == JOptionPane.YES_OPTION) {
-			var contract = new Contract();
-			var dao = new ContractDao();
-			
-			contract.setId(Integer.parseInt(ReadIdCon.getText()));
-			if(rdOn.isSelected()) {
-				contract.setStatus(true);
-			} else if(rdOff.isSelected()) {
-				contract.setStatus(false);
+			if(Float.parseFloat(priceStr)>0) {
+				JOptionPane.showMessageDialog(null, "Please make payment before checking out.");
+			} else {
+				var contract = new Contract();
+				var dao = new ContractDao();
+				
+				contract.setId(Integer.parseInt(ReadIdCon.getText()));
+				if(rdOn.isSelected()) {
+					contract.setStatus(true);
+				} else if(rdOff.isSelected()) {
+					contract.setStatus(false);
+				}
+				
+				dao.updateConStatus(contract);
+				
+				dispose();
+				
+				if(cardRoom!=null) {
+					int roomNumber = cardRoom.getCurrentApartNum();
+					cardRoom.setBackgroundColor(Color.WHITE);
+					
+					
+					CardLayout layout = (CardLayout) cardRoom.CardButton.getLayout();
+					layout.show(cardRoom.CardButton, "available");
+					
+					AppStateManager.saveAppState(roomNumber, Color.WHITE, "available");
+				}
 			}
 			
-			dao.updateConStatus(contract);
-			
-			dispose();
-			
-			if(cardRoom!=null) {
-				int roomNumber = cardRoom.getCurrentApartNum();
-				cardRoom.setBackgroundColor(Color.WHITE);
-				
-				
-				CardLayout layout = (CardLayout) cardRoom.CardButton.getLayout();
-				layout.show(cardRoom.CardButton, "available");
-				
-				AppStateManager.saveAppState(roomNumber, Color.WHITE, "available");
-			}
 		}
 		
 		

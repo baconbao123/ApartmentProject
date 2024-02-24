@@ -12,6 +12,21 @@ public class UsersOtherId {
 	private String receiver_email;
 	private String name;
 	private int numRoom;
+	private boolean role;
+	public UsersOtherId(int id, String receiver_email, String name, int numRoom, boolean role) {
+		super();
+		this.id = id;
+		this.receiver_email = receiver_email;
+		this.name = name;
+		this.numRoom = numRoom;
+		this.role = role;
+	}
+	public boolean isRole() {
+		return role;
+	}
+	public void setRole(boolean role) {
+		this.role = role;
+	}
 	public String getReceiver_email() {
 		return receiver_email;
 	}
@@ -28,12 +43,6 @@ public class UsersOtherId {
 		return numRoom;
 	}
 	public void setNumRoom(int numRoom) {
-		this.numRoom = numRoom;
-	}
-	public UsersOtherId(String receiver_email, String name, int numRoom) {
-		super();
-		this.receiver_email = receiver_email;
-		this.name = name;
 		this.numRoom = numRoom;
 	}
 	@Override

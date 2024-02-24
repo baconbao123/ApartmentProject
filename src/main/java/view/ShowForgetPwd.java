@@ -132,7 +132,6 @@ public class ShowForgetPwd extends JFrame {
 			if (user.getEmail().equals(txtEmail.getText())) {
 				emailFound = true;
 				info = user; 
-				System.out.println(info);
 				break;
 			}
 		}

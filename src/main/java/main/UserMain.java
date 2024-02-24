@@ -22,6 +22,8 @@ import component.Header;
 import component.Login;
 import event.EventMenuSelected;
 import event.EventShowPopupMenu;
+import formAdmin.Notification;
+import formAdmin.Setting;
 import formUser.Home;
 import formUser.MainForm;
 import formUser.NotiUser;
@@ -124,11 +126,10 @@ public class UserMain extends JFrame {
 				} else if (menuIndex == 2) {
 					mainForm.showForm(new Report());
 				} else if (menuIndex == 3) {
-					mainForm.showForm(new NotiUser());
+					mainForm.showForm(new Notification());
 				} else if (menuIndex == 4) {
-					mainForm.showForm(new SettingUser());
+					mainForm.showForm(new Setting());
 				}
-
 			}
 		});
 		

@@ -24,6 +24,7 @@ import javax.swing.text.StyledDocument;
 
 import dao.UserDao;
 import entity.Users;
+import event.EventLoadTable;
 import event.EventTableRenterAction;
 import formAdView.ViewInfoRenter;
 import formAdmin.ContractList.CenterRenderer;
@@ -97,6 +98,7 @@ public class RenterList extends JPanel {
 	
 	
 	
+	
 	public RenterList() {
 		setBackground(SystemColor.menu);
 		setBounds(0, 0, 1050, 800);
@@ -151,7 +153,7 @@ public class RenterList extends JPanel {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				switch (column) {
-					case 10: return true;
+					case 11: return true;
 					default: return false;
 				}
 			}
@@ -160,6 +162,7 @@ public class RenterList extends JPanel {
 		model.addColumn("Id");
 		model.addColumn("Avatar");
 		model.addColumn("Fullname");
+		model.addColumn("Email");
 		model.addColumn("Gender");
 		model.addColumn("Phone");
 		model.addColumn("Date Of Birth");
@@ -187,6 +190,7 @@ public class RenterList extends JPanel {
 					renter.getId(),
 					avatarIcon,
 					renter.getName(),
+					renter.getEmail(),
 					renter.getGender(),
 					renter.getPhone(),
 					renter.getDob(),
@@ -210,13 +214,14 @@ public class RenterList extends JPanel {
 				
 				
 				String fullName = (String) table.getValueAt(row, 2);
-				String gender = (String) table.getValueAt(row, 3);
-				String phone = (String) table.getValueAt(row, 4);
-				java.sql.Date dob = (java.sql.Date) table.getValueAt(row, 5);
-				String address = (String) table.getValueAt(row, 6);
-				String nic = (String) table.getValueAt(row, 7);
-				String iAuthority = (String) table.getValueAt(row, 8);
-				String imgCICs = (String) table.getValueAt(row, 9);
+				String email = (String) table.getValueAt(row, 3);
+				String gender = (String) table.getValueAt(row, 4);
+				String phone = (String) table.getValueAt(row, 5);
+				java.sql.Date dob = (java.sql.Date) table.getValueAt(row, 6);
+				String address = (String) table.getValueAt(row, 7);
+				String nic = (String) table.getValueAt(row, 8);
+				String iAuthority = (String) table.getValueAt(row, 9);
+				String imgCICs = (String) table.getValueAt(row, 10);
 				String[] imgSplit = imgCICs.split(";");
 				ImageIcon[] imageIcons = new ImageIcon[imgSplit.length];
 				ImageIcon img1 = new ImageIcon();
@@ -241,7 +246,7 @@ public class RenterList extends JPanel {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 				String dobString = dateFormat.format(dob);
 				
-				var viewInfo = new ViewInfoRenter(avatarResize, fullName, gender, phone, dobString, address, nic, iAuthority, img1, img2);
+				var viewInfo = new ViewInfoRenter(avatarResize, fullName, email, gender, phone, dobString, address, nic, iAuthority, img1, img2);
 				viewInfo.setVisible(true);
 				viewInfo.setLocationRelativeTo(null);
 				viewInfo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -253,10 +258,15 @@ public class RenterList extends JPanel {
 				int id = (int) table.getValueAt(row, 0);
 				String idStr = String.valueOf(id);
 				String fullname = (String) table.getValueAt(row, 2);
-				java.sql.Date dob = (java.sql.Date) table.getValueAt(row, 5);
-				RenterList renterList = null;
-				
-				var vewUp = new FrameUpRenter(idStr, fullname, dob);
+				java.sql.Date dob = (java.sql.Date) table.getValueAt(row, 6);
+				var vewUp = new FrameUpRenter(idStr, fullname, dob, new EventLoadTable() {
+					
+					@Override
+					public void loadDataTable() {
+						loadTable();
+						
+					}
+				});
 				vewUp.setVisible(true);
 				vewUp.setLocationRelativeTo(null);
 				vewUp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -268,10 +278,10 @@ public class RenterList extends JPanel {
 		table.getColumnModel().getColumn(0).setMinWidth(0);
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);
 		
-		table.getColumnModel().getColumn(10).setCellRenderer(new TableActionCellRender());
-		table.getColumnModel().getColumn(10).setCellEditor(new TableActionCellEditor(event));
+		table.getColumnModel().getColumn(11).setCellRenderer(new TableActionCellRender());
+		table.getColumnModel().getColumn(11).setCellEditor(new TableActionCellEditor(event));
 		
-		table.getColumnModel().getColumn(9).setCellRenderer(new ImgContractRender());
+		table.getColumnModel().getColumn(10).setCellRenderer(new ImgContractRender());
 		
 		filterData();
 	}
@@ -381,14 +391,17 @@ public class RenterList extends JPanel {
 	}
 	
 	protected void btnAddRenterActionPerformed(ActionEvent e) {
-		var add = new FrameAddRenter();
+		var add = new FrameAddRenter(this);
 		add.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		add.setVisible(true);
 		add.setLocationRelativeTo(null);
-		
+			
 		
 	}
 	
+	public void reloadTable() {
+		loadTable();
+	}
 	
 	
 	
@@ -582,19 +595,6 @@ public class RenterList extends JPanel {
 		scrollPane.setViewportView(table);
 	}
 	
-	private ImageIcon createRoundImageIcon(ImageIcon originalIcon) {
-	    Image originalImage = originalIcon.getImage();
-	    int width = originalImage.getWidth(null);
-	    int height = originalImage.getHeight(null);
-
-	    BufferedImage roundedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	    Graphics2D g2 = roundedImage.createGraphics();
-	    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	    g2.setClip(new RoundRectangle2D.Float(0, 0, width, height, width, height));
-	    g2.drawImage(originalImage, 0, 0, null);
-	    g2.dispose();
-
-	    return new ImageIcon(roundedImage);
-	}
+	
 	
 }

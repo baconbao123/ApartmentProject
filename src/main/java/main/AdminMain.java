@@ -152,7 +152,7 @@ public class AdminMain extends JFrame {
 				}
 				case 4: {
 					switch (subMenuIndex) {
-					case 0:
+					case -1:
 					{
 						mainForm.showForm(new Notification());
 						break;

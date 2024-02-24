@@ -7,7 +7,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import component.Login;
+import dao.NotiDao;
 import dao.UserDao;
+import entity.Noti;
 import entity.Users;
 import entity.UsersOtherId;
 
@@ -27,9 +29,14 @@ import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.AbstractListModel;
 
 public class ShowCompose extends JFrame {
@@ -51,6 +58,7 @@ public class ShowCompose extends JFrame {
 	private JList<String> listSelectedUsers; // JList để hiển thị danh sách người nhận đã chọn
 	private DefaultListModel<String> selectedUsersModel; // Model cho JList
 	private JButton btnNewButton_3;
+	private Map<String, Integer> emailToUserMap = new HashMap<>();
 
 	/**
 	 * Launch the application.
@@ -72,6 +80,7 @@ public class ShowCompose extends JFrame {
 	 * Create the frame.
 	 */
 	public ShowCompose() {
+		setTitle("Compose");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(600, 250, 780, 536);
 		contentPane = new JPanel();
@@ -139,7 +148,7 @@ public class ShowCompose extends JFrame {
 				}
 			});
 			btnNewButton_1.setBackground(Color.WHITE);
-			btnNewButton_1.setBounds(71, 82, 100, 27);
+			btnNewButton_1.setBounds(113, 83, 100, 27);
 			contentPane.add(btnNewButton_1);
 		}
 		{
@@ -151,7 +160,7 @@ public class ShowCompose extends JFrame {
 			});
 			btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			btnNewButton_2.setBackground(new Color(255, 255, 255));
-			btnNewButton_2.setBounds(184, 82, 115, 27);
+			btnNewButton_2.setBounds(226, 83, 115, 27);
 			contentPane.add(btnNewButton_2);
 		}
 		{
@@ -160,12 +169,6 @@ public class ShowCompose extends JFrame {
 			lblNewLabel_1.setBounds(445, 15, 131, 14);
 			contentPane.add(lblNewLabel_1);
 		}
-
-		showSelect();
-		selectedUsers = new ArrayList<>();
-		selectedUsersModel = new DefaultListModel<>();
-		listSelectedUsers = new JList<>(selectedUsersModel);
-		scrollPane_1.setViewportView(listSelectedUsers);
 		{
 			btnNewButton_3 = new JButton("Remove");
 			btnNewButton_3.setIcon(new ImageIcon(ShowCompose.class.getResource("/icon/trash.png")));
@@ -180,6 +183,12 @@ public class ShowCompose extends JFrame {
 			btnNewButton_3.setBounds(596, 11, 107, 23);
 			contentPane.add(btnNewButton_3);
 		}
+		showSelect();
+		selectedUsers = new ArrayList<>();
+		selectedUsersModel = new DefaultListModel<>();
+		listSelectedUsers = new JList<>(selectedUsersModel);
+		scrollPane_1.setViewportView(listSelectedUsers);
+
 		System.out.println(selectedUsers);
 	}
 
@@ -187,9 +196,29 @@ public class ShowCompose extends JFrame {
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
 		var dao = new UserDao();
 		Integer id = Login.getId();
+		Boolean currentUserIsAdmin = Login.getIsAdmin();
+		System.out.println(currentUserIsAdmin);
+		Set<String> addedEmails = new HashSet<>();
 		List<UsersOtherId> renterInfo = dao.selAllUserOtherId(id);
 		for (UsersOtherId renter : renterInfo) {
-			model.addElement(renter.getReceiver_email());
+			String email = renter.getReceiver_email();
+			var renterIsAdmin = renter.isRole();
+			System.out.println(renterIsAdmin);
+			if (!currentUserIsAdmin && renterIsAdmin && !addedEmails.contains(email)) {
+				model.addElement(email);
+				addedEmails.add(email);
+				// Lưu ánh xạ từ email đến to_user
+				emailToUserMap.put(email, renter.getId());
+			} else if (currentUserIsAdmin) {
+				// Nếu người dùng hiện tại là admin, thêm mọi người
+				if (!addedEmails.contains(email)) {
+					model.addElement(email);
+					addedEmails.add(email);
+					// Lưu ánh xạ từ email đến to_user
+					emailToUserMap.put(email, renter.getId());
+				}
+			}
+
 		}
 		comboBox.setModel(model); // Đặt model cho JComboBox
 	}
@@ -214,16 +243,35 @@ public class ShowCompose extends JFrame {
 			}
 		}
 	}
+
 	private void removeSelectedUser() {
-        int selectedIndex = listSelectedUsers.getSelectedIndex();
-        if (selectedIndex != -1) {
-            String removedUser = selectedUsersModel.remove(selectedIndex);
-            selectedUsers.remove(removedUser);
-        }
-    }
+		int selectedIndex = listSelectedUsers.getSelectedIndex();
+		if (selectedIndex != -1) {
+			String removedUser = selectedUsersModel.remove(selectedIndex);
+			selectedUsers.remove(removedUser);
+		}
+	}
 
 	// btn send
 	protected void btnNewButtonActionPerformed(ActionEvent e) {
+		NotiDao notiDao = new NotiDao();
+		var dao = new UserDao();
+		var id = Login.getId();
+
+		if (selectedUsers.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Please select user receiver", "Warring", JOptionPane.ERROR_MESSAGE);
+		} else if (textArea.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Message content is not be empty", "Warring",
+					JOptionPane.ERROR_MESSAGE);
+		} else {
+			for (String email : selectedUsers) {
+				// Lấy to_user sử dụng email từ map
+				Integer toUser = emailToUserMap.get(email);
+				notiDao.insertNoti(id, toUser, textArea.getText(), true);
+			}
+			textArea.setText("");
+			JOptionPane.showMessageDialog(null, "Send success", "Success", JOptionPane.INFORMATION_MESSAGE);
+		}
 
 	}
 
@@ -234,6 +282,7 @@ public class ShowCompose extends JFrame {
 	protected void btnNewButton_2ActionPerformed(ActionEvent e) {
 		selectAllUsers();
 	}
+
 	protected void btnNewButton_3ActionPerformed(ActionEvent e) {
 		removeSelectedUser();
 	}

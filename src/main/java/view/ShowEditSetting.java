@@ -617,7 +617,8 @@ public class ShowEditSetting extends JFrame {
 		// Update btn
 		UserDao user = new UserDao();
 		Integer userId = Login.getId();
-		Users infor = new Users();
+	
+		Users infor = user.selUser(userId);
 		int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure to update the information?", "Confirm",
 				JOptionPane.YES_NO_OPTION);
 		java.util.Date utilDate = dateDob.getDate();
@@ -638,12 +639,31 @@ public class ShowEditSetting extends JFrame {
 
 			if (confirmation == JOptionPane.YES_OPTION) {
 				// update info
-				Users info = user.updateInforUser(userId, txtAddress.getText(), txtPhone.getText(), gender,
-						newAvatarPath, txtFullName.getText(), null, txtEmail.getText(), imgNicPathsString,
-						txtiAuthority.getText(), txtNIC.getText(), sqlDate);
-				JOptionPane.showMessageDialog(null, "Update successfull!", "Success", JOptionPane.INFORMATION_MESSAGE);
-				JFrame frame = (JFrame) SwingUtilities.getWindowAncestor((Component) e.getSource());
-				frame.dispose();
+				String email = txtEmail.getText();
+				var rs = user.emailExist(email);
+				if(txtEmail.getText().equals(infor.getEmail())) {
+					Users info = user.updateInforUser(userId, txtAddress.getText(), txtPhone.getText(), gender,
+							newAvatarPath, txtFullName.getText(), null, txtEmail.getText(), imgNicPathsString,
+							txtiAuthority.getText(), txtNIC.getText(), sqlDate);
+					JOptionPane.showMessageDialog(null, "Update successfull!", "Success", JOptionPane.INFORMATION_MESSAGE);
+					JFrame frame = (JFrame) SwingUtilities.getWindowAncestor((Component) e.getSource());
+					frame.dispose();
+				}else if (!rs.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Email exist already", "Error", JOptionPane.ERROR_MESSAGE);
+				}else if(email.trim().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Email not be empty", "Error", JOptionPane.ERROR_MESSAGE);
+				} else if(email.contains(" ")) {
+					JOptionPane.showMessageDialog(null, "Email not be spaces", "Error", JOptionPane.ERROR_MESSAGE);
+				}else{
+					Users info = user.updateInforUser(userId, txtAddress.getText(), txtPhone.getText(), gender,
+							newAvatarPath, txtFullName.getText(), null, txtEmail.getText(), imgNicPathsString,
+							txtiAuthority.getText(), txtNIC.getText(), sqlDate);
+					JOptionPane.showMessageDialog(null, "Update successfull!", "Success",
+							JOptionPane.INFORMATION_MESSAGE);
+					JFrame frame = (JFrame) SwingUtilities.getWindowAncestor((Component) e.getSource());
+					frame.dispose();
+				}
+				
 			} else {
 				JOptionPane.showMessageDialog(null, "Update Failed!", "Error", JOptionPane.ERROR_MESSAGE);
 			}

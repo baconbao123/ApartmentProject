@@ -18,11 +18,10 @@ public class ViewNoti extends JFrame {
 	private JScrollPane scrollPane;
 	private JTextArea txtMess;
 	private JLabel lblEmail;
-	private JLabel lblRoom;
 	private JLabel lblTime;
 	private JLabel lblNewLabel;
-	private JLabel lblRoom_1;
 	private JLabel lbltime;
+	private JLabel lblNewLabel_1;
 
 	/**
 	 * Launch the application.
@@ -48,7 +47,7 @@ public class ViewNoti extends JFrame {
 	 * @param email 
 	 */
 	public ViewNoti() {};
-	public ViewNoti(String email, String room, String time, String mess) {
+	public ViewNoti(String email, String time, String mess) {
 		setTitle("View Noti");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(600, 300, 652, 474);
@@ -74,14 +73,8 @@ public class ViewNoti extends JFrame {
 		{
 			lblEmail = new JLabel();
 			lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			lblEmail.setBounds(109, 16, 263, 27);
+			lblEmail.setBounds(109, 42, 263, 27);
 			contentPane.add(lblEmail);
-		}
-		{
-			lblRoom = new JLabel();
-			lblRoom.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			lblRoom.setBounds(109, 47, 69, 22);
-			contentPane.add(lblRoom);
 		}
 		{
 			lblTime = new JLabel("Sending time:");
@@ -92,14 +85,8 @@ public class ViewNoti extends JFrame {
 		{
 			lblNewLabel = new JLabel("From:");
 			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lblNewLabel.setBounds(50, 23, 57, 14);
+			lblNewLabel.setBounds(50, 49, 57, 14);
 			contentPane.add(lblNewLabel);
-		}
-		{
-			lblRoom_1 = new JLabel("Room:");
-			lblRoom_1.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lblRoom_1.setBounds(50, 52, 57, 14);
-			contentPane.add(lblRoom_1);
 		}
 		{
 			lbltime = new JLabel();
@@ -107,10 +94,16 @@ public class ViewNoti extends JFrame {
 			lbltime.setBounds(144, 83, 217, 14);
 			contentPane.add(lbltime);
 			
-			lblEmail.setText(email);
-			lblRoom.setText(room);
+			lblEmail.setText("< "+email+" >");
 			lbltime.setText(time);
 			txtMess.setText(mess);
+		}
+		{
+			lblNewLabel_1 = new JLabel("Notification information");
+			lblNewLabel_1.setForeground(new Color(0, 128, 255));
+			lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+			lblNewLabel_1.setBounds(49, 11, 172, 20);
+			contentPane.add(lblNewLabel_1);
 		}
 		
 		

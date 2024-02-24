@@ -18,6 +18,7 @@ import javax.swing.table.TableCellEditor;
 
 import dao.ContractDao;
 import entity.Contract;
+import event.EventLoadTable;
 import event.EventTableRenterAction;
 import formAdView.ViewRoomContract;
 import formEnterAd.FrameAddContract;
@@ -74,6 +75,7 @@ public class ContractList extends JPanel {
 	private JComboBox cbbStatus;
 	private JComboBox cbbData;
 	private JButton btnReset;
+//	private EventLoadTable eventLoad;
 
 	/** 
 	 * Create the panel.
@@ -117,7 +119,7 @@ public class ContractList extends JPanel {
 		loadTableContract();
 	}
 
-	private void loadTableContract() {
+	public void loadTableContract() {
 		var model = new DefaultTableModel() {
 
 			public java.lang.Class<?> getColumnClass(int columnIndex) {
@@ -245,7 +247,14 @@ public class ContractList extends JPanel {
 			    boolean status = statusStr.equals("On");
 			    Integer ownerId= (Integer) tableConstract.getValueAt(row, 9);
 				
-				var upCon = new FrameUpContract(id, apartStr, fromDate, toDate, status, ownerId);
+				var upCon = new FrameUpContract(id, apartStr, fromDate, toDate, status, ownerId, new EventLoadTable() {
+					
+					@Override
+					public void loadDataTable() {
+						loadTableContract();
+						
+					}
+				});
 				
 				upCon.setVisible(true);
 				upCon.setLocationRelativeTo(null);
@@ -260,10 +269,18 @@ public class ContractList extends JPanel {
 
 	protected void btnAddContractActionPerformed(ActionEvent e) {
 		CardRoom cardRoom = new CardRoom();
-		var form = new FrameAddContract(cardRoom);
+		var form = new FrameAddContract(cardRoom, new EventLoadTable() {
+			
+			@Override
+			public void loadDataTable() {
+				loadTableContract();
+				
+			}
+		});
 		form.setVisible(true);
 		form.setLocationRelativeTo(null);
 		form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//		form.getContractList();
 	}
 
 	class CenterRenderer extends DefaultTableCellRenderer {
@@ -396,9 +413,12 @@ public class ContractList extends JPanel {
 		txtByRoom.setText("");
 		cbbStatus.setSelectedItem("Search by status");
 		
-		loadTableContract();
+		
 	}
 	
+	public void reloadTable() {
+		loadTableContract();
+	}
 	
 	
 	

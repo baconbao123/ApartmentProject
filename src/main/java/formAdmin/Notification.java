@@ -30,6 +30,7 @@ import table.TableActionCellNoti;
 import table.TableActionCellRender;
 import table.TableHeader;
 import view.ShowCompose;
+import view.ShowSend;
 import view.ViewNoti;
 
 import java.awt.Color;
@@ -78,14 +79,14 @@ public class Notification extends JPanel {
 	private JButton btnNext;
 	private JTextField textNumber;
 	private JComboBox comboBox;
-	private JButton btnDelete;
 	private JButton btnLoadData;
+	private JButton btnSend;
 
 	/**
 	 * Create the panel.
 	 */
 	public Notification() {
-		setBackground(new Color(247, 247, 247));
+		setBackground(SystemColor.menu);
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		setBounds(0, 0, 1050, 800);
 		{
@@ -105,6 +106,7 @@ public class Notification extends JPanel {
 		btnCompose.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnCompose.setIcon(new ImageIcon(Notification.class.getResource("/icon/solar_pen-bold.png")));
 		panel = new JPanel();
+		panel.setBorder(null);
 
 		btnPer = new JButton("<");
 		btnPer.setVisible(false);
@@ -125,18 +127,6 @@ public class Notification extends JPanel {
 		comboBox.setVisible(false);
 		comboBox.setFont(new Font("Dialog", Font.PLAIN, 12));
 		comboBox.setModel(new DefaultComboBoxModel(new String[] { "10", "20", "25" }));
-		btnDelete = new JButton("Delete");
-		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnDeleteActionPerformed(e);
-			}
-		});
-		btnDelete.setIcon(new ImageIcon(Notification.class.getResource("/icon/trash.png")));
-		btnDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnDelete.setForeground(new Color(255, 255, 255));
-		btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnDelete.setBorder(null);
-		btnDelete.setBackground(new Color(255, 0, 0));
 
 		btnLoadData = new JButton("Load data");
 		btnLoadData.addActionListener(new ActionListener() {
@@ -149,62 +139,72 @@ public class Notification extends JPanel {
 		btnLoadData.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnLoadData.setBorder(null);
 		btnLoadData.setBackground(new Color(128, 128, 255));
+		btnSend = new JButton("Send");
+		btnSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnSendActionPerformed(e);
+			}
+		});
+		btnSend.setIcon(new ImageIcon(Notification.class.getResource("/icon/material-symbols_send-outline.png")));
+		btnSend.setForeground(new Color(0, 0, 0));
+		btnSend.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnSend.setBorder(null);
+		btnSend.setBackground(new Color(255, 215, 0));
 		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup().addGap(37)
-						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(879, Short.MAX_VALUE))
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-						.addGroup(groupLayout
-								.createParallelGroup(
-										Alignment.TRAILING)
-								.addGroup(groupLayout.createSequentialGroup().addContainerGap().addComponent(btnPer)
-										.addGap(28)
-										.addComponent(textNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(26)
-										.addComponent(btnNext, GroupLayout.PREFERRED_SIZE, 41,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(261).addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 64,
-												GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-										.addGroup(groupLayout.createSequentialGroup().addGap(92).addComponent(panel,
-												GroupLayout.DEFAULT_SIZE, 879, Short.MAX_VALUE))
-										.addGroup(groupLayout.createSequentialGroup().addGap(546)
-												.addComponent(btnLoadData, GroupLayout.PREFERRED_SIZE, 119,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(31)
-												.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 119,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(37).addComponent(btnCompose, GroupLayout.PREFERRED_SIZE, 119,
-														GroupLayout.PREFERRED_SIZE))))
-						.addGap(79)));
-		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout
-				.createSequentialGroup()
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false).addGroup(groupLayout
-						.createSequentialGroup().addContainerGap()
-						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE).addGap(7)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnCompose, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
-						.addGap(53))
-						.addGroup(Alignment.TRAILING,
-								groupLayout.createSequentialGroup()
-										.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnLoadData, GroupLayout.PREFERRED_SIZE, 36,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(53)))
-				.addComponent(panel, GroupLayout.PREFERRED_SIZE, 516, GroupLayout.PREFERRED_SIZE).addGap(18)
-				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnPer).addComponent(btnNext).addComponent(textNumber, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(94, Short.MAX_VALUE)));
+					.addGap(37)
+					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(879, Short.MAX_VALUE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(btnPer)
+							.addGap(28)
+							.addComponent(textNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(26)
+							.addComponent(btnNext, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
+							.addGap(261)
+							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(92)
+								.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1004, Short.MAX_VALUE))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(btnLoadData, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
+								.addGap(26)
+								.addComponent(btnSend, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
+								.addGap(18)
+								.addComponent(btnCompose, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE))))
+					.addGap(79))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+					.addGap(7)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnCompose, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnSend, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnLoadData, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+					.addGap(53)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 516, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnPer)
+						.addComponent(btnNext)
+						.addComponent(textNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(94, Short.MAX_VALUE))
+		);
 		panel.setLayout(new BorderLayout(0, 0));
 		{
 			scrollPane_1 = new JScrollPane();
-			scrollPane_1.setViewportBorder(null);
+			scrollPane_1.setVerticalScrollBar(new ScrollBarCustom());
 			panel.add(scrollPane_1, BorderLayout.CENTER);
 
 			table_1 = new JTable();
@@ -243,7 +243,7 @@ public class Notification extends JPanel {
 					boolean hasFocus, int row, int column) {
 				TableHeader header = new TableHeader(value + "");
 
-				header.setHorizontalAlignment(JLabel.LEFT);
+				header.setHorizontalAlignment(JLabel.CENTER);
 				return header;
 
 			}
@@ -274,7 +274,7 @@ public class Notification extends JPanel {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				switch (column) {
-				case 6:
+				case 5:
 					return true;
 				default:
 					return false;
@@ -283,12 +283,13 @@ public class Notification extends JPanel {
 		};
 		model.addColumn("No.");
 		model.addColumn("Sender Email");
-		model.addColumn("Room");
 		model.addColumn("Role");
 		model.addColumn("Message");
 		model.addColumn("Time");
 		model.addColumn("Action");
-
+		table_1.setBorder(null);
+		table_1.setRowSelectionAllowed(false);
+		table_1.setColumnSelectionAllowed(false);
 		table_1.setModel(model);
 		table_1.setRowHeight(35);
 		EventTableNotiAction event = new EventTableNotiAction() {
@@ -297,13 +298,11 @@ public class Notification extends JPanel {
 			public void view(int row) {
 
 				String email = (String) table_1.getValueAt(row, 1);
-				String room = (String) table_1.getValueAt(row, 2);
-				LocalDateTime dateTime = (LocalDateTime) table_1.getValueAt(row, 5);
+				LocalDateTime dateTime = (LocalDateTime) table_1.getValueAt(row, 4);
 				String time = dateTime.toString().replace("T", "  ");
-				String mess = (String) table_1.getValueAt(row, 4);
-				ViewNoti showViewNoti = new ViewNoti(email, room, time, mess);
+				String mess = (String) table_1.getValueAt(row, 3);
+				ViewNoti showViewNoti = new ViewNoti(email, time, mess);
 				showViewNoti.setVisible(true);
-
 			}
 
 			@Override
@@ -336,26 +335,25 @@ public class Notification extends JPanel {
 			} else {
 				roleValue = "Renter";
 			}
-			model.addRow(new Object[] { sttCounter.getAndIncrement(), noti.getSender_email(),
-					noti.getSender_room_number(), roleValue, noti.getMess(), noti.getCreated_at(), });
+			model.addRow(new Object[] { sttCounter.getAndIncrement(), noti.getSender_email(), roleValue, noti.getMess(),
+					noti.getCreated_at() });
 		});
 
-		table_1.getColumnModel().getColumn(6).setCellRenderer(new TableActionCellNoti());
-		table_1.getColumnModel().getColumn(6).setCellEditor(new TableActionCellEditorNoti(event));
-
-	}
-
-	// delete
-	protected void btnDeleteActionPerformed(ActionEvent e) {
+		table_1.getColumnModel().getColumn(5).setCellRenderer(new TableActionCellNoti());
+		table_1.getColumnModel().getColumn(5).setCellEditor(new TableActionCellEditorNoti(event));
 
 	}
 
 	protected void tableMouseClicked(MouseEvent e) {
 		int rowindex = table_1.getSelectedRow();
-
 	}
-	//load data
+
+	// load data
 	protected void btnLoadDataActionPerformed(ActionEvent e) {
 		loadData();
+	}
+	protected void btnSendActionPerformed(ActionEvent e) {
+		ShowSend sh = new ShowSend();
+		sh.setVisible(true);
 	}
 }
