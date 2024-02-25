@@ -92,6 +92,7 @@ public class Bill extends JPanel {
 	private static GroupLayout groupLayout;
 	private static JTable tableReport = new JTable();
 	private static JTextField inputId;
+	private JButton btnFilter;
 	/*
 	 * Create the panel. 
 	 */
@@ -218,7 +219,7 @@ public class Bill extends JPanel {
 		selectStatus.setModel(new DefaultComboBoxModel(new String[] { "not finished", "finished" }));
 		selectStatus.setBorder(new TitledBorder(null, "Status", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
-		JButton btnFilter = new JButton("Filter");
+		btnFilter = new JButton("Filter");
 		btnFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				filter = true;
@@ -477,8 +478,7 @@ public class Bill extends JPanel {
 				Integer id = (Integer) tableBill.getValueAt(row, 0);
 				JFrame frame = new JFrame();
 				showPay(frame, id);
-				frame.setVisible(true);
-				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+			
 			}
 
 			@Override
@@ -495,12 +495,15 @@ public class Bill extends JPanel {
 				Integer id = (Integer) tableBill.getValueAt(row, 0);
 				JFrame frame = new JFrame();
 				showReport(frame,id);
-				frame.setVisible(true);
-				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 			}
 		};
-		tableBill.getColumnModel().getColumn(10).setCellEditor(new tableBillEditor(event));
-		tableBill.getColumnModel().getColumn(10).setCellRenderer(new tableBillRender());
+		var statusButton = selectStatus.getSelectedItem().toString().equals("finished") ? true :false ;
+		var tableEvent = new tableBillEditor(event);
+		tableEvent.setStatus(statusButton);
+		tableBill.getColumnModel().getColumn(10).setCellEditor(tableEvent);
+		var tableRender = new tableBillRender();
+		tableRender.setStatus(statusButton);
+		tableBill.getColumnModel().getColumn(10).setCellRenderer(tableRender);
 		tableBill.getColumnModel().getColumn(10).setPreferredWidth(220);
 		tableBill.setRowHeight(50);
 		
@@ -525,10 +528,14 @@ public class Bill extends JPanel {
 		});
 		tableBill.setModel(model);
 		tableReport.setModel(modelReport);
-
 		inputPage.setText(pageNumber.toString());
-		tableBill.getColumnModel().getColumn(10).setCellEditor(new tableBillEditor(event));
-		tableBill.getColumnModel().getColumn(10).setCellRenderer(new tableBillRender());
+		var statusButton = selectStatus.getSelectedItem().toString().equals("finished") ? true :false ;
+		var tableEvent = new tableBillEditor(event);
+		tableEvent.setStatus(statusButton);
+		tableBill.getColumnModel().getColumn(10).setCellEditor(tableEvent);
+		var tableRender = new tableBillRender();
+		tableRender.setStatus(statusButton);
+		tableBill.getColumnModel().getColumn(10).setCellRenderer(tableRender);
 		tableBill.getColumnModel().getColumn(10).setPreferredWidth(220);
 		tableBill.setRowHeight(50);
 	}
@@ -556,19 +563,24 @@ public class Bill extends JPanel {
 		
 	}
 	public static void showPay(Frame frameParent, int id) {
-		JDialog popup = new JDialog(frameParent, "What's status of the payment ? ", true);
-		var eventLoad = new EventLoadTable() {
-
-			@Override
-			public void loadDataTable() {
-				loadData();
-			}
-		};
-		var popupPanel = new ShowPayment(id, eventLoad);
-		popup.getContentPane().add(popupPanel);
-		popup.setSize(300, 100);
-		popup.setLocationRelativeTo(frameParent);
-		popup.setVisible(true);
+		var status = selectStatus.getSelectedItem().toString().equals("finished") ? true :false ;
+		if(!status) {
+			JDialog popup = new JDialog(frameParent, "What's status of the payment ? ", true);
+			var eventLoad = new EventLoadTable() {
+				
+				@Override
+				public void loadDataTable() {
+					loadData();
+				}
+			};
+			var popupPanel = new ShowPayment(id, eventLoad);
+			popup.getContentPane().add(popupPanel);
+			popup.setSize(300, 100);
+			popup.setLocationRelativeTo(frameParent);
+			popup.setVisible(true);
+			frameParent.setVisible(true);
+			frameParent.dispatchEvent(new WindowEvent(frameParent, WindowEvent.WINDOW_CLOSING));
+		}
 	}
 	public static void showReport(Frame frameParent , int id) {
 		 JDialog popup = new JDialog(frameParent, "View report ", true);
@@ -577,6 +589,8 @@ public class Bill extends JPanel {
 	        popup.setSize(800, 420);
 	        popup.setLocationRelativeTo(frameParent);
 	        popup.setVisible(true);
+	        frameParent.setVisible(true);
+	        frameParent.dispatchEvent(new WindowEvent(frameParent, WindowEvent.WINDOW_CLOSING));
 	}
 	
 	public void syncFees() {

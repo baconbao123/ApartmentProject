@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 import java.awt.event.ActionListener;
 
@@ -18,10 +19,11 @@ public class ActionFees extends JPanel {
 	private JButton btnEdit;
 	private JButton btnPay;
 	private JButton report;
+	private Boolean status;
 	/**
 	 * Create the panel.
 	 */
-	public ActionFees() {
+	public ActionFees(Boolean status) {
 		
 		btnEdit = new JButton("Edit");
 		
@@ -53,8 +55,14 @@ public class ActionFees extends JPanel {
 					.addContainerGap(266, Short.MAX_VALUE))
 		);
 		setLayout(groupLayout);
+		if(status) {
+//			JOptionPane.showMessageDialog(null, status);
+			btnPay.setEnabled(!status);
+			btnEdit.setEnabled(!status);
+		}
 
 	}
+
 
 
 	public void initEvent(TableActionEvent event, int row) {

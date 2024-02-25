@@ -46,7 +46,7 @@ public class Home extends JPanel {
 	public Home() {
 		setBounds(0, 0, 1100, 800);
 		System.out.println("userId" + userId);
-		
+		panel = new JPanel();
 		scrollPane = new JScrollPane();
 		scrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED, SystemColor.menu, SystemColor.menu, SystemColor.menu, SystemColor.menu));
 		panelAparts = new JPanel();
@@ -120,8 +120,7 @@ public class Home extends JPanel {
 
 		// Đặt panelAparts vào JScrollPane
 		scrollPane.setViewportView(containerPanel);
-		PaymentUser pm =new PaymentUser();
-		panel.add(pm);
+
 		
 		
 		initComponent();
@@ -148,11 +147,7 @@ public class Home extends JPanel {
 		return null;
 	}
 	
-	// load data
-	public void loadTable() {
-		PaymentUser pm =new PaymentUser();
-		
-	};
+
 	
 	
 	
@@ -164,7 +159,7 @@ public class Home extends JPanel {
 		
 		lblBillOrNoti = new JLabel("Bill OR noti");
 		lblBillOrNoti.setFont(new Font("Arial", Font.BOLD, 20));
-		panel = new JPanel();
+		
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
