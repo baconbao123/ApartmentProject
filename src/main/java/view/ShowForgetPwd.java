@@ -129,7 +129,7 @@ public class ShowForgetPwd extends JFrame {
 
 
 		for (Users user : userList) {
-			if (user.getEmail().equals(txtEmail.getText())) {
+			if (user.getEmail().equals(txtEmail.getText().trim())) {
 				emailFound = true;
 				info = user; 
 				break;
@@ -163,6 +163,7 @@ public class ShowForgetPwd extends JFrame {
 		} catch (Exception e2) {
 			// TODO: handle exception
 			e2.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Send Failed, please try again!", "Error", JOptionPane.ERROR_MESSAGE);
 		} 
 
 	}

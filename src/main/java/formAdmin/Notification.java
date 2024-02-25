@@ -139,7 +139,7 @@ public class Notification extends JPanel {
 		btnLoadData.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnLoadData.setBorder(null);
 		btnLoadData.setBackground(new Color(128, 128, 255));
-		btnSend = new JButton("Send");
+		btnSend = new JButton("Sent");
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnSendActionPerformed(e);
