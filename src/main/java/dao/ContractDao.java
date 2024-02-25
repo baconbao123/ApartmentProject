@@ -296,7 +296,7 @@ public class ContractDao {
 				contract.setOwnerName(rs.getString("ownerName"));
 				contract.setRoomates(rs.getString("total_roommates"));
 				list.add(contract);
-				System.out.println("list coasda" + list);
+//				System.out.println("list coasda" + list);
 			}
 			
 		} catch (Exception e) {

@@ -36,6 +36,8 @@ import dao.UserDao;
 import entity.Apartment;
 import entity.Contract;
 import entity.Users;
+import event.EventLoadTable;
+import formAdmin.ContractList;
 import view.AppStateManager;
 import view.CardRoom;
 
@@ -131,22 +133,35 @@ public class FrameAddContract extends JFrame {
 	private JLabel lblBtnDelete4_1;
 	private JLabel lblBtnDelete4_2;
 	private CardRoom cardRoom;
+	private ContractList contractList;
+	private EventLoadTable eventLoad;
+	
 	
 	public void setCardRoom(CardRoom cardRoom) {
 		this.cardRoom = cardRoom;
 	}
 	
-	public FrameAddContract(CardRoom cardRoom) {
+	public FrameAddContract(CardRoom cardRoom, EventLoadTable event) {
         this.cardRoom = cardRoom;	
-        initCode();
+        this.eventLoad = event;
+        initCode(event);
+        
     }
 
-	
+//	public ContractList getContractList() {
+//		contractList.loadTableContract();
+//		return contractList;
+//	}
+
+	public void setContractList(ContractList contractList) {
+		this.contractList = contractList;
+	}
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+//					ContractList con = new ContractList();
 					FrameAddContract frame = new FrameAddContract();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -160,7 +175,7 @@ public class FrameAddContract extends JFrame {
 	 * Create the frame.
 	 */
 	
-	private void initCode() {
+	private void initCode(EventLoadTable event) {
 		setBackground(SystemColor.window);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 510, 589);
@@ -218,6 +233,17 @@ public class FrameAddContract extends JFrame {
 				}
 		        
 				lblInfoRoomates1.setText(selectRoomates);
+				lblBtnDelete1.setVisible(true);
+				lblBtnDelete1.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						super.mouseClicked(e);
+						lblInfoRoomates1.setText("");
+						lblBtnDelete1.setVisible(false);
+						roomatesList.remove(String.valueOf(roomatesID));
+						
+					}
+				});
 				roomatesList.add(String.valueOf(roomatesID));
 
 			}
@@ -459,6 +485,8 @@ public class FrameAddContract extends JFrame {
 						}
 						
 						dispose();
+						
+						event.loadDataTable();
 					}
 				}
 			}
@@ -495,56 +523,63 @@ public class FrameAddContract extends JFrame {
 			filePathList.clear();
 			newAvatarFilePathList.clear();
 			 
-			for (int i = 0; i < Math.min(selectedFiles.length, 5); i++) {
-				File file = selectedFiles[i];
-				String fileName = file.getName();
-				String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-				String newAvatarFilePath = "images/contract_" + System.currentTimeMillis() + "." + extension;
-				String filePath = file.getAbsolutePath();
+			if(selectedFiles.length!=4) {
+				JOptionPane.showMessageDialog(null, "Please upload 4 photos of your contract", "Input Invalid",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				for (int i = 0; i < Math.min(selectedFiles.length, 5); i++) {
+					File file = selectedFiles[i];
+					String fileName = file.getName();
+					String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+					String newAvatarFilePath = "images/contract_" + System.currentTimeMillis() + "." + extension;
+					String filePath = file.getAbsolutePath();
 
-				filePathList.add(filePath);
-				newAvatarFilePathList.add(newAvatarFilePath);
+					filePathList.add(filePath);
+					newAvatarFilePathList.add(newAvatarFilePath);
 
-				switch (i) {
-				case 0:
-					var icon = new ImageIcon(filePath);
-					lblImgCon1.setIcon(new ImageIcon(icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-					lblImgCon1.setCursor(new Cursor(Cursor.HAND_CURSOR));
-					addMouseListenerImg(lblImgCon1, icon);
-					
-					
-					break;
+					switch (i) {
+					case 0:
+						var icon = new ImageIcon(filePath);
+						lblImgCon1.setIcon(new ImageIcon(icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+						lblImgCon1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+						addMouseListenerImg(lblImgCon1, icon);
+						
+						
+						break;
 
-				case 1:
-					var icon2 = new ImageIcon(filePath);
-					lblImgCon2.setIcon(new ImageIcon(icon2.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-					lblImgCon2.setCursor(new Cursor(Cursor.HAND_CURSOR));
-					addMouseListenerImg(lblImgCon2, icon2);
-					break;
+					case 1:
+						var icon2 = new ImageIcon(filePath);
+						lblImgCon2.setIcon(new ImageIcon(icon2.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+						lblImgCon2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+						addMouseListenerImg(lblImgCon2, icon2);
+						break;
 
-				case 2:
-					var icon3 = new ImageIcon(filePath);
-					lblImgCon3.setIcon(new ImageIcon(icon3.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-					lblImgCon3.setCursor(new Cursor(Cursor.HAND_CURSOR));
-					addMouseListenerImg(lblImgCon3, icon3);
-					break;
+					case 2:
+						var icon3 = new ImageIcon(filePath);
+						lblImgCon3.setIcon(new ImageIcon(icon3.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+						lblImgCon3.setCursor(new Cursor(Cursor.HAND_CURSOR));
+						addMouseListenerImg(lblImgCon3, icon3);
+						break;
 
-				case 3:
-					var icon4 = new ImageIcon(filePath);
-					lblImgCon4.setIcon(new ImageIcon(icon4.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-					lblImgCon4.setCursor(new Cursor(Cursor.HAND_CURSOR));
-					addMouseListenerImg(lblImgCon4, icon4);
-					break;
+					case 3:
+						var icon4 = new ImageIcon(filePath);
+						lblImgCon4.setIcon(new ImageIcon(icon4.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+						lblImgCon4.setCursor(new Cursor(Cursor.HAND_CURSOR));
+						addMouseListenerImg(lblImgCon4, icon4);
+						break;
 
-				case 4:
-					var icon5 = new ImageIcon(filePath);
-					lblImgCon5.setIcon(new ImageIcon(icon5.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-					lblImgCon5.setCursor(new Cursor(Cursor.HAND_CURSOR));
-					addMouseListenerImg(lblImgCon5, icon5);
-					break;
+					case 4:
+						var icon5 = new ImageIcon(filePath);
+						lblImgCon5.setIcon(new ImageIcon(icon5.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+						lblImgCon5.setCursor(new Cursor(Cursor.HAND_CURSOR));
+						addMouseListenerImg(lblImgCon5, icon5);
+						break;
+					}
+
 				}
-
 			}
+			
+			
 		}
 	}
 

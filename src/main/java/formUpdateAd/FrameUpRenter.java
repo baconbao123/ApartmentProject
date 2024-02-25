@@ -26,6 +26,7 @@ import com.toedter.calendar.JDateChooser;
 
 import dao.UserDao;
 import entity.Users;
+import event.EventLoadTable;
 import event.EventTableRenterAction;
 import formAdmin.RenterList;
 import regex.Regex;
@@ -79,6 +80,7 @@ public class FrameUpRenter extends JFrame {
 	private JLabel lblUpdateRenter;
 	private JLabel lblWarning;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	
 
 	// avatr
 	private File lastSelectedAvatar;
@@ -91,7 +93,13 @@ public class FrameUpRenter extends JFrame {
 
 	// gender
 	final String[] genderFinal = { "" };
+	private JLabel lblEmail;
+	private JTextField txtEmail;
 
+	private EventLoadTable eventLoad;
+	private String fullname;
+	private String id;
+	private Date dobDate;
 	/**
 	 * Launch the application.
 	 */
@@ -99,7 +107,13 @@ public class FrameUpRenter extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FrameUpRenter frame = new FrameUpRenter();
+//					FrameUpRenter frame = new FrameUpRenter();
+					EventLoadTable eventLoadTable = null;
+					String fullname = null;
+					String id = null;
+					Date dobDate = null;
+					FrameUpRenter frame = new FrameUpRenter(id, fullname, dobDate, eventLoadTable);
+//					FrameUpRenter frame = new FrameUpRenter(id, fullname, dateDob1, renterlist);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -111,12 +125,12 @@ public class FrameUpRenter extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FrameUpRenter() {
-	};
+//	public FrameUpRenter() {};
 
-	public FrameUpRenter(String id, String fullname, Date dob) {
+	public FrameUpRenter(String id, String fullname, Date dob, EventLoadTable event) {
+		this.eventLoad = event;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 510, 585);
+		setBounds(100, 100, 510, 621);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -124,7 +138,9 @@ public class FrameUpRenter extends JFrame {
 		setContentPane(contentPane);
 
 		lblAvatar = new JLabel("New Avatar");
+		lblAvatar.setBounds(15, 90, 92, 15);
 		btnUpAvatar = new JButton("Upload");
+		btnUpAvatar.setBounds(261, 90, 55, 39);
 		btnUpAvatar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnUpAvatarActionPerformed(e);
@@ -132,20 +148,28 @@ public class FrameUpRenter extends JFrame {
 		});
 
 		lblUpdateRenter = new JLabel("Update Renter Information for Mr/Ms " + fullname);
+		lblUpdateRenter.setBounds(83, 5, 338, 32);
 
 		lblImgAvatar = new JLabel("");
+		lblImgAvatar.setBounds(326, 90, 55, 39);
 
 		txtFullName = new JTextField();
+		txtFullName.setBounds(261, 152, 207, 19);
 		txtAddress = new JTextField();
+		txtAddress.setBounds(261, 229, 207, 19);
 		txtPhone = new JTextField();
+		txtPhone.setBounds(261, 269, 207, 19);
 		dateDob = new JDateChooser();
+		dateDob.setBounds(261, 311, 207, 20);
 		dateDob.setDateFormatString("yyyy-MM-dd");
 		dateDob.setDate(dob);
 		dateDob.getJCalendar().setMaxSelectableDate(Calendar.getInstance().getTime()); // Allow selecting dates from today onwards
+		txtEmail = new JTextField();
 
 
 		
 		rdMale = new JRadioButton("Male");
+		rdMale.setBounds(261, 348, 55, 23);
 		buttonGroup.add(rdMale);
 		rdMale.addActionListener(new ActionListener() {
 
@@ -156,6 +180,7 @@ public class FrameUpRenter extends JFrame {
 		});
 
 		rdFemale = new JRadioButton("Female");
+		rdFemale.setBounds(344, 348, 69, 23);
 		buttonGroup.add(rdFemale);
 		rdFemale.addActionListener(new ActionListener() {
 
@@ -166,20 +191,26 @@ public class FrameUpRenter extends JFrame {
 		});
 
 		txtCIC = new JTextField();
+		txtCIC.setBounds(261, 390, 207, 18);
 		txtIssAu = new JTextField();
+		txtIssAu.setBounds(261, 431, 207, 19);
 
 		btnUpCIC = new JButton("Upload");
+		btnUpCIC.setBounds(261, 461, 55, 42);
 		btnUpCIC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnUpCICActionPerformed(e);
 			}
 		});
 		lblImgCIC1 = new JLabel("");
+		lblImgCIC1.setBounds(326, 461, 55, 42);
 		lblImgCIC2 = new JLabel("");
+		lblImgCIC2.setBounds(391, 461, 55, 42);
 
 		Integer idInt = Integer.parseInt(id);
 
 		btnSave = new JButton("Save");
+		btnSave.setBounds(190, 522, 125, 31);
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				var renter = new Users();
@@ -198,8 +229,26 @@ public class FrameUpRenter extends JFrame {
 					return;
 				}
 
-				errorMessage = Valid.validateInputWithEmpty(txtAddress.getText(), Regex.CHAR, "Address ",
+				String emailCheck = txtEmail.getText().trim();
+				
+				if (!emailCheck.isEmpty()) {
+				    errorMessage = Valid.validateInputWithEmpty(emailCheck, Regex.EMAIL_REGEX, "Email ", "Please enter in the format: example@gmail.com");
+				    if(errorMessage != null) {
+				        JOptionPane.showMessageDialog(null, errorMessage, "Invalid Input", JOptionPane.ERROR_MESSAGE);
+				        return;
+				    }
+				    
+				    var daoCheck = new UserDao();
+				    List<Object> result = daoCheck.emailExist(emailCheck);
+				    if(!result.isEmpty()) {
+				        JOptionPane.showMessageDialog(null, "Email already exists.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+				        return;
+				    }
+				}
+				
+				errorMessage = Valid.validateInputWithEmpty(txtAddress.getText(), Regex.CHAR_NUM_UP, "Address ",
 						"Invalid. Please input letter only");
+				errorMessage = null;
 				if (errorMessage != null) {
 					JOptionPane.showMessageDialog(null, errorMessage, "Invalid Input", JOptionPane.ERROR_MESSAGE);
 					return;
@@ -237,6 +286,7 @@ public class FrameUpRenter extends JFrame {
 					renter.setAvatar(avatarPath);
 					renter.setName(txtFullName.getText());
 					renter.setDob(dobSql);
+					renter.setEmail(emailCheck);
 					if (rdMale.isSelected()) {
 						genderFinal[0] = "Male";
 					} else if (rdFemale.isSelected()) {
@@ -249,7 +299,9 @@ public class FrameUpRenter extends JFrame {
 					renter.setiAuthority(txtIssAu.getText());
 					renter.setImgIAuthority(imgNICPathSaveDB);
 					dao.updateUser(renter);
-
+					
+					JOptionPane.showMessageDialog(null, "Successfully updated renter information");
+					
 					try {
 						if (avatarPathAb != null) {
 							Files.copy(new File(avatarPathAb).toPath(), new File(avatarPath).toPath(),
@@ -271,7 +323,10 @@ public class FrameUpRenter extends JFrame {
 						}
 					}
 
+					
 					dispose();
+					
+					event.loadDataTable();
 				}
 				
 
@@ -340,33 +395,40 @@ public class FrameUpRenter extends JFrame {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File[] selectedFiles = chooser.getSelectedFiles();
 
-			for (int i = 0; i < Math.min(selectedFiles.length, 2); i++) {
-				File file = selectedFiles[i];
-				String fileName = file.getName();
-				String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+			if(selectedFiles.length!=2) {
+				JOptionPane.showMessageDialog(null, "Please upload 2 photos of your national ID card", "Input Invalid",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				for (int i = 0; i < 2; i++) {
+					File file = selectedFiles[i];
+					String fileName = file.getName();
+					String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
 
-				String folderSave = "images/nic_" + System.currentTimeMillis() + "." + extension;
-				String cicNewPath = file.getAbsolutePath();
+					String folderSave = "images/nic_" + System.currentTimeMillis() + "." + extension;
+					String cicNewPath = file.getAbsolutePath();
 
-				cicPaths.add(cicNewPath);
-				cicImgs.add(folderSave);
+					cicPaths.add(cicNewPath);
+					cicImgs.add(folderSave);
 
-				switch (i) {
-				case 0:
-					var icon = new ImageIcon(cicNewPath);
-					lblImgCIC1.setIcon(new ImageIcon(icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-					lblImgCIC1.setCursor(new Cursor(Cursor.HAND_CURSOR));
-					addMouseListenerImg(lblImgCIC1, icon);
-					break;
+					switch (i) {
+					case 0:
+						var icon = new ImageIcon(cicNewPath);
+						lblImgCIC1.setIcon(new ImageIcon(icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+						lblImgCIC1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+						addMouseListenerImg(lblImgCIC1, icon);
+						break;
 
-				case 1:
-					var icon1 = new ImageIcon(cicNewPath);
-					lblImgCIC2.setIcon(new ImageIcon(icon1.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-					lblImgCIC2.setCursor(new Cursor(Cursor.HAND_CURSOR));
-					addMouseListenerImg(lblImgCIC2, icon1);
-					break;
+					case 1:
+						var icon1 = new ImageIcon(cicNewPath);
+						lblImgCIC2.setIcon(new ImageIcon(icon1.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+						lblImgCIC2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+						addMouseListenerImg(lblImgCIC2, icon1);
+						break;
+					}
 				}
 			}
+			
+			
 		}
 	}
 
@@ -377,7 +439,7 @@ public class FrameUpRenter extends JFrame {
 				var dialog = new JDialog();
 				var imgLable = new JLabel(
 						new ImageIcon(cicNewPath.getImage().getScaledInstance(600, 600, Image.SCALE_SMOOTH)));
-				dialog.add(imgLable);
+				dialog.getContentPane().add(imgLable);
 				dialog.pack();
 				dialog.setVisible(true);
 				dialog.setLocationRelativeTo(null);
@@ -391,6 +453,7 @@ public class FrameUpRenter extends JFrame {
 		lblAvatar.setFont(new Font("Arial", Font.BOLD, 14));
 		lblAvatar.setBackground(Color.ORANGE);
 		lblQuantityAvatar = new JLabel("(Up to 1 image(.png or .jpg))");
+		lblQuantityAvatar.setBounds(15, 111, 135, 13);
 		lblQuantityAvatar.setForeground(Color.GRAY);
 		lblQuantityAvatar.setFont(new Font("Arial", Font.PLAIN, 11));
 
@@ -405,6 +468,7 @@ public class FrameUpRenter extends JFrame {
 		lblImgAvatar.setBackground(Color.WHITE);
 
 		lblFullname = new JLabel("New Fullname");
+		lblFullname.setBounds(15, 154, 98, 19);
 		lblFullname.setForeground(Color.GRAY);
 		lblFullname.setFont(new Font("Arial", Font.BOLD, 14));
 
@@ -413,10 +477,12 @@ public class FrameUpRenter extends JFrame {
 				Color.LIGHT_GRAY));
 
 		lblAddress = new JLabel("New Temporary address");
+		lblAddress.setBounds(15, 232, 190, 19);
 		lblAddress.setForeground(Color.GRAY);
 		lblAddress.setFont(new Font("Arial", Font.BOLD, 14));
 
 		lblPhone = new JLabel("New Phone Number");
+		lblPhone.setBounds(15, 269, 147, 19);
 		lblPhone.setForeground(Color.GRAY);
 		lblPhone.setFont(new Font("Arial", Font.BOLD, 14));
 
@@ -429,10 +495,12 @@ public class FrameUpRenter extends JFrame {
 				Color.LIGHT_GRAY));
 
 		lblDob = new JLabel("New Date Of Birth");
+		lblDob.setBounds(15, 311, 210, 20);
 		lblDob.setForeground(Color.GRAY);
 		lblDob.setFont(new Font("Arial", Font.BOLD, 14));
 
 		lblGender = new JLabel("New Gender");
+		lblGender.setBounds(15, 351, 124, 20);
 		lblGender.setForeground(Color.GRAY);
 		lblGender.setFont(new Font("Arial", Font.BOLD, 14));
 
@@ -443,6 +511,7 @@ public class FrameUpRenter extends JFrame {
 		rdFemale.setBackground(Color.WHITE);
 
 		lblCIC = new JLabel("New National ID Card");
+		lblCIC.setBounds(15, 388, 198, 20);
 		lblCIC.setForeground(Color.GRAY);
 		lblCIC.setFont(new Font("Arial", Font.BOLD, 14));
 
@@ -451,6 +520,7 @@ public class FrameUpRenter extends JFrame {
 				Color.LIGHT_GRAY));
 
 		lblIAuthority = new JLabel("New Issuing Authority");
+		lblIAuthority.setBounds(15, 431, 161, 19);
 		lblIAuthority.setForeground(Color.GRAY);
 		lblIAuthority.setFont(new Font("Arial", Font.BOLD, 14));
 
@@ -459,6 +529,7 @@ public class FrameUpRenter extends JFrame {
 				Color.LIGHT_GRAY));
 
 		lblQuantityImgCIC = new JLabel("(Up to 2 image(.png or .jpg))");
+		lblQuantityImgCIC.setBounds(15, 407, 135, 13);
 		lblQuantityImgCIC.setForeground(Color.GRAY);
 		lblQuantityImgCIC.setFont(new Font("Arial", Font.PLAIN, 11));
 
@@ -481,127 +552,49 @@ public class FrameUpRenter extends JFrame {
 
 		lblWarning = new JLabel(
 				"<html>If you have any information that you don't want to update, please leave it blank.</br> The system will automatically retrieve the old information.</html>");
+		lblWarning.setBounds(15, 46, 464, 26);
 		lblWarning.setForeground(new Color(220, 20, 60));
 		lblWarning.setFont(new Font("Arial", Font.BOLD, 12));
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addGap(78)
-						.addComponent(lblUpdateRenter, GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE).addGap(68))
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap().addGroup(gl_contentPane
-						.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGroup(gl_contentPane
-								.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblAvatar, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblQuantityAvatar, GroupLayout.PREFERRED_SIZE, 135,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblFullname)
-								.addComponent(lblAddress, GroupLayout.PREFERRED_SIZE, 190, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblPhone, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblDob, GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-								.addComponent(lblGender, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblCIC, GroupLayout.PREFERRED_SIZE, 198, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblIAuthority, GroupLayout.PREFERRED_SIZE, 161,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblQuantityImgCIC, GroupLayout.PREFERRED_SIZE, 135,
-										GroupLayout.PREFERRED_SIZE))
-								.addGap(36)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(txtFullName, 207, 207, 207)
-										.addComponent(txtAddress, GroupLayout.PREFERRED_SIZE, 207,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtPhone, GroupLayout.PREFERRED_SIZE, 207,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(dateDob, GroupLayout.PREFERRED_SIZE, 207,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtCIC, GroupLayout.PREFERRED_SIZE, 207,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtIssAu, GroupLayout.PREFERRED_SIZE, 207,
-												GroupLayout.PREFERRED_SIZE)
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(rdMale, GroupLayout.PREFERRED_SIZE, 55,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(28).addComponent(rdFemale, GroupLayout.PREFERRED_SIZE, 69,
-														GroupLayout.PREFERRED_SIZE))
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(btnUpCIC, GroupLayout.PREFERRED_SIZE, 55,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(lblImgCIC1, GroupLayout.PREFERRED_SIZE, 55,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblImgCIC2,
-														GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE))
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(btnUpAvatar, GroupLayout.PREFERRED_SIZE, 55,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(10).addComponent(lblImgAvatar, GroupLayout.PREFERRED_SIZE, 55,
-														GroupLayout.PREFERRED_SIZE))))
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(176)
-								.addComponent(btnSave, GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE).addGap(152)))
-						.addGap(21))
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addComponent(lblWarning, GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE).addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup()
-				.addComponent(lblUpdateRenter, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE).addGap(9)
-				.addComponent(lblWarning, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE).addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-								.addComponent(lblAvatar, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblQuantityAvatar).addGap(30)
-								.addComponent(lblFullname, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addComponent(lblAddress, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(btnUpAvatar, GroupLayout.PREFERRED_SIZE, 39,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblImgAvatar, GroupLayout.PREFERRED_SIZE, 39,
-												GroupLayout.PREFERRED_SIZE))
-								.addGap(23)
-								.addComponent(txtFullName, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-								.addGap(17)
-								.addComponent(txtAddress, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblPhone, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 19,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtPhone, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 19,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(23)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblDob, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 20,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(dateDob, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(17)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblGender, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 20,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(rdMale, Alignment.TRAILING).addComponent(rdFemale, Alignment.TRAILING))
-				.addGap(17)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(txtCIC, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblCIC, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 20,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblIAuthority, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(21).addComponent(lblQuantityImgCIC))
-						.addGroup(gl_contentPane.createSequentialGroup()
-								.addComponent(txtIssAu, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblImgCIC1, GroupLayout.PREFERRED_SIZE, 42,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblImgCIC2, GroupLayout.PREFERRED_SIZE, 42,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(btnUpCIC, GroupLayout.PREFERRED_SIZE, 42,
-												GroupLayout.PREFERRED_SIZE))))
-				.addGap(47).addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap()));
-		contentPane.setLayout(gl_contentPane);
+		
+		lblEmail = new JLabel("New Email");
+		lblEmail.setBounds(15, 194, 190, 19);
+		lblEmail.setForeground(Color.GRAY);
+		lblEmail.setFont(new Font("Arial", Font.BOLD, 14));
+		
+		
+		txtEmail.setBounds(261, 191, 207, 19);
+		txtEmail.setColumns(10);
+		txtEmail.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY,
+						Color.LIGHT_GRAY));
+		contentPane.setLayout(null);
+		contentPane.add(lblUpdateRenter);
+		contentPane.add(lblAvatar);
+		contentPane.add(lblQuantityAvatar);
+		contentPane.add(lblFullname);
+		contentPane.add(txtFullName);
+		contentPane.add(btnUpAvatar);
+		contentPane.add(lblImgAvatar);
+		contentPane.add(lblWarning);
+		contentPane.add(lblAddress);
+		contentPane.add(lblPhone);
+		contentPane.add(lblDob);
+		contentPane.add(lblGender);
+		contentPane.add(lblCIC);
+		contentPane.add(lblIAuthority);
+		contentPane.add(lblQuantityImgCIC);
+		contentPane.add(txtAddress);
+		contentPane.add(txtPhone);
+		contentPane.add(dateDob);
+		contentPane.add(txtCIC);
+		contentPane.add(txtIssAu);
+		contentPane.add(rdMale);
+		contentPane.add(rdFemale);
+		contentPane.add(btnUpCIC);
+		contentPane.add(lblImgCIC1);
+		contentPane.add(lblImgCIC2);
+		contentPane.add(btnSave);
+		contentPane.add(lblEmail);
+		contentPane.add(txtEmail);
 
 	}
-
 }

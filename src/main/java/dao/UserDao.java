@@ -42,7 +42,7 @@ public class UserDao {
 			cs.setString(9, user.getImgIAuthority());
 			cs.setString(10, user.getEmail()); // email
 			cs.setString(11, "123"); // password
-			cs.setNull(12, java.sql.Types.BIT); // is_active
+			cs.setBoolean(12, false); // is_active
 			cs.setTimestamp(13, new java.sql.Timestamp(System.currentTimeMillis()));
 			cs.executeUpdate();
 			System.out.println("insert success");
@@ -55,19 +55,20 @@ public class UserDao {
 		try 
 		( 
 			var con = ConnectDB.getConnect();
-			var cs = con.prepareCall("{call upUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+			var cs = con.prepareCall("{call upUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 		)
 		{
 			cs.setInt(1, user.getId());
 			cs.setString(2, user.getAvatar());
 			cs.setString(3, user.getName());
-			cs.setString(4, user.getGender());
-			cs.setString(5, user.getPhone());
-			cs.setDate(6, (Date) user.getDob());
-			cs.setString(7, user.getAddress());
-			cs.setString(8, user.getNic());
-			cs.setString(9, user.getiAuthority());
-			cs.setString(10, user.getImgIAuthority());
+			cs.setString(4, user.getEmail());
+			cs.setString(5, user.getGender());
+			cs.setString(6, user.getPhone());
+			cs.setDate(7, (Date) user.getDob());
+			cs.setString(8, user.getAddress());
+			cs.setString(9, user.getNic());
+			cs.setString(10, user.getiAuthority());
+			cs.setString(11, user.getImgIAuthority());
 			cs.executeUpdate();
 			System.out.println("Update renter success");
 		} catch (Exception e) {
@@ -92,6 +93,7 @@ public class UserDao {
 				renter.setId(rs.getInt("id"));
 				renter.setAvatar(rs.getString("avatar"));
 				renter.setName(rs.getString("name"));
+				renter.setEmail(rs.getString("email"));
 				renter.setGender(rs.getString("gender"));
 				renter.setDob(rs.getDate("dob"));
 				renter.setPhone(rs.getString("phone"));
@@ -386,7 +388,21 @@ public class UserDao {
 		return list;
 	}
 	
-		
+	public List<Object> emailExist(String email) {
+		var list = new ArrayList<>();
+		try (var con = ConnectDB.getConnect(); var cs = con.prepareCall("{call emailExist(?)}");) {
+			cs.setString(1, email);
+			var rs = cs.executeQuery();
+			while (rs.next()) {
+				list.add(rs.getInt("exist"));
+			}
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 
 	
 	

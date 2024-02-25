@@ -18,6 +18,7 @@ import java.awt.RenderingHints;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ImageIcon;
 import java.awt.Cursor;
@@ -69,8 +70,17 @@ public class Login extends JFrame {
 	private  static Integer id;
 	private JLabel lblNewLabel;
 	
+	private static Boolean isAdmin; 
 
 	
+
+	public final static Boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public final static void setIsAdmin(Boolean value) {
+		isAdmin = value;
+	}
 
 	public final static Integer getId() {
 		return id;
@@ -314,7 +324,8 @@ public class Login extends JFrame {
 		if(!rs.isEmpty()) {
 			lblStatusLoad.setText("Success");
 			showDashboardScreen( (boolean) rs.get(1));
-//			id = Integer.parseInt( rs.get(0).toString()) ;
+			isAdmin = (boolean) rs.get(1);
+			MenuBottom.getAdmin();
 			System.out.println(rs.toString());
 		} else {
 			lblStatusLoad.setText("Fail");
@@ -335,7 +346,7 @@ public class Login extends JFrame {
 			useMain.setVisible(true);
 			useMain.setLogin(this);
 			useMain.setLocationRelativeTo(null);
-//			useMain.initMoving(useMain);
+			useMain.initMoving(useMain);
 			this.setVisible(false);
 		}
 		

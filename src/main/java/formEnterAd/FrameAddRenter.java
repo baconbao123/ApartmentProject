@@ -46,6 +46,7 @@ import com.toedter.calendar.JDateChooser;
 import component.CardApartment;
 import dao.UserDao;
 import entity.Users;
+import formAdmin.RenterList;
 import formUpdateAd.FrameUpRenter;
 import regex.Regex;
 import regex.Valid;
@@ -97,6 +98,7 @@ public class FrameAddRenter extends JFrame {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private List<String> imgNICList = new ArrayList<>();
 	private List<String> pathNICList = new ArrayList<>();
+	private RenterList renterlist;
 
 	private int numRenterd;
 
@@ -104,11 +106,15 @@ public class FrameAddRenter extends JFrame {
 		currentCardRoom = cardRoom;
 	}
 
+
+
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FrameAddRenter frame = new FrameAddRenter();
+					RenterList renterList = new RenterList();
+					FrameAddRenter frame = new FrameAddRenter(renterList);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -117,7 +123,8 @@ public class FrameAddRenter extends JFrame {
 		});
 	}
 
-	public FrameAddRenter() {
+	public FrameAddRenter(RenterList renterList) {
+		this.renterlist = renterList;
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 494, 560);
@@ -167,30 +174,47 @@ public class FrameAddRenter extends JFrame {
 				String imgNICPathStr = String.join(";", imgNICList);
 
 				String errorMessage = "";
-				
-				//lbl icon
-				if(lblImgAvatar.getIcon()==null) {
-					JOptionPane.showMessageDialog(null, "Please upload an avatar", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+
+				// lbl icon
+				if (lblImgAvatar.getIcon() == null) {
+					JOptionPane.showMessageDialog(null, "Please upload an avatar", "Invalid Input",
+							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
-				
-				//txt
+
+				// txt
 				errorMessage = Valid.validateInputWithNOEmpty(txtFullname.getText(), Regex.CHAR, "Fullname ",
-						"Invalid. Please enter only numbers");
+						"Invalid. Please input letter only");
 				if (errorMessage != null) {
 					JOptionPane.showMessageDialog(null, errorMessage, "Invalid Input", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				
+				String emailCheck = txtEmail.getText().trim();	
 				
-				errorMessage = Valid.validateInputWithNOEmpty(txtAddress.getText(), Regex.CHAR, "Address ",
-						"Invalid. Please enter only numbers");
+				if (!emailCheck.isEmpty()) {
+				    errorMessage = Valid.validateInputWithEmpty(emailCheck, Regex.EMAIL_REGEX, "Email ", "Please enter in the format: example@gmail.com");
+				    if(errorMessage != null) {
+				        JOptionPane.showMessageDialog(null, errorMessage, "Invalid Input", JOptionPane.ERROR_MESSAGE);
+				        return;
+				    }
+				    
+				    var daoCheck = new UserDao();
+				    List<Object> result = daoCheck.emailExist(emailCheck);
+				    if(!result.isEmpty()) {
+				        JOptionPane.showMessageDialog(null, "Email already exists.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+				        return;
+				    }
+				}
+				
+				
+				errorMessage = Valid.validateInputWithNOEmpty(txtAddress.getText(), Regex.CHAR_NUM_UP, "Address ",
+						"Invalid. Please input letter only");
 				if (errorMessage != null) {
 					JOptionPane.showMessageDialog(null, errorMessage, "Invalid Input", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
+
 				errorMessage = Valid.validateInputWithNOEmpty(txtPhone.getText(), Regex.NUM, "Phone ",
 						"Invalid. Please enter only numbers");
 				if (errorMessage != null) {
@@ -205,37 +229,32 @@ public class FrameAddRenter extends JFrame {
 					return;
 				}
 
-				errorMessage = Valid.validateInputWithNOEmpty(txtIssAuth.getText(), Regex.CHAR, "ID card issuing place ",
-						"Invalid. Please input letter only");
+				errorMessage = Valid.validateInputWithNOEmpty(txtIssAuth.getText(), Regex.CHAR,
+						"ID card issuing place ", "Invalid. Please input letter only");
 				if (errorMessage != null) {
 					JOptionPane.showMessageDialog(null, errorMessage, "Invalid Input", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-		 		
-				// gender
-				if(!rdMale.isSelected()&&!rdFemale.isSelected()) {
-					JOptionPane.showMessageDialog(null, "Please chooser gender ", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				
 
-				if(lblImgCIC1.getIcon()==null) {
-					JOptionPane.showMessageDialog(null, "Please upload the first photo of your national ID card", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+				// gender
+				if (!rdMale.isSelected() && !rdFemale.isSelected()) {
+					JOptionPane.showMessageDialog(null, "Please chooser gender ", "Invalid Input",
+							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
-				if(lblImgCIC2.getIcon()==null) {
-					JOptionPane.showMessageDialog(null, "Please upload the second photo of your national ID card", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+
+				if (lblImgCIC1.getIcon() == null || lblImgCIC2.getIcon() == null) {
+					JOptionPane.showMessageDialog(null, "Please upload 2 photos of your national ID card",
+							"Invalid Input", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
 
 				if (dateDob.getDate() == null) {
 					JOptionPane.showMessageDialog(FrameAddRenter.this, "Enter date of birth(yyyy-MM-dd)",
 							"Invalid Input", JOptionPane.ERROR_MESSAGE);
 
-				}  else {				
-					
+				} else {
+
 					java.sql.Date sqlDate = new java.sql.Date(dateDob.getDate().getTime());
 					user.setAvatar(newAvatarPath);
 					user.setName(txtFullname.getText().trim());
@@ -243,12 +262,13 @@ public class FrameAddRenter extends JFrame {
 					user.setDob(sqlDate);
 					user.setGender(genderFinal[0]);
 					user.setPhone(txtPhone.getText().trim());
-					user.setEmail(txtEmail.getText().trim());
+					user.setEmail(emailCheck);
 					user.setNic(txtCIC.getText().trim());
 					user.setiAuthority(txtIssAuth.getText().trim());
 					user.setImgIAuthority(imgNICPathStr);
 					dao.insertRenter(user);
-
+					JOptionPane.showMessageDialog(null, "Successfully added renter");
+					
 					try {
 						Files.copy(new File(filePath).toPath(), new File(newAvatarPath).toPath(),
 								StandardCopyOption.REPLACE_EXISTING);
@@ -274,6 +294,8 @@ public class FrameAddRenter extends JFrame {
 						pathNICList.remove(index);
 						imgNICList.remove(index);
 					}
+					
+					
 
 					newAvatarPath = null;
 					lblImgAvatar.setIcon(null);
@@ -288,7 +310,7 @@ public class FrameAddRenter extends JFrame {
 					lblImgCIC1.setIcon(null);
 					lblImgCIC2.setIcon(null);
 
-					
+					renterList.reloadTable();
 				}
 
 			}
@@ -297,10 +319,6 @@ public class FrameAddRenter extends JFrame {
 		initComponent();
 
 	}
-	
-	
-
-	
 
 	protected void btnUpAvatarActionPerformed(ActionEvent e) {
 		var fileAvatarChooser = new JFileChooser();
@@ -323,7 +341,7 @@ public class FrameAddRenter extends JFrame {
 			getFileName = selectedFile.getName();
 			String extension = getFileName.substring(getFileName.lastIndexOf(".") + 1);
 			if (extension.equalsIgnoreCase("png") || extension.equalsIgnoreCase("jpg")) {
-				
+
 				filePath = selectedFile.getAbsolutePath();
 				String newAvatarFilePath = "avatar_" + System.currentTimeMillis() + "." + extension;
 				String imagesFolderPath = "images/";
@@ -334,8 +352,8 @@ public class FrameAddRenter extends JFrame {
 				lblImgAvatar.setIcon(imgAvatarParse);
 				lblImgAvatar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				for (MouseListener listener : lblImgAvatar.getMouseListeners()) {
-		                lblImgAvatar.removeMouseListener(listener);
-	            }
+					lblImgAvatar.removeMouseListener(listener);
+				}
 				addMouseListenerImg(lblImgAvatar, new ImageIcon(filePath));
 			}
 		}
@@ -355,37 +373,44 @@ public class FrameAddRenter extends JFrame {
 
 			pathNICList.clear();
 			imgNICList.clear();
-			
-			for (int i = 0; i < Math.min(selectedFiles.length, 2); i++) {
-				File file = selectedFiles[i];
-				String fileName = file.getName();
-				String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-				String newImgNICPath = "images/nic_" + System.currentTimeMillis() + "." + extension;
-				String filePath = file.getAbsolutePath();
 
-				pathNICList.add(filePath);
-				imgNICList.add(newImgNICPath);
+			if (selectedFiles.length != 2) {
+				JOptionPane.showMessageDialog(null, "Please upload 2 photos of your national ID card", "Input Invalid",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				for (int i = 0; i < 2; i++) {
+					File file = selectedFiles[i];
+					String fileName = file.getName();
+					String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+					String newImgNICPath = "images/nic_" + System.currentTimeMillis() + "." + extension;
+					String filePath = file.getAbsolutePath();
 
-				switch (i) {
-				case 0:
-					ImageIcon icon = new ImageIcon(filePath);
-					lblImgCIC1.setIcon(new ImageIcon(icon.getImage().getScaledInstance(60, 50, Image.SCALE_SMOOTH)));
-					lblImgCIC1.setCursor(new Cursor(Cursor.HAND_CURSOR));
-					for (MouseListener listener : lblImgCIC1.getMouseListeners()) {
-						lblImgCIC1.removeMouseListener(listener);
+					pathNICList.add(filePath);
+					imgNICList.add(newImgNICPath);
+
+					switch (i) {
+					case 0:
+						ImageIcon icon = new ImageIcon(filePath);
+						lblImgCIC1
+								.setIcon(new ImageIcon(icon.getImage().getScaledInstance(60, 50, Image.SCALE_SMOOTH)));
+						lblImgCIC1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+						for (MouseListener listener : lblImgCIC1.getMouseListeners()) {
+							lblImgCIC1.removeMouseListener(listener);
+						}
+						addMouseListenerImg(lblImgCIC1, icon);
+						break;
+
+					case 1:
+						ImageIcon icon1 = new ImageIcon(filePath);
+						lblImgCIC2
+								.setIcon(new ImageIcon(icon1.getImage().getScaledInstance(60, 50, Image.SCALE_SMOOTH)));
+						lblImgCIC2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+						for (MouseListener listener : lblImgCIC2.getMouseListeners()) {
+							lblImgCIC2.removeMouseListener(listener);
+						}
+						addMouseListenerImg(lblImgCIC2, icon1);
+						break;
 					}
-					addMouseListenerImg(lblImgCIC1, icon);
-					break;
-
-				case 1:
-					ImageIcon icon1 = new ImageIcon(filePath);
-					lblImgCIC2.setIcon(new ImageIcon(icon1.getImage().getScaledInstance(60, 50, Image.SCALE_SMOOTH)));
-					lblImgCIC2.setCursor(new Cursor(Cursor.HAND_CURSOR));
-					for (MouseListener listener : lblImgCIC2.getMouseListeners()) {
-						lblImgCIC2.removeMouseListener(listener);
-					}
-					addMouseListenerImg(lblImgCIC2, icon1);
-					break;
 				}
 			}
 
@@ -482,10 +507,10 @@ public class FrameAddRenter extends JFrame {
 
 		dateDob = new JDateChooser();
 		dateDob.setDateFormatString("yyyy-MM-dd");
-		dateDob.getJCalendar().setMaxSelectableDate(Calendar.getInstance().getTime());
-//		Calendar currentDate = Calendar.getInstance();
-//		currentDate.add(Calendar.YEAR, -18);
-//		dateDob.getJCalendar().setMaxSelectableDate(currentDate.getTime());
+//		dateDob.getJCalendar().setMaxSelectableDate(Calendar.getInstance().getTime());
+		Calendar currentDate = Calendar.getInstance();
+		currentDate.add(Calendar.YEAR, -18);
+		dateDob.getJCalendar().setMaxSelectableDate(currentDate.getTime());
 
 		lblGender = new JLabel("Gender");
 		lblGender.setForeground(Color.GRAY);

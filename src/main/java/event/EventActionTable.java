@@ -1,4 +1,4 @@
-package service;
+package event;
 
 public interface EventActionTable {
 	public void view(int row);
