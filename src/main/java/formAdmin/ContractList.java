@@ -29,8 +29,10 @@ import table.ImgContractRender;
 import table.TableActionCellEditor;
 import table.TableActionCellRender;
 import table.TableHeader;
+import view.AppStateManager;
 import view.CardRoom;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JTable;
@@ -41,6 +43,7 @@ import java.awt.SystemColor;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.List;
@@ -74,6 +77,7 @@ public class ContractList extends JPanel {
 	private JComboBox cbbStatus;
 	private JComboBox cbbData;
 	private JButton btnReset;
+	private CardRoom cardRoom = new CardRoom();
 //	private EventLoadTable eventLoad;
 
 	/** 
@@ -119,6 +123,7 @@ public class ContractList extends JPanel {
 	}
 
 	public void loadTableContract() {
+		
 		var model = new DefaultTableModel() {
 
 			public java.lang.Class<?> getColumnClass(int columnIndex) {
@@ -263,7 +268,60 @@ public class ContractList extends JPanel {
 
 		tableConstract.getColumnModel().getColumn(10).setCellRenderer(new TableActionCellRender());
 		tableConstract.getColumnModel().getColumn(10).setCellEditor(new TableActionCellEditor(event));
+		
+		
+		var daoUp = new ContractDao();
+		
+		for(int i=0; i<model.getRowCount();i++) {
+			Date toDate = (Date) model.getValueAt(i, 6);
+			String statusString = (String) model.getValueAt(i, 4);
+			
+			
+			Boolean status = "On".equals(statusString);
+			
+					
+			if(toDate!=null && toDate.before(new Date())&&status) {
+//				model.setValueAt("Off", i, 4);
+				String numRoomStr =  String.valueOf(model.getValueAt(i, 1));
+				
+				int conId = (int) tableConstract.getValueAt(i, 0);
+				Integer roomInt = Integer.parseInt(numRoomStr);
+				
+				var contract = new Contract();
+				contract.setId(conId);
+				contract.setStatus(false);
+				
+				daoUp.updateConStatus(contract);
+				
+				if(cardRoom!=null) {
+					CardLayout layout = (CardLayout) cardRoom.CardButton.getLayout();
+					layout.show(cardRoom.CardButton, "available");
+					cardRoom.setBackground(Color.WHITE);
+					cardRoom.repaint();
+					
+					AppStateManager.saveAppState(roomInt, Color.WHITE, "available");
+					
+				} 
+			}
+			
+		
+		}
+
+		
+		
+		
+		
+		
 		filterData();
+		
+		
+
+	}
+	
+	public void endContract() {
+		var daoContract = new ContractDao();
+//		daoEndContract.endContract();
+		
 	}
 
 	protected void btnAddContractActionPerformed(ActionEvent e) {

@@ -45,6 +45,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -110,7 +111,7 @@ public class FrameContract extends JFrame {
 	private JLabel lblInfoRoomates2_1;
 	private JLabel lblInfoRoomates2_2;
 	private JLabel lblInfoRoomates2_3;
-	private JLabel lblInfoRoomates2_4; 
+	private JLabel lblInfoRoomates2_4;
 	private JLabel lblInfoRoomates2_5;
 	private JLabel lblBtnDelete2_1;
 	private JLabel lblBtnDelete2_2;
@@ -133,17 +134,13 @@ public class FrameContract extends JFrame {
 	private JLabel lblApartmentId;
 	private JLabel ReadID;
 	private String maxPeople;
-	
-	
+
 	public void setMaxPeople(String maxPeopleStr) {
 		maxPeople = maxPeopleStr;
 	}
 
-
-
-
 	private CardRoom cardRoom;
-	
+
 	public void setCardRoom(CardRoom cardRoom) {
 		this.cardRoom = cardRoom;
 	}
@@ -155,7 +152,7 @@ public class FrameContract extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FrameContract frame = new FrameContract(); 
+					FrameContract frame = new FrameContract();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -164,12 +161,12 @@ public class FrameContract extends JFrame {
 		});
 	}
 
-	/** 
+	/**
 	 * Create the frame.
 	 */
 //	public FrameAddContract() {};
 	public FrameContract() {
-		
+
 		setBackground(SystemColor.window);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 510, 589);
@@ -210,6 +207,17 @@ public class FrameContract extends JFrame {
 				String[] parts = selectRoomates.split("-");
 				int roomatesID = Integer.parseInt(parts[0]);
 				lblInfoRoomates1.setText(selectRoomates);
+				lblBtnDelete1.setVisible(true);
+				lblBtnDelete1.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						super.mouseClicked(e);
+						lblInfoRoomates1.setText("");
+						lblBtnDelete1.setVisible(false);
+						roomatesList.remove(String.valueOf(roomatesID));
+
+					}
+				});
 				roomatesList.add(String.valueOf(roomatesID));
 
 			}
@@ -253,49 +261,56 @@ public class FrameContract extends JFrame {
 				if (selectCount < 3) {
 					int roomatesID = Integer.parseInt(parts[0]);
 
-					switch (selectCount) {
-					case 1: {
-						lblInfoRoomates2.setText(selectRoomates);
-						lblBtnDelete2.setVisible(true);
-						lblBtnDelete2.addMouseListener(new MouseAdapter() {
-							public void mouseClicked(java.awt.event.MouseEvent e) {
-								lblInfoRoomates2.setText("");
-								lblBtnDelete2.setVisible(false);
-								selectCount = 1;
-								roomatesList.remove(String.valueOf(roomatesID));
-							};
-						});
-						break;
+					if (isIdRoomateExit(roomatesID)) {
+						JOptionPane.showMessageDialog(null, "ID already exists in the roommates list!");
+						return;
 					}
-					case 2: {
-						lblInfoRoomates3.setText(selectRoomates);
-						lblBtnDelete3.setVisible(true);
-						lblBtnDelete3.addMouseListener(new MouseAdapter() {
-							public void mouseClicked(java.awt.event.MouseEvent e) {
-								lblInfoRoomates3.setText("");
-								lblBtnDelete3.setVisible(false);
-								selectCount = 2;
-								roomatesList.remove(String.valueOf(roomatesID));
-							};
-						});
-						break;
+					{
+						switch (selectCount) {
+						case 1: {
+							lblInfoRoomates2.setText(selectRoomates);
+							lblBtnDelete2.setVisible(true);
+							lblBtnDelete2.addMouseListener(new MouseAdapter() {
+								public void mouseClicked(java.awt.event.MouseEvent e) {
+									lblInfoRoomates2.setText("");
+									lblBtnDelete2.setVisible(false);
+									selectCount = 1;
+									roomatesList.remove(String.valueOf(roomatesID));
+								};
+							});
+							break;
+						}
+						case 2: {
+							lblInfoRoomates3.setText(selectRoomates);
+							lblBtnDelete3.setVisible(true);
+							lblBtnDelete3.addMouseListener(new MouseAdapter() {
+								public void mouseClicked(java.awt.event.MouseEvent e) {
+									lblInfoRoomates3.setText("");
+									lblBtnDelete3.setVisible(false);
+									selectCount = 2;
+									roomatesList.remove(String.valueOf(roomatesID));
+								};
+							});
+							break;
+						}
+						case 3: {
+							lblInfoRoomates4.setText(selectRoomates);
+							lblBtnDelete4.setVisible(true);
+							lblBtnDelete4.addMouseListener(new MouseAdapter() {
+								public void mouseClicked(java.awt.event.MouseEvent e) {
+									lblInfoRoomates4.setText("");
+									lblBtnDelete4.setVisible(false);
+									selectCount = 3;
+									roomatesList.remove(String.valueOf(roomatesID));
+								};
+							});
+							break;
+						}
+						}
+						roomatesList.add(String.valueOf(roomatesID));
+						selectCount++;
 					}
-					case 3: {
-						lblInfoRoomates4.setText(selectRoomates);
-						lblBtnDelete4.setVisible(true);
-						lblBtnDelete4.addMouseListener(new MouseAdapter() {
-							public void mouseClicked(java.awt.event.MouseEvent e) {
-								lblInfoRoomates4.setText("");
-								lblBtnDelete4.setVisible(false);
-								selectCount = 3;
-								roomatesList.remove(String.valueOf(roomatesID));
-							};
-						});
-						break;
-					}
-					}
-					roomatesList.add(String.valueOf(roomatesID));
-					selectCount++;
+
 				}
 
 			}
@@ -378,25 +393,26 @@ public class FrameContract extends JFrame {
 					java.sql.Date sqlToDate = new java.sql.Date(dateToDate.getDate().getTime());
 
 					// regex
-					if(!rdbOnContract.isSelected() && !rdbtnOffContract.isSelected()) {
+					if (!rdbOnContract.isSelected() && !rdbtnOffContract.isSelected()) {
 						JOptionPane.showMessageDialog(FrameContract.this, "Please choose status", "Invalid Input",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					
-					if(lblImgCon1.getIcon()==null || lblImgCon2.getIcon()==null || lblImgCon3.getIcon()==null || lblImgCon4.getIcon()==null) {
-						JOptionPane.showMessageDialog(FrameContract.this, "Please select at least 4 contract photos", "Invalid Input",
-								JOptionPane.ERROR_MESSAGE);
+
+					if (lblImgCon1.getIcon() == null || lblImgCon2.getIcon() == null || lblImgCon3.getIcon() == null) {
+						JOptionPane.showMessageDialog(FrameContract.this, "Please select at least 3 contract photos",
+								"Invalid Input", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					
+
 					int countRoomList = roomatesList.size();
-					if(Integer.parseInt(maxPeople) > countRoomList) {
-						JOptionPane.showMessageDialog(FrameContract.this, "The number of renters cannot exceed the maximum occupancy", "Invalid Input",
+					if (Integer.parseInt(maxPeople) < countRoomList) {
+						JOptionPane.showMessageDialog(FrameContract.this,
+								"The number of renters cannot exceed the maximum occupancy", "Invalid Input",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					
+
 					if (cbbOwner.getSelectedItem() == null || cbbOwner.getSelectedItem().toString().isEmpty()
 							|| cbbOwner.getSelectedItem().toString().trim().equalsIgnoreCase("")) {
 						JOptionPane.showMessageDialog(FrameContract.this, "Please choose an owner", "Invalid Input",
@@ -406,13 +422,13 @@ public class FrameContract extends JFrame {
 						String selectedOwnerInfo = (String) cbbOwner.getSelectedItem();
 						int ownerID = Integer.parseInt(selectedOwnerInfo.split("-")[0]);
 						Users ownerApart = renterMapOwner.get(ownerID);
- 
+
 						// save to db
 						if (ownerApart != null) {
 							contract.setOwnerID(ownerID);
 						}
 						contract.setApartNum(Integer.parseInt(ReadID.getText()));
-						
+
 						if (rdbOnContract.isSelected()) {
 							contract.setStatus(true);
 						} else {
@@ -440,43 +456,36 @@ public class FrameContract extends JFrame {
 								e1.printStackTrace();
 							}
 						}
-						
-						
-						
-						
+
 						JOptionPane.showMessageDialog(null, "Save success");
-						
+
 						dispose();
-						
-						 
-						
-						if(cardRoom!=null) {
+
+						if (cardRoom != null) {
 							int roomNumber = cardRoom.getCurrentApartNum();
 							cardRoom.setBackgroundColor(new Color(39, 158, 255));
-							
-							
+
 							CardLayout layout = (CardLayout) cardRoom.CardButton.getLayout();
 							layout.show(cardRoom.CardButton, "rented");
-							
+
 							AppStateManager.saveAppState(roomNumber, new Color(39, 158, 255), "rented");
 						}
-						
-						
+
 					}
 				}
-				
-				
+
 			}
 		});
 
-		initComponent(); 
+		initComponent();
 	}
 
 	protected void btnUploadContractActionPerformed(ActionEvent e) {
 		int minImg = 3;
 		int maxImg = 5;
-		
+
 		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.setMultiSelectionEnabled(true);
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "png", "jpg"));
 		fileChooser.setCurrentDirectory(new File("C:\\Users"));
@@ -485,14 +494,24 @@ public class FrameContract extends JFrame {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File[] selectedFiles = fileChooser.getSelectedFiles();
 
-			int selectedImges = Math.min(selectedFiles.length, 5);
-			
+			int selectedImges = Math.min(selectedFiles.length, maxImg);
+
 			filePathList.clear();
 			newAvatarFilePathList.clear();
-			
-			
-			 
-			for (int i = 0; i < Math.min(selectedFiles.length, 5); i++) {
+
+			if (selectedFiles.length < minImg) {
+				JOptionPane.showMessageDialog(FrameContract.this, "Please select at least 3 images.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			if (selectedFiles.length > maxImg) {
+				JOptionPane.showMessageDialog(null, "Please input a maximum of 5 photos ", "Input Invalid",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			for (int i = 0; i < selectedImges; i++) {
 				File file = selectedFiles[i];
 				String fileName = file.getName();
 				String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -507,15 +526,20 @@ public class FrameContract extends JFrame {
 					var icon = new ImageIcon(filePath);
 					lblImgCon1.setIcon(new ImageIcon(icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 					lblImgCon1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					for (MouseListener listener : lblImgCon1.getMouseListeners()) {
+						lblImgCon1.removeMouseListener(listener);
+					}
 					addMouseListenerImg(lblImgCon1, icon);
-					
-					
+
 					break;
 
 				case 1:
 					var icon2 = new ImageIcon(filePath);
 					lblImgCon2.setIcon(new ImageIcon(icon2.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 					lblImgCon2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					for (MouseListener listener : lblImgCon2.getMouseListeners()) {
+						lblImgCon2.removeMouseListener(listener);
+					}
 					addMouseListenerImg(lblImgCon2, icon2);
 					break;
 
@@ -523,6 +547,9 @@ public class FrameContract extends JFrame {
 					var icon3 = new ImageIcon(filePath);
 					lblImgCon3.setIcon(new ImageIcon(icon3.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 					lblImgCon3.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					for (MouseListener listener : lblImgCon3.getMouseListeners()) {
+						lblImgCon3.removeMouseListener(listener);
+					}
 					addMouseListenerImg(lblImgCon3, icon3);
 					break;
 
@@ -530,6 +557,9 @@ public class FrameContract extends JFrame {
 					var icon4 = new ImageIcon(filePath);
 					lblImgCon4.setIcon(new ImageIcon(icon4.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 					lblImgCon4.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					for (MouseListener listener : lblImgCon4.getMouseListeners()) {
+						lblImgCon4.removeMouseListener(listener);
+					}
 					addMouseListenerImg(lblImgCon4, icon4);
 					break;
 
@@ -537,6 +567,9 @@ public class FrameContract extends JFrame {
 					var icon5 = new ImageIcon(filePath);
 					lblImgCon5.setIcon(new ImageIcon(icon5.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 					lblImgCon5.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					for (MouseListener listener : lblImgCon5.getMouseListeners()) {
+						lblImgCon5.removeMouseListener(listener);
+					}
 					addMouseListenerImg(lblImgCon5, icon5);
 					break;
 				}
@@ -544,11 +577,11 @@ public class FrameContract extends JFrame {
 			}
 		}
 	}
-	
+
 	public void setNumApart(String apartNum) {
 		ReadNumApart.setText(apartNum);
 	}
-	
+
 	public void setApartID(String apartID) {
 		ReadID.setText(apartID);
 	}
@@ -568,9 +601,13 @@ public class FrameContract extends JFrame {
 			}
 		});
 	}
-	
-	
 
+	private boolean isIdRoomateExit(int id) {
+		if (roomatesList.contains(String.valueOf(id))) {
+			return true;
+		}
+		return false;
+	}
 
 	private void initComponent() {
 		lblAddContract = new JLabel("Add Contract");
@@ -658,8 +695,8 @@ public class FrameContract extends JFrame {
 		btnSave.setBorder(null);
 		btnSave.setBackground(new Color(64, 128, 128));
 
-		lblUpTo = new JLabel("Up to 5 images(png or jpg)");
-		lblUpTo.setBounds(15, 144, 138, 13);
+		lblUpTo = new JLabel("<html>(At least 3 photos, maximum 5 photos)</html>");
+		lblUpTo.setBounds(15, 139, 138, 29);
 		lblUpTo.setForeground(Color.GRAY);
 		lblUpTo.setFont(new Font("Arial", Font.PLAIN, 11));
 		contentPane.setLayout(null);
@@ -712,9 +749,9 @@ public class FrameContract extends JFrame {
 
 		lblBtnDelete1 = new JLabel("");
 		lblBtnDelete1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblBtnDelete1.setVisible(false);
 		lblBtnDelete1.setIcon(new ImageIcon(FrameContract.class.getResource("/icon/cross.png")));
 		lblBtnDelete1.setBounds(295, 0, 20, 24);
+		lblBtnDelete1.setVisible(false);
 		FourRoomate.add(lblBtnDelete1);
 		FourRoomate.add(lblInfoRoomates1);
 		FourRoomate.add(lblInfoRoomates2);
@@ -806,18 +843,18 @@ public class FrameContract extends JFrame {
 		lblBtnDelete4_2.setIcon(new ImageIcon(FrameContract.class.getResource("/icon/cross.png")));
 		lblBtnDelete4_2.setBounds(295, 121, 20, 24);
 		FiveRoomate.add(lblBtnDelete4_2);
-		
+
 		ReadNumApart = new JLabel("1");
 		ReadNumApart.setFont(new Font("Arial", Font.PLAIN, 13));
 		ReadNumApart.setBounds(163, 42, 55, 19);
 		contentPane.add(ReadNumApart);
-		
+
 		lblApartmentId = new JLabel("Apartment ID");
 		lblApartmentId.setForeground(Color.GRAY);
 		lblApartmentId.setFont(new Font("Arial", Font.BOLD, 14));
 		lblApartmentId.setBounds(234, 42, 90, 19);
 		contentPane.add(lblApartmentId);
-		
+
 		ReadID = new JLabel("1");
 		ReadID.setFont(new Font("Arial", Font.PLAIN, 13));
 		ReadID.setBounds(334, 43, 55, 19);

@@ -21,8 +21,6 @@ public class ApartmentList extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel lblNewLabel;
-	private JTextPane colorPaid;
-	private JLabel lblPaid;
 	private JTextPane colorRented;
 	private JLabel lblRented_1;
 	private JTextPane colorAvailable;
@@ -40,12 +38,6 @@ public class ApartmentList extends JPanel {
 		lblNewLabel = new JLabel("");
 		lblNewLabel.setBackground(new Color(46, 204, 113));
 		
-		colorPaid = new JTextPane();
-		colorPaid.setBackground(new Color(46, 204, 113));
-		
-		lblPaid = new JLabel("Paid");
-		lblPaid.setFont(new Font("Arial", Font.PLAIN, 14));
-		
 		colorRented = new JTextPane();
 		colorRented.setBackground(new Color(29, 158, 255));
 		
@@ -61,30 +53,23 @@ public class ApartmentList extends JPanel {
 		cardApartment = new CardApartment();
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(771, Short.MAX_VALUE)
+					.addComponent(colorRented, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblRented_1, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+					.addGap(10)
+					.addComponent(colorAvailable, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
+					.addGap(10)
+					.addComponent(lblRented_2, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+					.addGap(31))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(1050)
+					.addComponent(lblNewLabel))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(33)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED, 1017, Short.MAX_VALUE)
-							.addComponent(lblNewLabel))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(colorPaid, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(lblPaid, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(colorRented, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(lblRented_1, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(colorAvailable, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(lblRented_2, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED))
-								.addComponent(cardApartment, GroupLayout.DEFAULT_SIZE, 986, Short.MAX_VALUE))
-							.addGap(31))))
+					.addComponent(cardApartment, GroupLayout.PREFERRED_SIZE, 986, GroupLayout.PREFERRED_SIZE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -92,21 +77,15 @@ public class ApartmentList extends JPanel {
 					.addGap(39)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblRented_2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-								.addComponent(colorAvailable, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblRented_1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(lblPaid, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(colorRented, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.RELATED))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(colorPaid, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-							.addComponent(lblNewLabel)
-							.addGap(34)))
-					.addComponent(cardApartment, GroupLayout.PREFERRED_SIZE, 671, GroupLayout.PREFERRED_SIZE)
-					.addGap(25))
+								.addComponent(colorAvailable, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblRented_2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+							.addGap(6)
+							.addComponent(lblNewLabel))
+						.addComponent(colorRented, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(34)
+					.addComponent(cardApartment, GroupLayout.PREFERRED_SIZE, 682, GroupLayout.PREFERRED_SIZE))
 		);
 		setLayout(groupLayout);
 		

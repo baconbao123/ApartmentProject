@@ -105,7 +105,7 @@ public class Home extends JPanel {
 	            
 	            
 	            
-	            cardRoomUser.setPreferredSize(new Dimension(240, 165)); // Adjust width and height as needed
+	            cardRoomUser.setPreferredSize(new Dimension(243, 249)); // Adjust width and height as needed
 	        
 	        }
 

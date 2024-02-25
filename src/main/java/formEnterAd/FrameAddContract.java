@@ -47,6 +47,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -90,13 +91,13 @@ public class FrameAddContract extends JFrame {
 	private JRadioButton rdbtnOffContract;
 	private JLabel lblFromDate;
 	private JDateChooser dateFromDate;
-	private JLabel lblToDate; 
+	private JLabel lblToDate;
 	private JDateChooser dateToDate;
 	private JLabel lblRoomates;
 	private JComboBox cbbRoomates;
 	private JLabel lblInfoRoomates1;
 	private JLabel lblInfoRoomates2;
-	private JLabel lblInfoRoomates3; 
+	private JLabel lblInfoRoomates3;
 	private JLabel lblInfoRoomates4;
 	private List<String> roomatesList = new ArrayList<>();
 	private JButton btnSave;
@@ -135,23 +136,17 @@ public class FrameAddContract extends JFrame {
 	private CardRoom cardRoom;
 	private ContractList contractList;
 	private EventLoadTable eventLoad;
-	
-	
+
 	public void setCardRoom(CardRoom cardRoom) {
 		this.cardRoom = cardRoom;
 	}
-	
-	public FrameAddContract(CardRoom cardRoom, EventLoadTable event) {
-        this.cardRoom = cardRoom;	
-        this.eventLoad = event;
-        initCode(event);
-        
-    }
 
-//	public ContractList getContractList() {
-//		contractList.loadTableContract();
-//		return contractList;
-//	}
+	public FrameAddContract(CardRoom cardRoom, EventLoadTable event) {
+		this.cardRoom = cardRoom;
+		this.eventLoad = event;
+		initCode(event);
+
+	}
 
 	public void setContractList(ContractList contractList) {
 		this.contractList = contractList;
@@ -174,7 +169,7 @@ public class FrameAddContract extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	
+
 	private void initCode(EventLoadTable event) {
 		setBackground(SystemColor.window);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -192,11 +187,10 @@ public class FrameAddContract extends JFrame {
 		cbbApart = new JComboBox();
 		cbbApart.setBounds(163, 43, 315, 19);
 
-		List<Apartment> apartNumber = dao.selectApartNum(); 
+		List<Apartment> apartNumber = dao.selectApartNum();
 		for (Apartment number : apartNumber) {
 			cbbApart.addItem(number);
 		}
-		
 
 		// onwer name
 		Map<Integer, Users> renterMapOwner = new HashMap<>();
@@ -218,20 +212,20 @@ public class FrameAddContract extends JFrame {
 		}
 
 		cbbOwner.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				JComboBox combobox = (JComboBox) e.getSource();
 				String selectRoomates = (String) cbbOwner.getSelectedItem();
 				String[] parts = selectRoomates.split("-");
 				int roomatesID = Integer.parseInt(parts[0]);
-				
+
 				// Xóa chủ sở hữu trước đó khỏi danh sách roomatesList
 				if (!roomatesList.isEmpty()) {
-				    roomatesList.remove(0); // Xóa owner trước đó khỏi danh sách
+					roomatesList.remove(0); // Xóa owner trước đó khỏi danh sách
 				}
-		        
+
 				lblInfoRoomates1.setText(selectRoomates);
 				lblBtnDelete1.setVisible(true);
 				lblBtnDelete1.addMouseListener(new MouseAdapter() {
@@ -241,7 +235,7 @@ public class FrameAddContract extends JFrame {
 						lblInfoRoomates1.setText("");
 						lblBtnDelete1.setVisible(false);
 						roomatesList.remove(String.valueOf(roomatesID));
-						
+
 					}
 				});
 				roomatesList.add(String.valueOf(roomatesID));
@@ -249,7 +243,7 @@ public class FrameAddContract extends JFrame {
 			}
 		});
 
-		// roomate 
+		// roomate
 		panelRoomate = new JPanel();
 		panelRoomate.setLayout(new CardLayout(0, 0));
 
@@ -271,7 +265,7 @@ public class FrameAddContract extends JFrame {
 		cbbRoomates.setModel(new DefaultComboBoxModel(new String[] { "" }));
 		for (Object renter : renterInfo) {
 			Users renterObject = (Users) renter;
-			cbbRoomates.addItem(renterObject.getId() + "-" + renterObject.getName() + renterObject.getPhone() + "-"
+			cbbRoomates.addItem(renterObject.getId() + "-" + renterObject.getName()+ "-" + renterObject.getPhone() + "-"
 					+ renterObject.getDob() + "-" + renterObject.getNic());
 			renterMapRoomate.put(renterObject.getId(), renterObject);
 		}
@@ -287,49 +281,55 @@ public class FrameAddContract extends JFrame {
 				if (selectCount < 3) {
 					int roomatesID = Integer.parseInt(parts[0]);
 
-					switch (selectCount) {
-					case 1: {
-						lblInfoRoomates2.setText(selectRoomates);
-						lblBtnDelete2.setVisible(true);
-						lblBtnDelete2.addMouseListener(new MouseAdapter() {
-							public void mouseClicked(java.awt.event.MouseEvent e) {
-								lblInfoRoomates2.setText("");
-								lblBtnDelete2.setVisible(false);
-								selectCount = 1;
-								roomatesList.remove(String.valueOf(roomatesID));
-							};
-						});
-						break;
+					if (isIdRoomateExit(roomatesID)) {
+						JOptionPane.showMessageDialog(null, "ID already exists in the roommates list!");
+						return;
+					} else {
+						switch (selectCount) {
+						case 1: {
+							lblInfoRoomates2.setText(selectRoomates);
+							lblBtnDelete2.setVisible(true);
+							lblBtnDelete2.addMouseListener(new MouseAdapter() {
+								public void mouseClicked(java.awt.event.MouseEvent e) {
+									lblInfoRoomates2.setText("");
+									lblBtnDelete2.setVisible(false);
+									selectCount = 1;
+									roomatesList.remove(String.valueOf(roomatesID));
+								};
+							});
+							break;
+						}
+						case 2: {
+							lblInfoRoomates3.setText(selectRoomates);
+							lblBtnDelete3.setVisible(true);
+							lblBtnDelete3.addMouseListener(new MouseAdapter() {
+								public void mouseClicked(java.awt.event.MouseEvent e) {
+									lblInfoRoomates3.setText("");
+									lblBtnDelete3.setVisible(false);
+									selectCount = 2;
+									roomatesList.remove(String.valueOf(roomatesID));
+								};
+							});
+							break;
+						}
+						case 3: {
+							lblInfoRoomates4.setText(selectRoomates);
+							lblBtnDelete4.setVisible(true);
+							lblBtnDelete4.addMouseListener(new MouseAdapter() {
+								public void mouseClicked(java.awt.event.MouseEvent e) {
+									lblInfoRoomates4.setText("");
+									lblBtnDelete4.setVisible(false);
+									selectCount = 3;
+									roomatesList.remove(String.valueOf(roomatesID));
+								};
+							});
+							break;
+						}
+						}
+						roomatesList.add(String.valueOf(roomatesID));
+						selectCount++;
 					}
-					case 2: {
-						lblInfoRoomates3.setText(selectRoomates);
-						lblBtnDelete3.setVisible(true);
-						lblBtnDelete3.addMouseListener(new MouseAdapter() {
-							public void mouseClicked(java.awt.event.MouseEvent e) {
-								lblInfoRoomates3.setText("");
-								lblBtnDelete3.setVisible(false);
-								selectCount = 2;
-								roomatesList.remove(String.valueOf(roomatesID));
-							};
-						});
-						break;
-					}
-					case 3: {
-						lblInfoRoomates4.setText(selectRoomates);
-						lblBtnDelete4.setVisible(true);
-						lblBtnDelete4.addMouseListener(new MouseAdapter() {
-							public void mouseClicked(java.awt.event.MouseEvent e) {
-								lblInfoRoomates4.setText("");
-								lblBtnDelete4.setVisible(false);
-								selectCount = 3;
-								roomatesList.remove(String.valueOf(roomatesID));
-							};
-						});
-						break;
-					}
-					}
-					roomatesList.add(String.valueOf(roomatesID));
-					selectCount++;
+
 				}
 
 			}
@@ -395,7 +395,7 @@ public class FrameAddContract extends JFrame {
 					}
 				}
 			}
-		}); 
+		});
 
 		btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
@@ -415,18 +415,18 @@ public class FrameAddContract extends JFrame {
 					java.sql.Date sqlToDate = new java.sql.Date(dateToDate.getDate().getTime());
 
 					// regex
-					if(!rdbOnContract.isSelected() && !rdbtnOffContract.isSelected()) {
+					if (!rdbOnContract.isSelected() && !rdbtnOffContract.isSelected()) {
 						JOptionPane.showMessageDialog(FrameAddContract.this, "Please choose status", "Invalid Input",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					
-					if(lblImgCon1.getIcon()==null || lblImgCon2.getIcon()==null || lblImgCon3.getIcon()==null || lblImgCon4.getIcon()==null) {
-						JOptionPane.showMessageDialog(FrameAddContract.this, "Please select at least 4 contract photos", "Invalid Input",
-								JOptionPane.ERROR_MESSAGE);
+
+					if (lblImgCon1.getIcon() == null || lblImgCon2.getIcon() == null || lblImgCon3.getIcon() == null) {
+						JOptionPane.showMessageDialog(FrameAddContract.this, "Please select at least 3 contract photos",
+								"Invalid Input", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					
+
 					if (cbbOwner.getSelectedItem() == null || cbbOwner.getSelectedItem().toString().isEmpty()
 							|| cbbOwner.getSelectedItem().toString().trim().equalsIgnoreCase("")) {
 						JOptionPane.showMessageDialog(FrameAddContract.this, "Please choose an owner", "Invalid Input",
@@ -469,23 +469,24 @@ public class FrameAddContract extends JFrame {
 								e1.printStackTrace();
 							}
 						}
-						
-						if(cardRoom!=null) {
+
+						if (cardRoom != null) {
 							int selectedApartNum = selectedApartment.getRoomNumber();
 							System.out.println("Apartment num" + selectedApartNum);
 							cardRoom.setBackgroundColor(new Color(39, 158, 255));
-							
+
 							CardLayout layout = (CardLayout) cardRoom.CardButton.getLayout();
 							layout.show(cardRoom.CardButton, "rented");
 							cardRoom.setBackgroundColor(new Color(39, 158, 255));
 							cardRoom.repaint();
 							AppStateManager.saveAppState(selectedApartNum, new Color(39, 158, 255), "rented");
-						} else if (cardRoom == null) {
-							System.out.println("card room null");
-						}
-						
+						} 
+//						else if (cardRoom == null) {
+//							System.out.println("card room null");
+//						}
+
 						dispose();
-						
+
 						event.loadDataTable();
 					}
 				}
@@ -493,7 +494,7 @@ public class FrameAddContract extends JFrame {
 		});
 
 		initComponent();
-		
+
 	}
 
 	public FrameAddContract() {
@@ -506,12 +507,15 @@ public class FrameAddContract extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-
 	}
- 
+
 	protected void btnUploadContractActionPerformed(ActionEvent e) {
+		int minImg = 3;
+		int maxImg = 5;
+
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setMultiSelectionEnabled(true);
+		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "png", "jpg"));
 		fileChooser.setCurrentDirectory(new File("C:\\Users"));
 		int result = fileChooser.showOpenDialog(FrameAddContract.this);
@@ -519,67 +523,88 @@ public class FrameAddContract extends JFrame {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File[] selectedFiles = fileChooser.getSelectedFiles();
 
+			int selectedImg = Math.min(selectedFiles.length, maxImg);
 
 			filePathList.clear();
 			newAvatarFilePathList.clear();
-			 
-			if(selectedFiles.length!=4) {
-				JOptionPane.showMessageDialog(null, "Please upload 4 photos of your contract", "Input Invalid",
+
+			if (selectedFiles.length < minImg) {
+				JOptionPane.showMessageDialog(null, "Please select at least 3 images.", "Error",
 						JOptionPane.ERROR_MESSAGE);
-			} else {
-				for (int i = 0; i < Math.min(selectedFiles.length, 5); i++) {
-					File file = selectedFiles[i];
-					String fileName = file.getName();
-					String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-					String newAvatarFilePath = "images/contract_" + System.currentTimeMillis() + "." + extension;
-					String filePath = file.getAbsolutePath();
-
-					filePathList.add(filePath);
-					newAvatarFilePathList.add(newAvatarFilePath);
-
-					switch (i) {
-					case 0:
-						var icon = new ImageIcon(filePath);
-						lblImgCon1.setIcon(new ImageIcon(icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-						lblImgCon1.setCursor(new Cursor(Cursor.HAND_CURSOR));
-						addMouseListenerImg(lblImgCon1, icon);
-						
-						
-						break;
-
-					case 1:
-						var icon2 = new ImageIcon(filePath);
-						lblImgCon2.setIcon(new ImageIcon(icon2.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-						lblImgCon2.setCursor(new Cursor(Cursor.HAND_CURSOR));
-						addMouseListenerImg(lblImgCon2, icon2);
-						break;
-
-					case 2:
-						var icon3 = new ImageIcon(filePath);
-						lblImgCon3.setIcon(new ImageIcon(icon3.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-						lblImgCon3.setCursor(new Cursor(Cursor.HAND_CURSOR));
-						addMouseListenerImg(lblImgCon3, icon3);
-						break;
-
-					case 3:
-						var icon4 = new ImageIcon(filePath);
-						lblImgCon4.setIcon(new ImageIcon(icon4.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-						lblImgCon4.setCursor(new Cursor(Cursor.HAND_CURSOR));
-						addMouseListenerImg(lblImgCon4, icon4);
-						break;
-
-					case 4:
-						var icon5 = new ImageIcon(filePath);
-						lblImgCon5.setIcon(new ImageIcon(icon5.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-						lblImgCon5.setCursor(new Cursor(Cursor.HAND_CURSOR));
-						addMouseListenerImg(lblImgCon5, icon5);
-						break;
-					}
-
-				}
+				return;
 			}
-			
-			
+
+			if (selectedFiles.length > maxImg) {
+				JOptionPane.showMessageDialog(null, "Please input a maximum of 5 photos ", "Input Invalid",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			for (int i = 0; i < selectedImg; i++) {
+				File file = selectedFiles[i];
+				String fileName = file.getName();
+				String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+				String newAvatarFilePath = "images/contract_" + System.currentTimeMillis() + "." + extension;
+				String filePath = file.getAbsolutePath();
+
+				filePathList.add(filePath);
+				newAvatarFilePathList.add(newAvatarFilePath);
+
+				switch (i) {
+				case 0:
+					var icon = new ImageIcon(filePath);
+					lblImgCon1.setIcon(new ImageIcon(icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+					lblImgCon1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					for (MouseListener listener : lblImgCon1.getMouseListeners()) {
+						lblImgCon1.removeMouseListener(listener);
+					}
+					addMouseListenerImg(lblImgCon1, icon);
+
+					break;
+
+				case 1:
+					var icon2 = new ImageIcon(filePath);
+					lblImgCon2.setIcon(new ImageIcon(icon2.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+					lblImgCon2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					for (MouseListener listener : lblImgCon2.getMouseListeners()) {
+						lblImgCon2.removeMouseListener(listener);
+					}
+					addMouseListenerImg(lblImgCon2, icon2);
+					break;
+
+				case 2:
+					var icon3 = new ImageIcon(filePath);
+					lblImgCon3.setIcon(new ImageIcon(icon3.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+					lblImgCon3.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					for (MouseListener listener : lblImgCon3.getMouseListeners()) {
+						lblImgCon3.removeMouseListener(listener);
+					}
+					addMouseListenerImg(lblImgCon3, icon3);
+					break;
+
+				case 3:
+					var icon4 = new ImageIcon(filePath);
+					lblImgCon4.setIcon(new ImageIcon(icon4.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+					lblImgCon4.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					for (MouseListener listener : lblImgCon4.getMouseListeners()) {
+						lblImgCon4.removeMouseListener(listener);
+					}
+					addMouseListenerImg(lblImgCon4, icon4);
+					break;
+
+				case 4:
+					var icon5 = new ImageIcon(filePath);
+					lblImgCon5.setIcon(new ImageIcon(icon5.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+					lblImgCon5.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					for (MouseListener listener : lblImgCon5.getMouseListeners()) {
+						lblImgCon5.removeMouseListener(listener);
+					}
+					addMouseListenerImg(lblImgCon5, icon5);
+					break;
+				}
+
+			}
+
 		}
 	}
 
@@ -597,6 +622,13 @@ public class FrameAddContract extends JFrame {
 				super.mouseClicked(e);
 			}
 		});
+	}
+
+	private boolean isIdRoomateExit(int id) {
+		if (roomatesList.contains(String.valueOf(id))) {
+			return true;
+		}
+		return false;
 	}
 
 	private void initComponent() {
@@ -649,21 +681,6 @@ public class FrameAddContract extends JFrame {
 		lblImgCon5 = new JLabel("");
 		lblImgCon5.setBounds(422, 119, 43, 38);
 
-//		lblImgCon1.setOpaque(true);
-//		lblImgCon1.setBackground(SystemColor.info);
-//
-//		lblImgCon2.setOpaque(true);
-//		lblImgCon2.setBackground(SystemColor.info);
-//
-//		lblImgCon3.setOpaque(true);
-//		lblImgCon3.setBackground(SystemColor.info);
-//
-//		lblImgCon4.setOpaque(true);
-//		lblImgCon4.setBackground(SystemColor.info);
-//
-//		lblImgCon5.setOpaque(true);
-//		lblImgCon5.setBackground(SystemColor.info);
-
 		lblStatus = new JLabel("Status");
 		lblStatus.setBounds(15, 179, 138, 19);
 		lblStatus.setForeground(Color.GRAY);
@@ -704,8 +721,8 @@ public class FrameAddContract extends JFrame {
 		btnSave.setBorder(null);
 		btnSave.setBackground(new Color(64, 128, 128));
 
-		lblUpTo = new JLabel("Up to 5 images(png or jpg)");
-		lblUpTo.setBounds(15, 144, 138, 13);
+		lblUpTo = new JLabel("<html>(At least 3 photos, maximum 5 photos)</html>");
+		lblUpTo.setBounds(15, 144, 138, 24);
 		lblUpTo.setForeground(Color.GRAY);
 		lblUpTo.setFont(new Font("Arial", Font.PLAIN, 11));
 		contentPane.setLayout(null);

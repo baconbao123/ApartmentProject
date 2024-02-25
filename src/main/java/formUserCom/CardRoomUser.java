@@ -124,19 +124,14 @@ public class CardRoomUser extends JPanel {
 	 */
 	public CardRoomUser() {
 		setBackground(new Color(39, 158, 255));
-		setBounds(0, 0, 246, 257);
+		setBounds(0, 0, 246, 249);
 		ReadRoomNum = new JLabel("101");
-		ReadRoomNum.setBounds(115, 21, 31, 16);
 		ReadOwner = new JLabel("None");
-		ReadOwner.setBounds(74, 60, 132, 14);
 		ReadPrice = new JLabel("0");
-		ReadPrice.setBounds(74, 94, 132, 14);
 		ReadPrice.setBackground(new Color(217, 181, 67));
 		ReadPeople = new JLabel("0");
 		ReadPeople.setForeground(Color.WHITE);
-		ReadPeople.setBounds(74, 126, 11, 16);
 		ReadMaxPeople = new JLabel("0");
-		ReadMaxPeople.setBounds(104, 126, 7, 16);
 		
 		initComponent();
 	}
@@ -230,7 +225,6 @@ public class CardRoomUser extends JPanel {
 
 	private void initComponent() {
 		lblRoomNumber = new JLabel("Room");
-		lblRoomNumber.setBounds(74, 21, 40, 16);
 		lblRoomNumber.setForeground(Color.WHITE);
 		lblRoomNumber.setFont(new Font("Arial", Font.BOLD, 13));
 		ReadRoomNum.setForeground(Color.WHITE);
@@ -245,7 +239,6 @@ public class CardRoomUser extends JPanel {
 		ReadPeople.setFont(new Font("Arial", Font.BOLD, 13));
 		
 		btnViewRoom = new JButton("View Room");
-		btnViewRoom.setBounds(15, 160, 221, 28);
 		btnViewRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnViewRoomActionPerformed(e);
@@ -258,7 +251,6 @@ public class CardRoomUser extends JPanel {
 		btnViewRoom.setBackground(new Color(0, 154, 33));
 		
 		btnViewContract = new JButton("View Contract");
-		btnViewContract.setBounds(15, 198, 221, 28);
 		btnViewContract.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnViewContractActionPerformed(e);
@@ -271,47 +263,98 @@ public class CardRoomUser extends JPanel {
 		btnViewContract.setBackground(new Color(215, 125, 0));
 		
 		lblIconRoom = new JLabel("");
-		lblIconRoom.setBounds(40, 21, 16, 16);
 		lblIconRoom.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/home.png")));
 		
 		lblIconOwner = new JLabel("");
-		lblIconOwner.setBounds(40, 58, 16, 16);
 		lblIconOwner.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/check.png")));
 		
 		lblIconMoney = new JLabel("");
-		lblIconMoney.setBounds(40, 92, 16, 16);
 		lblIconMoney.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/payment.png")));
 		
 		lblIconPeople = new JLabel("");
-		lblIconPeople.setBounds(40, 126, 16, 16);
 		lblIconPeople.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/users.png")));
 		
 		lblRenter = new JLabel("renters");
-		lblRenter.setBounds(117, 126, 73, 16);
 		lblRenter.setForeground(Color.WHITE);
 		lblRenter.setFont(new Font("Arial", Font.BOLD, 13));
 		lblRenter.setBackground(Color.BLACK);
 		
 		lblR = new JLabel("/");
-		lblR.setBounds(91, 126, 7, 16);
 		lblR.setForeground(Color.WHITE);
 		lblR.setFont(new Font("Arial", Font.BOLD, 13));
 		lblR.setBackground(Color.BLACK);
-		setLayout(null);
-		add(lblIconRoom);
-		add(lblRoomNumber);
-		add(ReadRoomNum);
-		add(lblIconOwner);
-		add(ReadOwner);
-		add(lblIconMoney);
-		add(ReadPrice);
-		add(btnViewRoom);
-		add(btnViewContract);
-		add(lblIconPeople);
-		add(ReadPeople);
-		add(lblR);
-		add(ReadMaxPeople);
-		add(lblRenter);
+		GroupLayout groupLayout = new GroupLayout(this);
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(40)
+					.addComponent(lblIconRoom)
+					.addGap(18)
+					.addComponent(lblRoomNumber, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addComponent(ReadRoomNum, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(40)
+					.addComponent(lblIconOwner)
+					.addGap(18)
+					.addComponent(ReadOwner, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(40)
+					.addComponent(lblIconMoney)
+					.addGap(18)
+					.addComponent(ReadPrice, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(40)
+					.addComponent(lblIconPeople)
+					.addGap(18)
+					.addComponent(ReadPeople, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)
+					.addGap(6)
+					.addComponent(lblR, GroupLayout.PREFERRED_SIZE, 7, GroupLayout.PREFERRED_SIZE)
+					.addGap(6)
+					.addComponent(ReadMaxPeople)
+					.addGap(6)
+					.addComponent(lblRenter, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(15)
+					.addComponent(btnViewRoom, GroupLayout.PREFERRED_SIZE, 221, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(15)
+					.addComponent(btnViewContract, GroupLayout.PREFERRED_SIZE, 221, GroupLayout.PREFERRED_SIZE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(21)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblIconRoom)
+						.addComponent(lblRoomNumber)
+						.addComponent(ReadRoomNum))
+					.addGap(21)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblIconOwner)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(2)
+							.addComponent(ReadOwner, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblIconMoney)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(2)
+							.addComponent(ReadPrice, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblIconPeople)
+						.addComponent(ReadPeople)
+						.addComponent(lblR)
+						.addComponent(ReadMaxPeople)
+						.addComponent(lblRenter))
+					.addGap(18)
+					.addComponent(btnViewRoom, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+					.addComponent(btnViewContract, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+					.addGap(23))
+		);
+		setLayout(groupLayout);
 		
 	}
 	
