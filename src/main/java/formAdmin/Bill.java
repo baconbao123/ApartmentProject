@@ -483,12 +483,12 @@ public class Bill extends JPanel {
 
 			@Override
 			public void edit(int row) {
+				
 				// TODO Auto-generated method stub
 				Integer id = (Integer) tableBill.getValueAt(row, 0);
 				JFrame frame = new JFrame();
 				showEditFees(frame, id);
-				frame.setVisible(true);
-				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+				
 			}
 			@Override 
 			public void report(int row) {
@@ -534,19 +534,26 @@ public class Bill extends JPanel {
 	}
 
 	public static void showEditFees(Frame frameParent, int id) {
-		JDialog popup = new JDialog(frameParent, "Edit fees ", true);
-		var eventLoad = new EventLoadTable() {
+		var status = selectStatus.getSelectedItem().toString().equals("finished") ? true :false ;
+		if(!status) {
+			JDialog popup = new JDialog(frameParent, "Edit fees ", true);
+			var eventLoad = new EventLoadTable() {
 
-			@Override
-			public void loadDataTable() {
-				loadData();
-			}
-		};
-		var popupPanel = new ShowEditFees(id, eventLoad);
-		popup.getContentPane().add(popupPanel);
-		popup.setSize(460, 500);
-		popup.setLocationRelativeTo(frameParent);
-		popup.setVisible(true);
+				@Override
+				public void loadDataTable() {
+					loadData();
+				}
+			};
+			
+			var popupPanel = new ShowEditFees(id, eventLoad);
+			popup.getContentPane().add(popupPanel);
+			popup.setSize(460, 500);
+			popup.setLocationRelativeTo(frameParent);
+			popup.setVisible(true);
+			frameParent.setVisible(true);
+			frameParent.dispatchEvent(new WindowEvent(frameParent, WindowEvent.WINDOW_CLOSING));
+		}
+		
 	}
 	public static void showPay(Frame frameParent, int id) {
 		JDialog popup = new JDialog(frameParent, "What's status of the payment ? ", true);
