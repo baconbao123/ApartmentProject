@@ -88,7 +88,6 @@ public class ApartmentDao {
 				apart.setRoomNumber(rs.getInt("rooms"));		
 				
 				list.add(apart);
-//				System.out.println("list ");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -190,7 +189,6 @@ public class ApartmentDao {
 				apart.setRoomNumber(rs.getInt("rooms"));
 				apart.setPeople(rs.getInt("total_roommates"));
 				list.add(apart);
-//				System.out.println("list"+list);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -219,6 +217,27 @@ public class ApartmentDao {
 				contract.setToDate(rs.getDate("toDate"));
 				list.add(contract);
 //				System.out.println("list hahah"+list);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return list;
+	}
+	
+	public List<Object> slectCard() {
+		List<Object> list = new ArrayList<Object>();
+		try 
+		(
+			var con = ConnectDB.getConnect();
+			var cs = con.prepareCall("{call selectCard()}");
+		)
+		{
+			var rs = cs.executeQuery();
+			while (rs.next()) {
+				list.add(rs.getInt("user_id"));
+				list.add(rs.getString("all_user_id"));
+				list.add(rs.getInt("rooms"));
+				System.out.println(list);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

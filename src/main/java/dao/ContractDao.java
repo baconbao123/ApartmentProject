@@ -304,4 +304,17 @@ public class ContractDao {
 		}
 		return list;
 	}
+	
+//	public void endContract() {
+//		try 
+//		(
+//			var con = ConnectDB.getConnect();
+//			var cs = con.prepareCall("{call endContract()}")
+//		)
+//		{
+//			cs.executeQuery();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
