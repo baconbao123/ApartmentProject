@@ -80,6 +80,7 @@ public class Login extends JFrame {
 		return isAdmin;
 	}
 
+	
 	public final static void setIsAdmin(Boolean value) {
 		isAdmin = value;
 	}

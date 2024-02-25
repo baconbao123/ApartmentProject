@@ -28,7 +28,7 @@ public class MenuBottom extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel LblName;
-	private JLabel LblStatus;
+	private static JLabel LblStatus;
 	private JLabel lblIcon;
 	private JLabel lblAvatar;
 	private JPanel panel;
@@ -38,6 +38,13 @@ public class MenuBottom extends JPanel {
 	
 	public static void getAdmin() {
 		isAdmin = Login.getIsAdmin();
+		System.out.println("isAddmin: " + isAdmin);
+		if(isAdmin) {
+			LblStatus.setText("Admin");
+		} else {
+			LblStatus.setText("Renter");
+		}
+		
 	}
 
 	public JLabel getLblIcon() {
@@ -50,7 +57,7 @@ public class MenuBottom extends JPanel {
 	public MenuBottom() {
 		setOpaque(false);
 		setBounds(0, 0, 230, 65);
-		System.out.println("isAddmin: " + Login.getIsAdmin());
+		
 		
 		panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
@@ -68,13 +75,13 @@ public class MenuBottom extends JPanel {
 		panel.setLayout(null);
 		
 		LblName = new JLabel("Baconbao");
-		LblName.setBounds(77, 5, 72, 19);
+		LblName.setBounds(66, 5, 106, 19);
 		panel.add(LblName);
 		LblName.setForeground(SystemColor.controlShadow);
 		LblName.setFont(new Font("Tahoma", Font.BOLD, 15));
 		
-		LblStatus = new JLabel("");
-		LblStatus.setBounds(77, 27, 72, 19);
+		LblStatus = new JLabel();
+		LblStatus.setBounds(66, 27, 83, 19);
 		panel.add(LblStatus);
 		LblStatus.setForeground(SystemColor.controlShadow);
 		LblStatus.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 15));
@@ -88,9 +95,12 @@ public class MenuBottom extends JPanel {
 		lblAvatar.setBounds(10, 5, 46, 41);
 		panel.add(lblAvatar);
 		
-		var isAdmin = Login.getIsAdmin();
-		System.out.println("Menu "+isAdmin);
-		System.out.println("Id "+Login.getId());
+//		if(isAdmin) {
+//			LblStatus.setText("Admin");
+//		} else {
+//			LblStatus.setText("Renter");
+//		}
+		
 		lblIcon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -116,7 +126,7 @@ public class MenuBottom extends JPanel {
 		
 		if (info != null) {
 
-			LblName.setText(info.getEmail() != null ? info.getEmail() : "");
+			LblName.setText(info.getName() != null ? info.getName() : "");
 		
 			
 			if (info.getAvatar() == null || info.getAvatar().isEmpty()) {

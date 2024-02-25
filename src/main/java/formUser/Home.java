@@ -36,10 +36,11 @@ import java.awt.SystemColor;
 public class Home extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JLabel lblHome;
 	private int userId = Login.getId();
 	private JScrollPane scrollPane;
 	private JPanel panelAparts;
+	private JLabel lblNewLabel;
+	private JLabel lblBillOrNoti;
 	
 	public Home() {
 		setBounds(0, 0, 1100, 800);
@@ -65,7 +66,7 @@ public class Home extends JPanel {
 		
 		System.out.println(apartments);
 		
-		panelAparts.setLayout(new GridLayout(0, 4, 20, 40));
+		panelAparts.setLayout(new GridLayout(0, 2, 50, 50));
 
 		for(int i = 1; i <= apartments.size(); i++) {
 	        JPanel floorPanel = new JPanel();
@@ -104,7 +105,7 @@ public class Home extends JPanel {
 	            
 	            
 	            
-	            cardRoomUser.setPreferredSize(new Dimension(240, 195)); // Adjust width and height as needed
+	            cardRoomUser.setPreferredSize(new Dimension(240, 165)); // Adjust width and height as needed
 	        
 	        }
 
@@ -145,31 +146,46 @@ public class Home extends JPanel {
 		return null;
 	}
 	
+	// load data
+	public void loadTable() {};
+	
+	
+	
 	
 	private void initComponent() {
-		lblHome = new JLabel("Home");
-		lblHome.setFont(new Font("Arial", Font.BOLD, 18));
+		
+		lblNewLabel = new JLabel("List of rented rooms.");
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
+		
+		lblBillOrNoti = new JLabel("Bill OR noti");
+		lblBillOrNoti.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(524)
-					.addComponent(lblHome, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(524))
-				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(19)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1062, Short.MAX_VALUE)
-					.addGap(19))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblNewLabel)
+							.addPreferredGap(ComponentPlacement.RELATED, 574, Short.MAX_VALUE)
+							.addComponent(lblBillOrNoti, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
+							.addGap(109))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 547, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap(534, Short.MAX_VALUE))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(22)
-					.addComponent(lblHome)
-					.addGap(130)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(404, Short.MAX_VALUE))
+					.addGap(66)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblBillOrNoti, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblNewLabel)
+							.addGap(18)
+							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 606, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(86, Short.MAX_VALUE))
 		);
 		
 		

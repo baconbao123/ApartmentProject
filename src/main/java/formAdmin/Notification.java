@@ -91,7 +91,7 @@ public class Notification extends JPanel {
 		setBounds(0, 0, 1050, 800);
 		{
 			lblNewLabel = new JLabel("Notification");
-			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+			lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
 		}
 
 		btnCompose = new JButton("Compose");
@@ -152,46 +152,44 @@ public class Notification extends JPanel {
 		btnSend.setBackground(new Color(255, 215, 0));
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(37)
-					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(879, Short.MAX_VALUE))
+			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(btnPer)
-							.addGap(28)
-							.addComponent(textNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnLoadData, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
 							.addGap(26)
-							.addComponent(btnNext, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
-							.addGap(261)
-							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+							.addComponent(btnSend, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(btnCompose, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(92)
-								.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1004, Short.MAX_VALUE))
-							.addGroup(groupLayout.createSequentialGroup()
 								.addContainerGap()
-								.addComponent(btnLoadData, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnPer)
+								.addGap(28)
+								.addComponent(textNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(26)
-								.addComponent(btnSend, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addComponent(btnCompose, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE))))
+								.addComponent(btnNext, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
+								.addGap(261)
+								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+							.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+								.addGap(92)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
+									.addComponent(panel, GroupLayout.DEFAULT_SIZE, 879, Short.MAX_VALUE)))))
 					.addGap(79))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addContainerGap()
 					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-					.addGap(7)
+					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnCompose, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnSend, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnLoadData, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
-					.addGap(53)
+					.addGap(42)
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 516, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)

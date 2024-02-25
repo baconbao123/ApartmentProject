@@ -93,18 +93,24 @@ public class Setting extends JPanel {
 		panel_2.setForeground(new Color(134, 134, 134));
 		panel_2.setBackground(new Color(255, 255, 255));
 		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout
-				.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup().addGap(56)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 973,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblNewLabel))
-								.addContainerGap(21, Short.MAX_VALUE)));
-		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup().addGap(52).addComponent(lblNewLabel).addGap(53)
-						.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 641, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(30, Short.MAX_VALUE)));
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(56)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 973, GroupLayout.PREFERRED_SIZE))
+					.addGap(21))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(34)
+					.addComponent(lblNewLabel)
+					.addGap(71)
+					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 641, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(30, Short.MAX_VALUE))
+		);
 		panel_2.setLayout(null);
 		{
 			panel = new JPanel() {

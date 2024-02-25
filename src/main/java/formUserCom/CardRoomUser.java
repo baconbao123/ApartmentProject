@@ -124,13 +124,19 @@ public class CardRoomUser extends JPanel {
 	 */
 	public CardRoomUser() {
 		setBackground(new Color(39, 158, 255));
-		setBounds(0, 0, 240, 195);
+		setBounds(0, 0, 246, 257);
 		ReadRoomNum = new JLabel("101");
+		ReadRoomNum.setBounds(115, 21, 31, 16);
 		ReadOwner = new JLabel("None");
+		ReadOwner.setBounds(74, 60, 132, 14);
 		ReadPrice = new JLabel("0");
-		ReadPrice.setBackground(new Color(244, 0, 0));
+		ReadPrice.setBounds(74, 94, 132, 14);
+		ReadPrice.setBackground(new Color(217, 181, 67));
 		ReadPeople = new JLabel("0");
+		ReadPeople.setForeground(Color.WHITE);
+		ReadPeople.setBounds(74, 126, 11, 16);
 		ReadMaxPeople = new JLabel("0");
+		ReadMaxPeople.setBounds(104, 126, 7, 16);
 		
 		initComponent();
 	}
@@ -224,20 +230,22 @@ public class CardRoomUser extends JPanel {
 
 	private void initComponent() {
 		lblRoomNumber = new JLabel("Room");
-		lblRoomNumber.setForeground(Color.BLACK);
+		lblRoomNumber.setBounds(74, 21, 40, 16);
+		lblRoomNumber.setForeground(Color.WHITE);
 		lblRoomNumber.setFont(new Font("Arial", Font.BOLD, 13));
-		ReadRoomNum.setForeground(Color.BLACK);
+		ReadRoomNum.setForeground(Color.WHITE);
 		ReadRoomNum.setFont(new Font("Arial", Font.BOLD, 13));
-		ReadOwner.setForeground(Color.BLACK);
+		ReadOwner.setForeground(Color.WHITE);
 		ReadOwner.setFont(new Font("Arial", Font.BOLD, 13));
-		ReadPrice.setForeground(new Color(244, 0, 0));
+		ReadPrice.setForeground(Color.WHITE);
 		ReadPrice.setFont(new Font("Arial", Font.BOLD, 13));
-		ReadMaxPeople.setForeground(Color.BLACK);
+		ReadMaxPeople.setForeground(Color.WHITE);
 		ReadMaxPeople.setFont(new Font("Arial", Font.BOLD, 13));
-		ReadMaxPeople.setBackground(Color.BLACK);
+		ReadMaxPeople.setBackground(new Color(234, 56, 0));
 		ReadPeople.setFont(new Font("Arial", Font.BOLD, 13));
 		
 		btnViewRoom = new JButton("View Room");
+		btnViewRoom.setBounds(15, 160, 221, 28);
 		btnViewRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnViewRoomActionPerformed(e);
@@ -247,9 +255,10 @@ public class CardRoomUser extends JPanel {
 		btnViewRoom.setFont(new Font("Arial", Font.BOLD, 12));
 		btnViewRoom.setFocusable(false);
 		btnViewRoom.setBorder(null);
-		btnViewRoom.setBackground(Color.LIGHT_GRAY);
+		btnViewRoom.setBackground(new Color(0, 154, 33));
 		
 		btnViewContract = new JButton("View Contract");
+		btnViewContract.setBounds(15, 198, 221, 28);
 		btnViewContract.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnViewContractActionPerformed(e);
@@ -259,107 +268,50 @@ public class CardRoomUser extends JPanel {
 		btnViewContract.setFont(new Font("Arial", Font.BOLD, 12));
 		btnViewContract.setFocusable(false);
 		btnViewContract.setBorder(null);
-		btnViewContract.setBackground(new Color(210, 180, 140));
+		btnViewContract.setBackground(new Color(215, 125, 0));
 		
 		lblIconRoom = new JLabel("");
-		lblIconRoom.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/home(1).png")));
+		lblIconRoom.setBounds(40, 21, 16, 16);
+		lblIconRoom.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/home.png")));
 		
 		lblIconOwner = new JLabel("");
-		lblIconOwner.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/check(1).png")));
+		lblIconOwner.setBounds(40, 58, 16, 16);
+		lblIconOwner.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/check.png")));
 		
 		lblIconMoney = new JLabel("");
-		lblIconMoney.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/payment(1).png")));
+		lblIconMoney.setBounds(40, 92, 16, 16);
+		lblIconMoney.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/payment.png")));
 		
 		lblIconPeople = new JLabel("");
-		lblIconPeople.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/users(1).png")));
+		lblIconPeople.setBounds(40, 126, 16, 16);
+		lblIconPeople.setIcon(new ImageIcon(CardRoomUser.class.getResource("/icon/users.png")));
 		
 		lblRenter = new JLabel("renters");
-		lblRenter.setForeground(Color.BLACK);
+		lblRenter.setBounds(117, 126, 73, 16);
+		lblRenter.setForeground(Color.WHITE);
 		lblRenter.setFont(new Font("Arial", Font.BOLD, 13));
 		lblRenter.setBackground(Color.BLACK);
 		
 		lblR = new JLabel("/");
-		lblR.setForeground(Color.BLACK);
+		lblR.setBounds(91, 126, 7, 16);
+		lblR.setForeground(Color.WHITE);
 		lblR.setFont(new Font("Arial", Font.BOLD, 13));
 		lblR.setBackground(Color.BLACK);
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(40)
-					.addComponent(lblIconRoom)
-					.addGap(18)
-					.addComponent(lblRoomNumber, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-					.addGap(1)
-					.addComponent(ReadRoomNum, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(40)
-					.addComponent(lblIconOwner)
-					.addGap(18)
-					.addComponent(ReadOwner, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(40)
-					.addComponent(lblIconMoney)
-					.addGap(18)
-					.addComponent(ReadPrice, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btnViewRoom, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnViewContract, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
-					.addContainerGap())
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(40)
-					.addComponent(lblIconPeople)
-					.addGap(18)
-					.addComponent(ReadPeople, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblR, GroupLayout.PREFERRED_SIZE, 7, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(ReadMaxPeople)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblRenter, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(21)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblIconRoom)
-								.addComponent(lblRoomNumber)
-								.addComponent(ReadRoomNum))
-							.addGap(21)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblIconOwner)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(2)
-									.addComponent(ReadOwner, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
-							.addGap(18)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblIconMoney)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(2)
-									.addComponent(ReadPrice, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)))
-							.addGap(18)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblIconPeople)
-								.addComponent(ReadPeople)
-								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-									.addComponent(ReadMaxPeople)
-									.addComponent(lblRenter, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(126)
-							.addComponent(lblR, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnViewContract, GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
-						.addComponent(btnViewRoom, GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
-					.addGap(11))
-		);
-		setLayout(groupLayout);
+		setLayout(null);
+		add(lblIconRoom);
+		add(lblRoomNumber);
+		add(ReadRoomNum);
+		add(lblIconOwner);
+		add(ReadOwner);
+		add(lblIconMoney);
+		add(ReadPrice);
+		add(btnViewRoom);
+		add(btnViewContract);
+		add(lblIconPeople);
+		add(ReadPeople);
+		add(lblR);
+		add(ReadMaxPeople);
+		add(lblRenter);
 		
 	}
 	

@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Regex {
+public class Regex1 {
 	public static final String NUM = "[0-9]+";
 	public static final String CHAR = "^[a-zA-Z\\s]+$";
 	public static final String GENDER = "[0-1]";

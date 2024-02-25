@@ -66,7 +66,6 @@ public class ContractList extends JPanel {
 	private JButton btnPrevious;
 	private JButton btnNext;
 	private JButton btnAddContract;
-	private JButton btnHistory;
 	private Integer pageNumber = 1;
 	private Integer rowOfPage = 15;
 	private Integer totalOfRow = 0;
@@ -530,7 +529,7 @@ public class ContractList extends JPanel {
 
 	private void initComponent() {
 		lblContract = new JLabel("Contract");
-		lblContract.setFont(new Font("Arial", Font.BOLD, 18));
+		lblContract.setFont(new Font("Arial", Font.BOLD, 20));
 
 		btnAddContract = new JButton("Add Contract");
 		btnAddContract.setFocusable(false);
@@ -543,13 +542,6 @@ public class ContractList extends JPanel {
 		btnAddContract.setFont(new Font("Arial", Font.BOLD, 15));
 		btnAddContract.setBackground(SystemColor.activeCaption);
 		btnAddContract.setBorder(null);
-
-		btnHistory = new JButton("History");
-		btnHistory.setFocusable(false);
-		btnHistory.setForeground(SystemColor.window);
-		btnHistory.setFont(new Font("Arial", Font.BOLD, 15));
-		btnHistory.setBorder(null);
-		btnHistory.setBackground(SystemColor.controlShadow);
 
 		
 		lblPageNumber.setFont(new Font("Arial", Font.BOLD, 12));
@@ -626,67 +618,61 @@ public class ContractList extends JPanel {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(483)
-					.addComponent(lblContract, GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-					.addGap(482))
-				.addGroup(groupLayout.createSequentialGroup()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(20)
-							.addComponent(scrollTable, GroupLayout.DEFAULT_SIZE, 1015, Short.MAX_VALUE))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(371)
 							.addComponent(btnPrevious, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(lblPageNumber, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+							.addGap(10)
+							.addComponent(lblPageNumber, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(btnNext, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
-							.addGap(241)
+							.addPreferredGap(ComponentPlacement.RELATED, 241, Short.MAX_VALUE)
 							.addComponent(cbbData, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(20)
-							.addComponent(txtByOwner, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(txtByRoom, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(cbbStatus, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
-							.addComponent(btnHistory, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnAddContract, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)))
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollTable, GroupLayout.DEFAULT_SIZE, 1015, Short.MAX_VALUE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(txtByOwner, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(txtByRoom, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(cbbStatus, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, 265, Short.MAX_VALUE)
+									.addComponent(btnAddContract, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
+								.addComponent(lblContract, GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))))
 					.addGap(15))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
 					.addComponent(lblContract, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(txtByOwner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(txtByOwner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(txtByRoom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(cbbStatus, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(btnAddContract, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(btnHistory, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)))
-							.addGap(18))
+								.addComponent(btnAddContract, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)))
-					.addComponent(scrollTable, GroupLayout.PREFERRED_SIZE, 642, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGap(10)
+							.addComponent(cbbStatus, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)))
+					.addGap(18)
+					.addComponent(scrollTable, GroupLayout.PREFERRED_SIZE, 628, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnPrevious, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+						.addComponent(btnNext, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
 						.addComponent(lblPageNumber, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(cbbData, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
-							.addComponent(btnNext, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)))
-					.addGap(21))
+						.addComponent(btnPrevious, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+						.addComponent(cbbData, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
+					.addGap(31))
 		);
-		groupLayout.linkSize(SwingConstants.VERTICAL, new Component[] {txtByOwner, txtByRoom});
+		groupLayout.linkSize(SwingConstants.VERTICAL, new Component[] {txtByOwner, txtByRoom, btnAddContract, btnReset});
 		groupLayout.linkSize(SwingConstants.VERTICAL, new Component[] {lblPageNumber, btnPrevious});
 		setLayout(groupLayout);
 	}

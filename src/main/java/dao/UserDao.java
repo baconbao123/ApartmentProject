@@ -74,13 +74,14 @@ public class UserDao {
 		}
 	}
 
-	public List<Users> selectRenders(int pageNumber, int rowOfPage) {
+	public List<Users> selectRenders(int pageNumber, int rowOfPage, int id) {
 		List<Users> list = new ArrayList<>();
-		try (var con = ConnectDB.getConnect(); var cs = con.prepareCall("{call selRenter(?, ?)}");
+		try (var con = ConnectDB.getConnect(); var cs = con.prepareCall("{call selRenter(?, ?, ?)}");
 
 		) {
 			cs.setInt(1, pageNumber);
 			cs.setInt(2, rowOfPage);
+			cs.setInt(3, id);
 			var rs = cs.executeQuery();
 			while (rs.next()) {
 				var renter = new Users();

@@ -132,18 +132,22 @@ public class FrameAddMoney extends JFrame {
 	}
 
 	public void btnPayAllActionPerformed(ActionEvent e) {
+		JOptionPane.showMessageDialog(null, idFeeAll);
 		if (idFeeAll != null) {
 			Set<Integer> uniqueValues = new HashSet<>();
+			
 			String[] idFeeAllSplit = idFeeAll.split(";");
+			
 			for (String path : idFeeAllSplit) {
 				try {
 					int value = Integer.parseInt(path.trim());
 					uniqueValues.add(value);
+					
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
 			}
-
+			
 			int result = JOptionPane.showConfirmDialog(null, "Pay the total amount of " + moneyAll);
 			if (result == JOptionPane.YES_OPTION) {
 				var dao = new ApartmentDao();
@@ -172,7 +176,7 @@ public class FrameAddMoney extends JFrame {
 	public void btnPayMonthActionPerformed(ActionEvent e) {		
 		var dao = new ApartmentDao();
 		List<Fees> daoFees = dao.selectMonthByMoth();
-		System.out.println("daoFees" + daoFees);
+//		System.out.println("daoFees" + daoFees);
 		
 		 if (paymentDialog == null) {
 		        paymentDialog = new JDialog();
@@ -180,7 +184,7 @@ public class FrameAddMoney extends JFrame {
 
 		        for (Fees fee : daoFees) {
 		            if (fee.getRoom() == currentCardRoom) {
-		                JButton btnTime = new JButton(fee.getTime().toString());
+		                JButton btnTime = new JButton(fee.getTime().toString());	
 		                int id = fee.getId();
 		                float money = fee.getTotal();
 

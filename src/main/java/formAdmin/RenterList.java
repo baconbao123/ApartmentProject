@@ -22,6 +22,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.StyledDocument;
 
+import component.Login;
 import dao.UserDao;
 import entity.Users;
 import event.EventLoadTable;
@@ -88,7 +89,6 @@ public class RenterList extends JPanel {
 	private JTextField txtSearchName;
 	private JTextField txtNIC;
 	private JTextField txtByPhone;
-	private JButton btnHistory;
 	private JComboBox cbbData;
 	private JLabel txtPageNumber;
 	private JButton btnReset;
@@ -176,14 +176,15 @@ public class RenterList extends JPanel {
 		var dao = new UserDao();
 		totalOfRow = dao.countRenter();
 		totalPage = Math.ceil(totalOfRow.doubleValue()/rowOfPage.doubleValue());
+		var id = Login.getId();
 		
-		dao.selectRenders(pageNumber, rowOfPage).stream().forEach(
+		dao.selectRenders(pageNumber, rowOfPage, id).stream().forEach(
 			renter -> {
 				ImageIcon avatarIcon;
 				if (renter.getAvatar() != null) {
 				    avatarIcon = new ImageIcon(renter.getAvatar());
-				} else {
-				    avatarIcon = null;
+				}  else {
+					avatarIcon = new ImageIcon("images/avatarDefaut.jpg");
 				}
 				
 			model.addRow(new Object[] {
@@ -316,10 +317,11 @@ public class RenterList extends JPanel {
 	            String phone = txtByPhone.getText().trim();
 	            String nic = txtNIC.getText().trim();
 	            List<Users> filteredUsers = null;
+	            var id = Login.getId();
 	            if (!name.isEmpty() || !phone.isEmpty() || !nic.isEmpty()) {
 	            	filteredUsers = dao.selectRendersFilteredData(name, phone, nic);
 	            } else {
-	                filteredUsers = dao.selectRenders(pageNumber, rowOfPage); // Clear the table when no input is provided
+	                filteredUsers = dao.selectRenders(pageNumber, rowOfPage, id); // Clear the table when no input is provided
 	            }
 	            updateTable(filteredUsers);
 			}
@@ -338,7 +340,9 @@ public class RenterList extends JPanel {
 				if (renter.getAvatar() != null) {
 				    avatarIcon = new ImageIcon(renter.getAvatar());
 				} else {
-				    avatarIcon = null;
+				    avatarIcon = new ImageIcon(
+				    	new ImageIcon("images/avatarDefaut.jpg").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)
+				    );
 				}
 				
 			model.addRow(new Object[] {
@@ -459,7 +463,7 @@ public class RenterList extends JPanel {
 		Next.setBackground(SystemColor.activeCaption);
 		
 		lblNewLabel = new JLabel("Renter List");
-		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 18));
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		txtSearchName = new JTextField();
 		txtSearchName.setBackground(SystemColor.menu);
@@ -478,12 +482,6 @@ public class RenterList extends JPanel {
 		txtByPhone.setColumns(10);
 		txtByPhone.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(240, 240, 240), new Color(192, 192, 192)), "Search By Phone", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(192, 192, 192)));
 		txtByPhone.setBackground(SystemColor.menu);
-		
-		btnHistory = new JButton("History");
-		btnHistory.setForeground(SystemColor.text);
-		btnHistory.setFont(new Font("Arial", Font.BOLD, 15));
-		btnHistory.setBorder(null);
-		btnHistory.setBackground(new Color(15, 160, 206));
 		
 		cbbData = new JComboBox();
 		cbbData.addActionListener(new ActionListener() {
@@ -529,34 +527,33 @@ public class RenterList extends JPanel {
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(TablePanel, GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(361)
-							.addComponent(btnPrevious, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(txtPageNumber, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(Next, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
-							.addGap(315)
-							.addComponent(cbbData, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(txtSearchName, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtByPhone, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtNIC, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
-							.addComponent(btnAddRenter, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnHistory, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)))
-					.addGap(19))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(476)
-					.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
-					.addGap(476))
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(TablePanel, GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(361)
+									.addComponent(btnPrevious, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(txtPageNumber, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(Next, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
+									.addGap(315)
+									.addComponent(cbbData, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(txtSearchName, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtByPhone, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtNIC, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, 276, Short.MAX_VALUE)
+									.addComponent(btnAddRenter, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)))
+							.addGap(19))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -570,7 +567,6 @@ public class RenterList extends JPanel {
 							.addComponent(txtByPhone, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
 							.addComponent(txtNIC, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(btnHistory, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 							.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 							.addComponent(btnAddRenter, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -584,7 +580,6 @@ public class RenterList extends JPanel {
 					.addGap(16))
 		);
 		groupLayout.linkSize(SwingConstants.VERTICAL, new Component[] {btnPrevious, Next, cbbData});
-		groupLayout.linkSize(SwingConstants.VERTICAL, new Component[] {btnHistory, btnReset});
 		groupLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {btnPrevious, Next});
 		
 		

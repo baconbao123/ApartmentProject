@@ -132,7 +132,16 @@ public class FrameContract extends JFrame {
 	private JLabel ReadNumApart;
 	private JLabel lblApartmentId;
 	private JLabel ReadID;
+	private String maxPeople;
 	
+	
+	public void setMaxPeople(String maxPeopleStr) {
+		maxPeople = maxPeopleStr;
+	}
+
+
+
+
 	private CardRoom cardRoom;
 	
 	public void setCardRoom(CardRoom cardRoom) {
@@ -160,6 +169,7 @@ public class FrameContract extends JFrame {
 	 */
 //	public FrameAddContract() {};
 	public FrameContract() {
+		
 		setBackground(SystemColor.window);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 510, 589);
@@ -380,6 +390,13 @@ public class FrameContract extends JFrame {
 						return;
 					}
 					
+					int countRoomList = roomatesList.size();
+					if(Integer.parseInt(maxPeople) > countRoomList) {
+						JOptionPane.showMessageDialog(FrameContract.this, "The number of renters cannot exceed the maximum occupancy", "Invalid Input",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
 					if (cbbOwner.getSelectedItem() == null || cbbOwner.getSelectedItem().toString().isEmpty()
 							|| cbbOwner.getSelectedItem().toString().trim().equalsIgnoreCase("")) {
 						JOptionPane.showMessageDialog(FrameContract.this, "Please choose an owner", "Invalid Input",
@@ -456,6 +473,9 @@ public class FrameContract extends JFrame {
 	}
 
 	protected void btnUploadContractActionPerformed(ActionEvent e) {
+		int minImg = 3;
+		int maxImg = 5;
+		
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setMultiSelectionEnabled(true);
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "png", "jpg"));
@@ -465,9 +485,12 @@ public class FrameContract extends JFrame {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File[] selectedFiles = fileChooser.getSelectedFiles();
 
-
+			int selectedImges = Math.min(selectedFiles.length, 5);
+			
 			filePathList.clear();
 			newAvatarFilePathList.clear();
+			
+			
 			 
 			for (int i = 0; i < Math.min(selectedFiles.length, 5); i++) {
 				File file = selectedFiles[i];
