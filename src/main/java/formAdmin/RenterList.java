@@ -94,6 +94,8 @@ public class RenterList extends JPanel {
 	private JButton btnReset;
 	private JButton btnAddRenter;
 //	private RenterList renterList;
+	private FrameAddRenter frameFrameAddRenter;
+	private ViewInfoRenter frameViewInfoRenter;
 	
 	
 	
@@ -209,48 +211,54 @@ public class RenterList extends JPanel {
 			
 			@Override
 			public void view(int row) {
-				ImageIcon avatarOrigin = (ImageIcon) table.getValueAt(row, 1);
-				Image avatarNew = avatarOrigin.getImage().getScaledInstance(140, 110, Image.SCALE_SMOOTH);
-				ImageIcon avatarResize = new ImageIcon(avatarNew);
-				
-				
-				String fullName = (String) table.getValueAt(row, 2);
-				String email = (String) table.getValueAt(row, 3);
-				String gender = (String) table.getValueAt(row, 4);
-				String phone = (String) table.getValueAt(row, 5);
-				java.sql.Date dob = (java.sql.Date) table.getValueAt(row, 6);
-				String address = (String) table.getValueAt(row, 7);
-				String nic = (String) table.getValueAt(row, 8);
-				String iAuthority = (String) table.getValueAt(row, 9);
-				String imgCICs = (String) table.getValueAt(row, 10);
-				String[] imgSplit = imgCICs.split(";");
-				ImageIcon[] imageIcons = new ImageIcon[imgSplit.length];
-				ImageIcon img1 = new ImageIcon();
-				ImageIcon img2 = new ImageIcon();
-				
-				for(int i=0; i<imgSplit.length; i++) {
-					try {
-						BufferedImage image = ImageIO.read(new File(imgSplit[i].trim()));
-						ImageIcon resizedImageIcon = new ImageIcon(image.getScaledInstance(400, 400, Image.SCALE_SMOOTH));
-						imageIcons[i] = resizedImageIcon;
-					} catch (IOException e) {
-						e.printStackTrace();
+				if(frameViewInfoRenter==null) {
+					ImageIcon avatarOrigin = (ImageIcon) table.getValueAt(row, 1);
+					Image avatarNew = avatarOrigin.getImage().getScaledInstance(140, 110, Image.SCALE_SMOOTH);
+					ImageIcon avatarResize = new ImageIcon(avatarNew);
+					
+					
+					String fullName = (String) table.getValueAt(row, 2);
+					String email = (String) table.getValueAt(row, 3);
+					String gender = (String) table.getValueAt(row, 4);
+					String phone = (String) table.getValueAt(row, 5);
+					java.sql.Date dob = (java.sql.Date) table.getValueAt(row, 6);
+					String address = (String) table.getValueAt(row, 7);
+					String nic = (String) table.getValueAt(row, 8);
+					String iAuthority = (String) table.getValueAt(row, 9);
+					String imgCICs = (String) table.getValueAt(row, 10);
+					String[] imgSplit = imgCICs.split(";");
+					ImageIcon[] imageIcons = new ImageIcon[imgSplit.length];
+					ImageIcon img1 = new ImageIcon();
+					ImageIcon img2 = new ImageIcon();
+					
+					for(int i=0; i<imgSplit.length; i++) {
+						try {
+							BufferedImage image = ImageIO.read(new File(imgSplit[i].trim()));
+							ImageIcon resizedImageIcon = new ImageIcon(image.getScaledInstance(400, 400, Image.SCALE_SMOOTH));
+							imageIcons[i] = resizedImageIcon;
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
+					
+					if(imageIcons.length>=2) {
+						img1.setImage(imageIcons[0].getImage());
+					    
+					    img2.setImage(imageIcons[1].getImage());
+					}
+					
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+					String dobString = dateFormat.format(dob);
+					
+					frameViewInfoRenter = new ViewInfoRenter(avatarResize, fullName, email, gender, phone, dobString, address, nic, iAuthority, img1, img2);
+					frameViewInfoRenter.setVisible(true);
+					frameViewInfoRenter.setLocationRelativeTo(null);
+					frameViewInfoRenter.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				} else {
+					frameViewInfoRenter.setVisible(true);
+					frameViewInfoRenter.setExtendedState(JFrame.NORMAL); 
 				}
 				
-				if(imageIcons.length>=2) {
-					img1.setImage(imageIcons[0].getImage());
-				    
-				    img2.setImage(imageIcons[1].getImage());
-				}
-				
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-				String dobString = dateFormat.format(dob);
-				
-				var viewInfo = new ViewInfoRenter(avatarResize, fullName, email, gender, phone, dobString, address, nic, iAuthority, img1, img2);
-				viewInfo.setVisible(true);
-				viewInfo.setLocationRelativeTo(null);
-				viewInfo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				
 			}
 			
@@ -395,10 +403,16 @@ public class RenterList extends JPanel {
 	}
 	
 	protected void btnAddRenterActionPerformed(ActionEvent e) {
-		var add = new FrameAddRenter(this);
-		add.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		add.setVisible(true);
-		add.setLocationRelativeTo(null);
+		if(frameFrameAddRenter==null) {
+			frameFrameAddRenter = new FrameAddRenter(this);
+			frameFrameAddRenter.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			frameFrameAddRenter.setVisible(true);
+			frameFrameAddRenter.setLocationRelativeTo(null);
+		} else {
+			frameFrameAddRenter.setVisible(true);
+			frameFrameAddRenter.setExtendedState(JFrame.NORMAL); 
+		}
+		
 			
 		
 	}

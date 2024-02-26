@@ -1,26 +1,15 @@
 package formUpdateAd;
 
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import dao.ContractDao;
-import entity.Contract;
-import event.apartmentEvent;
-import view.AppStateManager;
-import view.CardRoom;
-
-import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
@@ -29,21 +18,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.LayoutStyle.ComponentPlacement;
-
-import java.awt.CardLayout;
-import java.awt.Color;
-import javax.swing.JRadioButton;
-import javax.swing.SwingConstants;
-import java.awt.Component;
-import java.awt.Cursor;
-
-import javax.swing.JScrollPane;
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.ButtonGroup;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.EmptyBorder;
+
+import dao.ContractDao;
+import entity.Contract;
+import event.apartmentEvent;
+import view.AppStateManager;
+import view.CardRoom;
 
 public class FrameContractDisconnect extends JFrame {
 

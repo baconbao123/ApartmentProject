@@ -53,6 +53,8 @@ public class ViewRoomOfUser extends JFrame {
 	private JLabel ReadApType;
 	private JLabel ReadApMaxPeo;
 	private JTable tableInfo;
+	private JLabel lblOwnerName;
+	private JLabel ReadOwnerName;
 
 	/**
 	 * Launch the application.
@@ -80,12 +82,14 @@ public class ViewRoomOfUser extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.menu);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		ReadOwnerName = new JLabel("ReadOwnerName");
 		setContentPane(contentPane);
 
 		scrollTable = new JScrollPane();
+		scrollTable.setBounds(15, 286, 856, 315);
 		
 		scrollUti = new JScrollPane();
+		scrollUti.setBounds(547, 90, 4, 88);
 		panelUti = new JPanel();
 		panelUti.setBorder(null);
 		panelUti.setLayout(new GridLayout(0, 2));
@@ -93,6 +97,7 @@ public class ViewRoomOfUser extends JFrame {
 		scrollUti.setVerticalScrollBar(new ScrollBarCustom());
 		
 		scrollCon = new JScrollPane();
+		scrollCon.setBounds(97, 90, 315, 88);
 		panelCon = new JPanel();
 		panelCon.setBorder(null);
 		panelCon.setLayout(new GridLayout(0, 2));
@@ -231,7 +236,9 @@ public class ViewRoomOfUser extends JFrame {
 		};
 	}
 	
-	
+	public void setOwnerNameCard(String ownerName) {
+		ReadOwnerName.setText(ownerName);
+	}
 	
 	
 	
@@ -269,29 +276,36 @@ public class ViewRoomOfUser extends JFrame {
 	private void initComponent() {
 		
 		lblApNum = new JLabel("Apartment Number");
+		lblApNum.setBounds(15, 46, 113, 18);
 		lblApNum.setFont(new Font("Arial", Font.PLAIN, 12));
 		
 		lblApType = new JLabel("Apartment Type ");
+		lblApType.setBounds(231, 46, 88, 18);
 		lblApType.setFont(new Font("Arial", Font.PLAIN, 12));
 		
 		lblMax = new JLabel("Maximum Number Of Renters");
+		lblMax.setBounds(459, 46, 163, 18);
 		lblMax.setFont(new Font("Arial", Font.PLAIN, 12));
 		
 		lblAp = new JLabel("APARTMENT INFORMATION");
+		lblAp.setBounds(15, 16, 217, 19);
 		lblAp.setForeground(Color.BLACK);
 		lblAp.setFont(new Font("Arial", Font.BOLD, 16));
 		
 		lblRentersInfo = new JLabel("Renters Information");
+		lblRentersInfo.setBounds(15, 256, 151, 19);
 		lblRentersInfo.setForeground(Color.BLACK);
 		lblRentersInfo.setFont(new Font("Arial", Font.BOLD, 16));
 		
 		lblConvenient = new JLabel("Convenient");
+		lblConvenient.setBounds(15, 125, 78, 18);
 		lblConvenient.setFont(new Font("Arial", Font.PLAIN, 12));
 		
 		
 		scrollCon.setBorder(new BevelBorder(BevelBorder.LOWERED, SystemColor.menu, SystemColor.menu, SystemColor.menu, SystemColor.menu));
 		
 		lblUtilities = new JLabel("Utilities");
+		lblUtilities.setBounds(479, 123, 64, 18);
 		lblUtilities.setFont(new Font("Arial", Font.PLAIN, 12));
 		
 		
@@ -301,86 +315,40 @@ public class ViewRoomOfUser extends JFrame {
 		scrollTable.setBorder(new BevelBorder(BevelBorder.LOWERED, SystemColor.menu, SystemColor.menu, SystemColor.menu, SystemColor.menu));
 		
 		ReadApNum = new JLabel("1");
+		ReadApNum.setBounds(134, 46, 55, 18);
 		ReadApNum.setFont(new Font("Arial", Font.PLAIN, 12));
 		
 		ReadApType = new JLabel("1");
+		ReadApType.setBounds(325, 46, 103, 18);
 		ReadApType.setFont(new Font("Arial", Font.PLAIN, 12));
 		
 		ReadApMaxPeo = new JLabel("1");
+		ReadApMaxPeo.setBounds(632, 46, 55, 18);
 		ReadApMaxPeo.setFont(new Font("Arial", Font.PLAIN, 12));
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(lblAp, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblApNum, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(ReadApNum, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-							.addGap(42)
-							.addComponent(lblApType, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(ReadApType, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
-							.addGap(31)
-							.addComponent(lblMax, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(ReadApMaxPeo, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblConvenient, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(scrollCon, GroupLayout.PREFERRED_SIZE, 315, GroupLayout.PREFERRED_SIZE)
-							.addGap(67)
-							.addComponent(lblUtilities, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(scrollUti))
-						.addComponent(lblRentersInfo, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollTable, GroupLayout.PREFERRED_SIZE, 856, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(12, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblAp, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-									.addComponent(lblApNum, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
-									.addComponent(ReadApNum))
-								.addComponent(lblApType, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblMax, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
-								.addComponent(ReadApType, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(59)
-									.addComponent(lblUtilities, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(26)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(scrollUti, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addGroup(gl_contentPane.createSequentialGroup()
-													.addGap(35)
-													.addComponent(lblConvenient, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
-												.addComponent(scrollCon, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
-											.addGap(26)
-											.addComponent(lblRentersInfo, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))))))
-						.addComponent(ReadApMaxPeo, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addComponent(scrollTable, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(28, Short.MAX_VALUE))
-		);
+		contentPane.setLayout(null);
+		contentPane.add(scrollTable);
+		contentPane.add(lblAp);
+		contentPane.add(lblApNum);
+		contentPane.add(ReadApNum);
+		contentPane.add(lblApType);
+		contentPane.add(ReadApType);
+		contentPane.add(lblMax);
+		contentPane.add(ReadApMaxPeo);
+		contentPane.add(lblConvenient);
+		contentPane.add(scrollCon);
+		contentPane.add(lblUtilities);
+		contentPane.add(scrollUti);
+		contentPane.add(lblRentersInfo);
+		
+		lblOwnerName = new JLabel("Owner Name");
+		lblOwnerName.setFont(new Font("Arial", Font.BOLD, 14));
+		lblOwnerName.setBounds(15, 227, 113, 18);
+		contentPane.add(lblOwnerName);
 		
 		
-		
-		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {lblApNum, ReadApNum});
-		contentPane.setLayout(gl_contentPane);
+		ReadOwnerName.setFont(new Font("Arial", Font.PLAIN, 14));
+		ReadOwnerName.setBounds(117, 227, 224, 18);
+		contentPane.add(ReadOwnerName);
 		
 	}
 	

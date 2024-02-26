@@ -166,7 +166,7 @@ public class CardRoomUser extends JPanel {
 		view.setMaxPeop(ReadMaxPeople.getText());
 		view.setType(typeRoom);
 		view.loadRoomateInfor(inforRoomate);
-		
+		view.setOwnerNameCard(ReadOwner.getText());
 		var dao = new ApartmentDao();
 		List<Apartment> apartments = dao.selectApartment();
 		
