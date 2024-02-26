@@ -125,10 +125,10 @@ public class UserDao {
 		}
 		return list;
 	}
-
-	public List<Users> selRenterNameInfor() {
-		List<Users> list = new ArrayList<>();
-		try (var con = ConnectDB.getConnect(); var cs = con.prepareCall("{call selectRenterName()}");) {
+	
+	public List<Object> selRenterNameNoEmail() {
+		List<Object> list = new ArrayList<>();
+		try (var con = ConnectDB.getConnect(); var cs = con.prepareCall("{call selectRenterNameWithNoEmail()}");) {
 
 			var rs = cs.executeQuery();
 			while (rs.next()) {
@@ -145,6 +145,26 @@ public class UserDao {
 		}
 		return list;
 	}
+
+//	public List<Users> selRenterNameInfor() {
+//		List<Users> list = new ArrayList<>();
+//		try (var con = ConnectDB.getConnect(); var cs = con.prepareCall("{call selectRenterName()}");) {
+//
+//			var rs = cs.executeQuery();
+//			while (rs.next()) {
+//				var renter = new Users();
+//				renter.setId(rs.getInt("id"));
+//				renter.setName(rs.getString("name"));
+//				renter.setPhone(rs.getString("phone"));
+//				renter.setDob(rs.getDate("dob"));
+//				renter.setNic(rs.getString("nic"));
+//				list.add(renter);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return list;
+//	}
 
 	public List<Users> selRoomateInFor(List<Integer> idList) {
 		List<Users> list = new ArrayList<>();

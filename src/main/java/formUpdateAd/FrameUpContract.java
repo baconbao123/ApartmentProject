@@ -173,6 +173,7 @@ public class FrameUpContract extends JFrame {
 		Map<Integer, Users> renterMapRoomate = new HashMap<>();
 
 		List<Object> renterInfor = daoUser.selRenterName();
+		List<Object> renterInforNoEmail = daoUser.selRenterNameNoEmail();
 
 		cbbOwner = new JComboBox();
 		cbbOwner.setModel(new DefaultComboBoxModel());

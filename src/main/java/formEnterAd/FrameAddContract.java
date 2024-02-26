@@ -201,8 +201,10 @@ public class FrameAddContract extends JFrame {
 		cbbOwner.setBounds(163, 82, 315, 19);
 		cbbOwner.setModel(new DefaultComboBoxModel(new String[] { "" }));
 
+		
 		List<Object> renterInfo = daoUser.selRenterName();
-
+		List<Object> renterInforNoEmail = daoUser.selRenterNameNoEmail();
+		
 		for (Object renter : renterInfo) {
 			if (renter instanceof Users) {
 				Users renterObject = (Users) renter;
@@ -263,7 +265,7 @@ public class FrameAddContract extends JFrame {
 		cbbRoomates.setBounds(163, 291, 315, 19);
 
 		cbbRoomates.setModel(new DefaultComboBoxModel(new String[] { "" }));
-		for (Object renter : renterInfo) {
+		for (Object renter : renterInforNoEmail) {
 			Users renterObject = (Users) renter;
 			cbbRoomates.addItem(renterObject.getId() + "-" + renterObject.getName() + "-" + renterObject.getNic());
 			renterMapRoomate.put(renterObject.getId(), renterObject);
