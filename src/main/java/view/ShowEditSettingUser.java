@@ -24,7 +24,7 @@ import component.Login;
 import dao.UserDao;
 import entity.Users;
 
-import helper.Regex;
+import helper.Regex1;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -257,7 +257,7 @@ public class ShowEditSettingUser extends JFrame {
 					previousValue = currentValue;
 					System.out.println(currentValue);
 					System.out.println("Email: " + isEmail);
-					if (!Regex.isValidEmail(currentValue)) {
+					if (!Regex1.isValidEmail(currentValue)) {
 						lblErrEmail.setVisible(true);
 						isEmail = false;
 					} else {

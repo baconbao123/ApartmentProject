@@ -102,7 +102,7 @@ public class Bill extends JPanel {
 		setBounds(0, 0, 1100, 800);
 
 		lblTitle = new JLabel("Payment Management");
-		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		JButton btnHistory = new JButton("History");
 		btnHistory.setForeground(new Color(255, 255, 255));
@@ -131,6 +131,7 @@ public class Bill extends JPanel {
 		scrollTable.setAutoscrolls(true);
 
 		inputPage = new JTextField();
+		inputPage.setHorizontalAlignment(SwingConstants.CENTER);
 		inputPage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (inputPage.getText().matches("-?\\d+")) {
@@ -297,7 +298,7 @@ public class Bill extends JPanel {
 		inputId.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Id", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
+			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
@@ -314,11 +315,10 @@ public class Bill extends JPanel {
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblDisplay, GroupLayout.PREFERRED_SIZE, 234, GroupLayout.PREFERRED_SIZE)
-									.addGap(197)
-									.addComponent(inputPage, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+									.addGap(195)
+									.addComponent(inputPage, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED, 435, Short.MAX_VALUE)
 									.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE))
-								.addComponent(scrollTable, GroupLayout.PREFERRED_SIZE, 1031, GroupLayout.PREFERRED_SIZE)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(inputId, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
 									.addGap(28)
@@ -336,19 +336,19 @@ public class Bill extends JPanel {
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(btnReset, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnHistory, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)))))
+									.addComponent(btnHistory, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE))
+								.addComponent(scrollTable, GroupLayout.DEFAULT_SIZE, 1031, Short.MAX_VALUE)
+								.addComponent(lblTitle, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))))
 					.addGap(35))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addGap(454)
-					.addComponent(lblTitle, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-					.addGap(460))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(67)
+							.addGap(36)
+							.addComponent(lblTitle, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 									.addComponent(btnHistory, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
@@ -368,26 +368,23 @@ public class Bill extends JPanel {
 												.addComponent(inputId, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))))))
 							.addGap(38))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(37)
-							.addComponent(lblTitle, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-							.addGap(76)
 							.addComponent(view, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
 							.addGap(39)))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(scrollTable, GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
 					.addGap(41)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(inputPage, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnNext, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(btnPrev, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnFirst, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-								.addComponent(lblDisplay))
+							.addComponent(btnFirst, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+							.addComponent(lblDisplay))
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnLast, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addComponent(inputPage, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(77)));
+							.addComponent(btnLast, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addGap(77))
+		);
 
 		tableBill = new JTable();
 		tableBill.setRowSelectionAllowed(false);
@@ -579,7 +576,7 @@ public class Bill extends JPanel {
 		var feeDao = new FeesDao();
 		
 //		LocalDate currentDate = LocalDate.now();
-		LocalDate currentDate = LocalDate.parse("2024-04-29",DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		LocalDate currentDate = LocalDate.parse("2024-06-29",DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate futureDate = currentDate.plus(2,ChronoUnit.DAYS);
 		boolean isNewMonth = futureDate.getMonth() != currentDate.getMonth();
 		if(isNewMonth) {

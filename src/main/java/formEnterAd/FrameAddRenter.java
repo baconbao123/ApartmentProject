@@ -176,11 +176,11 @@ public class FrameAddRenter extends JFrame {
 				String errorMessage = "";
 
 				// lbl icon
-				if (lblImgAvatar.getIcon() == null) {
-					JOptionPane.showMessageDialog(null, "Please upload an avatar", "Invalid Input",
-							JOptionPane.ERROR_MESSAGE);
-					return;
-				}
+//				if (lblImgAvatar.getIcon() == null) {
+//					JOptionPane.showMessageDialog(null, "Please upload an avatar", "Invalid Input",
+//							JOptionPane.ERROR_MESSAGE);
+//					return;
+//				}
 
 				// txt
 				errorMessage = Valid.validateInputWithNOEmpty(txtFullname.getText(), Regex.CHAR, "Fullname ",

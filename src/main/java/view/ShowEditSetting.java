@@ -23,8 +23,9 @@ import javax.swing.event.DocumentListener;
 import component.Login;
 import dao.UserDao;
 import entity.Users;
-
-import helper.Regex;
+import regex.Regex;
+import helper.Regex1;
+import regex.Valid;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -457,15 +458,14 @@ public class ShowEditSetting extends JFrame {
 					String currentValue = txtEmail.getText();
 					boolean isValueChanged = !currentValue.equals(previousValue);
 					previousValue = currentValue;
-					System.out.println(currentValue);
-					System.out.println("Email: " + isEmail);
-					if (!Regex.isValidEmail(currentValue)) {
+					if (!Regex1.isValidEmail(currentValue)) {
 						lblErrEmail.setVisible(true);
 						isEmail = false;
 					} else {
 						lblErrEmail.setVisible(false);
 						isEmail = true;
 					}
+					
 				}
 
 			});
@@ -478,7 +478,7 @@ public class ShowEditSetting extends JFrame {
 					boolean isValueChanged = !currentValue.equals(previousValue);
 					previousValue = currentValue;
 					System.out.println(currentValue);
-					if (!Regex.isValidNumber(currentValue)) {
+					if (!Regex1.isValidNumber(currentValue)) {
 						lblErrPhone.setVisible(true);
 						isPhone = false;
 					} else {
@@ -515,7 +515,7 @@ public class ShowEditSetting extends JFrame {
 					boolean isValueChanged = !currentValue.equals(previousValue);
 					previousValue = currentValue;
 					System.out.println("nic" + isNic);
-					if (!Regex.isValidNumber(currentValue)) {
+					if (!Regex1.isValidNumber(currentValue)) {
 						lblErrNIC.setVisible(true);
 						isNic = false;
 					} else {
@@ -640,8 +640,14 @@ public class ShowEditSetting extends JFrame {
 			if (confirmation == JOptionPane.YES_OPTION) {
 				// update info
 				String email = txtEmail.getText();
+				
+				String error = Valid.validateInputWithNOEmpty(email, Regex.EMAIL_REGEX, "Email ", " Please enter in the format: example@gmail.com");
+				if(error!=null) {
+					JOptionPane.showMessageDialog(null, error, "Invalid Input", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				var rs = user.emailExist(email);
-				if(txtEmail.getText().equals(infor.getEmail())) {
+				if(email.equals(infor.getEmail())) {
 					Users info = user.updateInforUser(userId, txtAddress.getText(), txtPhone.getText(), gender,
 							newAvatarPath, txtFullName.getText(), null, txtEmail.getText(), imgNicPathsString,
 							txtiAuthority.getText(), txtNIC.getText(), sqlDate);
