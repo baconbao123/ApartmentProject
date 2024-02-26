@@ -132,7 +132,16 @@ public class FrameContract extends JFrame {
 	private JLabel ReadNumApart;
 	private JLabel lblApartmentId;
 	private JLabel ReadID;
+	private String maxPeople;
 	
+	
+	public void setMaxPeople(String maxPeopleStr) {
+		maxPeople = maxPeopleStr;
+	}
+
+
+
+
 	private CardRoom cardRoom;
 	
 	public void setCardRoom(CardRoom cardRoom) {
@@ -160,6 +169,7 @@ public class FrameContract extends JFrame {
 	 */
 //	public FrameAddContract() {};
 	public FrameContract() {
+		
 		setBackground(SystemColor.window);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 510, 589);
@@ -376,6 +386,13 @@ public class FrameContract extends JFrame {
 					
 					if(lblImgCon1.getIcon()==null || lblImgCon2.getIcon()==null || lblImgCon3.getIcon()==null || lblImgCon4.getIcon()==null) {
 						JOptionPane.showMessageDialog(FrameContract.this, "Please select at least 4 contract photos", "Invalid Input",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					int countRoomList = roomatesList.size();
+					if(Integer.parseInt(maxPeople) > countRoomList) {
+						JOptionPane.showMessageDialog(FrameContract.this, "The number of renters cannot exceed the maximum occupancy", "Invalid Input",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}

@@ -46,6 +46,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.SystemColor;
 
 public class CardRoom extends JPanel {
  
@@ -57,7 +58,6 @@ public class CardRoom extends JPanel {
 	private JLabel lblIconMoney;
 	private JLabel lblPrice;
 	private JLabel lblIconPeople;
-	private JLabel lblMaxPeople;
 	public JPanel CardButton;
 	private JPanel CardBtnAvailable;
 	private JButton btnViewRoom;
@@ -73,7 +73,6 @@ public class CardRoom extends JPanel {
 	private int currentApartNum;
 	private int currentapfloor;
 	private int idCurrent;
-	private JLabel lblPeopleInRoom;
 	private String typeRoom;
 	private int peopleMax;
 	private String inforRoomate;
@@ -86,8 +85,11 @@ public class CardRoom extends JPanel {
 //	private int idFee;
 	private float totalMoneyMoth;
 	private String nameCard;
-	
-	
+	private JLabel lblPeopleInRoom;
+	private JLabel lblR;
+	private JLabel lblMaxPeople;
+	private JLabel lblRenter;
+
 	// name Card
 	public String getNameCard() {
 		return nameCard;
@@ -215,7 +217,7 @@ public class CardRoom extends JPanel {
 
 		lblOwner = new JLabel("None");
 		lblPrice = new JLabel("0");
-
+		
 		CardButton = new JPanel();
 		CardButton.setBorder(null);
 		CardButton.setLayout(new CardLayout(0, 0));
@@ -236,6 +238,7 @@ public class CardRoom extends JPanel {
 		btnView = new JButton("View");
 		btnPayment = new JButton("Payment");
 
+		
 		initComponent();
 //		callStateCard();
 //		JOptionPane.showMessageDialog(null, nameCard);
@@ -287,7 +290,7 @@ public class CardRoom extends JPanel {
 
 	// set people
 	public void setPeopleNumber(int peopleMaximum) {
-		lblMaxPeople.setText("/ " + peopleMaximum + " renters");
+		lblMaxPeople.setText(String.valueOf(peopleMaximum));
 	}
 	
 	// people in room
@@ -305,6 +308,7 @@ public class CardRoom extends JPanel {
 		contract.setNumApart(String.valueOf(currentApartNum));
 		contract.setApartID(String.valueOf(idCurrent));
 		contract.setCardRoom(this);
+		contract.setMaxPeople(lblMaxPeople.getText());
 	}
 
 	// btn edit room
@@ -384,7 +388,7 @@ public class CardRoom extends JPanel {
 		});
 		addPaymen.setMoneyAll(Float.parseFloat(lblPrice.getText()));
 		addPaymen.setIdFeeAll(idFeeAll);
-
+		
 	}
  
 	// btn checkout
@@ -508,6 +512,12 @@ public class CardRoom extends JPanel {
 		g2d.dispose();
 	}
 
+	
+	
+	
+	
+	
+	
 	private void initComponent() {
 		roomNum = new JLabel("101");
 		roomNum.setForeground(Color.BLACK);
@@ -533,11 +543,6 @@ public class CardRoom extends JPanel {
 
 		lblIconPeople = new JLabel("");
 		lblIconPeople.setIcon(new ImageIcon(CardRoom.class.getResource("/icon/users(1).png")));
-
-		lblMaxPeople = new JLabel("/ 4 renters");
-		lblMaxPeople.setForeground(Color.BLACK);
-		lblMaxPeople.setFont(new Font("Arial", Font.BOLD, 12));
-		lblMaxPeople.setBackground(Color.BLACK);
 
 		btnViewRoom.setFocusable(false);
 		btnViewRoom.setFont(new Font("Arial", Font.BOLD, 12));
@@ -604,23 +609,24 @@ public class CardRoom extends JPanel {
 				btnCheckOutActionPerformed(e);
 			}
 		});
-		
-		lblPeopleInRoom = new JLabel("2");
-		lblPeopleInRoom.setFont(new Font("Arial", Font.BOLD, 12));
 
 		GroupLayout gl_CardBtnAvailable = new GroupLayout(CardBtnAvailable);
-		gl_CardBtnAvailable.setHorizontalGroup(gl_CardBtnAvailable.createParallelGroup(Alignment.LEADING)
+		gl_CardBtnAvailable.setHorizontalGroup(
+			gl_CardBtnAvailable.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_CardBtnAvailable.createSequentialGroup()
-						.addComponent(btnViewRoom, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnEditRoom, GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnAddRenter, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)));
-		gl_CardBtnAvailable.setVerticalGroup(gl_CardBtnAvailable.createParallelGroup(Alignment.LEADING)
+					.addComponent(btnViewRoom, GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnEditRoom, GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnAddRenter, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		gl_CardBtnAvailable.setVerticalGroup(
+			gl_CardBtnAvailable.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_CardBtnAvailable.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnViewRoom, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-						.addComponent(btnEditRoom, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnAddRenter, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)));
+					.addComponent(btnViewRoom, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+					.addComponent(btnEditRoom, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnAddRenter, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))
+		);
 		CardBtnAvailable.setLayout(gl_CardBtnAvailable);
 
 		GroupLayout gl_CardBtnRented = new GroupLayout(CardBtnRented);
@@ -639,6 +645,25 @@ public class CardRoom extends JPanel {
 								.addComponent(btnView, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 								.addComponent(btnPayment, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)));
 		CardBtnRented.setLayout(gl_CardBtnRented);
+		
+		lblPeopleInRoom = new JLabel("0");
+		lblPeopleInRoom.setForeground(SystemColor.desktop);
+		lblPeopleInRoom.setFont(new Font("Arial", Font.BOLD, 13));
+		
+		lblR = new JLabel("/");
+		lblR.setForeground(SystemColor.desktop);
+		lblR.setFont(new Font("Arial", Font.BOLD, 13));
+		lblR.setBackground(Color.BLACK);
+		
+		lblMaxPeople = new JLabel("0");
+		lblMaxPeople.setForeground(SystemColor.desktop);
+		lblMaxPeople.setFont(new Font("Arial", Font.BOLD, 13));
+		lblMaxPeople.setBackground(new Color(234, 56, 0));
+		
+		lblRenter = new JLabel("renters");
+		lblRenter.setForeground(SystemColor.desktop);
+		lblRenter.setFont(new Font("Arial", Font.BOLD, 13));
+		lblRenter.setBackground(Color.BLACK);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -663,11 +688,13 @@ public class CardRoom extends JPanel {
 					.addGap(34)
 					.addComponent(lblIconPeople)
 					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(10)
-							.addComponent(lblMaxPeople, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
-						.addComponent(lblPeopleInRoom, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)))
+					.addComponent(lblPeopleInRoom, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)
+					.addGap(6)
+					.addComponent(lblR, GroupLayout.PREFERRED_SIZE, 7, GroupLayout.PREFERRED_SIZE)
+					.addGap(6)
+					.addComponent(lblMaxPeople)
+					.addGap(6)
+					.addComponent(lblRenter, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(10)
 					.addComponent(CardButton, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
@@ -696,13 +723,14 @@ public class CardRoom extends JPanel {
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblIconPeople)
-						.addComponent(lblMaxPeople, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblPeopleInRoom, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblPeopleInRoom)
+						.addComponent(lblR)
+						.addComponent(lblMaxPeople)
+						.addComponent(lblRenter))
 					.addGap(18)
 					.addComponent(CardButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGap(7))
 		);
 		setLayout(groupLayout);
 	}
-
 }
