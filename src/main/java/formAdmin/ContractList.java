@@ -78,6 +78,9 @@ public class ContractList extends JPanel {
 	private JComboBox cbbData;
 	private JButton btnReset;
 	private CardRoom cardRoom = new CardRoom();
+	private FrameAddContract frameFrameAddContract;
+	private FrameUpContract frameFrameUpContract;
+	private ViewRoomContract frameViewRoomContract;
 //	private EventLoadTable eventLoad;
 	
 
@@ -215,58 +218,72 @@ public class ContractList extends JPanel {
 
 			@Override
 			public void view(int row) {
-				Integer apartInt = (Integer) tableConstract.getValueAt(row, 1);
-				String apartStr = String.valueOf(apartInt);
-				String ownerName = (String) tableConstract.getValueAt(row, 2);
-				String status = (String) tableConstract.getValueAt(row, 4);
-				java.sql.Date dateFrom = (java.sql.Date) tableConstract.getValueAt(row, 5);
-				java.sql.Date dateTo = (java.sql.Date) tableConstract.getValueAt(row, 6);
-				String imgPaths = (String) tableConstract.getValueAt(row, 3);
-				System.out.println(imgPaths);
-				String rommateStrID = (String) tableConstract.getValueAt(row, 8);
+				if(frameViewRoomContract==null) {
+					Integer apartInt = (Integer) tableConstract.getValueAt(row, 1);
+					String apartStr = String.valueOf(apartInt);
+					String ownerName = (String) tableConstract.getValueAt(row, 2);
+					String status = (String) tableConstract.getValueAt(row, 4);
+					java.sql.Date dateFrom = (java.sql.Date) tableConstract.getValueAt(row, 5);
+					java.sql.Date dateTo = (java.sql.Date) tableConstract.getValueAt(row, 6);
+					String imgPaths = (String) tableConstract.getValueAt(row, 3);
+					System.out.println(imgPaths);
+					String rommateStrID = (String) tableConstract.getValueAt(row, 8);
+					
+					SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
+					String dateFromStr = spf.format(dateFrom);
+					String dateToStr = spf.format(dateTo);
+					
+					
+					frameViewRoomContract = new ViewRoomContract(apartStr, ownerName, status, dateFromStr, dateToStr, imgPaths, rommateStrID);
+					frameViewRoomContract.setVisible(true);
+					frameViewRoomContract.setLocationRelativeTo(null);
+					frameViewRoomContract.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				} else {
+					frameViewRoomContract.setVisible(true);
+					frameViewRoomContract.setExtendedState(JFrame.NORMAL); 
+				}
 				
-				SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
-				String dateFromStr = spf.format(dateFrom);
-				String dateToStr = spf.format(dateTo);
-				
-				
-				var viewContract = new ViewRoomContract(apartStr, ownerName, status, dateFromStr, dateToStr, imgPaths, rommateStrID);
-				viewContract.setVisible(true);
-				viewContract.setLocationRelativeTo(null);
-				viewContract.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				
 				
 			}
 
 			@Override
 			public void edit(int row) {
-				String statusStr = (String) tableConstract.getValueAt(row, 4);
+				if(frameFrameUpContract==null) {
+					String statusStr = (String) tableConstract.getValueAt(row, 4);
 				
-		        if (statusStr.equals("Off")) {
-		            return;
-		        }
-		        
-		        Integer apartInt = (Integer) tableConstract.getValueAt(row, 1);
-		        String apartStr = String.valueOf(apartInt);
-		        
-		        Integer id = (Integer) tableConstract.getValueAt(row, 0);
-		        
-		        java.sql.Date fromDate = (java.sql.Date) tableConstract.getValueAt(row, 5);
-		        java.sql.Date toDate = (java.sql.Date) tableConstract.getValueAt(row, 6);
-		        
-		        boolean status = statusStr.equals("On");
-		        Integer ownerId = (Integer) tableConstract.getValueAt(row, 9);
-		        
-		        var upCon = new FrameUpContract(id, apartStr, fromDate, toDate, status, ownerId, new EventLoadTable() {
-		            @Override
-		            public void loadDataTable() {
-		                loadTableContract();
-		            }
-		        });
-		        
-		        upCon.setVisible(true);
-		        upCon.setLocationRelativeTo(null);
-		        upCon.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			        if (statusStr.equals("Off")) {
+			            return;
+			        }
+			        
+			        Integer apartInt = (Integer) tableConstract.getValueAt(row, 1);
+			        String apartStr = String.valueOf(apartInt);
+			        
+			        Integer id = (Integer) tableConstract.getValueAt(row, 0);
+			        
+			        java.sql.Date fromDate = (java.sql.Date) tableConstract.getValueAt(row, 5);
+			        java.sql.Date toDate = (java.sql.Date) tableConstract.getValueAt(row, 6);
+			        
+			        boolean status = statusStr.equals("On");
+			        Integer ownerId = (Integer) tableConstract.getValueAt(row, 9);
+			        
+			        
+			        
+			        frameFrameUpContract = new FrameUpContract(id, apartStr, fromDate, toDate, status, ownerId, new EventLoadTable() {
+			            @Override
+			            public void loadDataTable() {
+			                loadTableContract();
+			            }
+			        });
+			        
+			        frameFrameUpContract.setVisible(true);
+			        frameFrameUpContract.setLocationRelativeTo(null);
+			        frameFrameUpContract.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				} else {
+					frameFrameUpContract.setVisible(true);
+					frameFrameUpContract.setExtendedState(JFrame.NORMAL); 
+				}
+				
 		        
 			}
 		};
@@ -330,18 +347,24 @@ public class ContractList extends JPanel {
 	}
 
 	protected void btnAddContractActionPerformed(ActionEvent e) {
-		CardRoom cardRoom = new CardRoom();
-		var form = new FrameAddContract(cardRoom, new EventLoadTable() {
-			
-			@Override
-			public void loadDataTable() {
-				loadTableContract();
+		if(frameFrameAddContract==null) {
+			CardRoom cardRoom = new CardRoom();
+			frameFrameAddContract = new FrameAddContract(cardRoom, new EventLoadTable() {
 				
-			}
-		});
-		form.setVisible(true);
-		form.setLocationRelativeTo(null);
-		form.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				@Override
+				public void loadDataTable() {
+					loadTableContract();
+					
+				}
+			});
+			frameFrameAddContract.setVisible(true);
+			frameFrameAddContract.setLocationRelativeTo(null);
+			frameFrameAddContract.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		} else {
+			frameFrameAddContract.setVisible(true);
+			frameFrameAddContract.setExtendedState(JFrame.NORMAL); 
+		}
+		
 //		form.getContractList();
 	}
 
@@ -448,6 +471,7 @@ public class ContractList extends JPanel {
 	
 	
 	private void updateTable(List<Contract> filterContract) {
+		
 		var dao = new ContractDao();
 		DefaultTableModel model = (DefaultTableModel) tableConstract.getModel();
 		model.setRowCount(0);

@@ -8,6 +8,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
@@ -92,9 +93,16 @@ public class CardRoom extends JPanel {
 	private JLabel lblMaxPeople;
 	private JLabel lblRenter;
 	private FrameUpContract frameUpCon;
+	private FrameContract contractFrame;
+	private FrameAddRoom frameAddRoom; 
+	private ViewRoomApartNoBtn frameViewRoomApartNoBtn;
+	private FrameAddMoney frameFrameAddMoney;
+	private FrameContractDisconnect frameFrameContractDisconnect;
+	private ViewRoomOfUser frameViewRoomOfUser;
+	
 	private apartmentEvent event;
 	
-
+	private boolean isVisibleFrame = false;
 	
 	
 	
@@ -327,64 +335,95 @@ public class CardRoom extends JPanel {
 	// -----------------------------Available-------------------------------------------------
 	// btn add renter
 	protected void btnAddRenterActionPerformed(ActionEvent e) {
-		var contract = new FrameContract();
-		contract.setE(event);
-		contract.setVisible(true);
-		contract.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		contract.setLocationRelativeTo(null);
-		contract.setNumApart(String.valueOf(currentApartNum));
-		contract.setApartID(String.valueOf(idCurrent));
-		contract.setCardRoom(this);
-		contract.setMaxPeople(lblMaxPeople.getText());
+		
+//		var contract = new FrameContract();
+//		contract.setE(event);
+//		contract.setVisible(true);
+//		contract.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//		contract.setLocationRelativeTo(null);
+//		contract.setNumApart(String.valueOf(currentApartNum));
+//		contract.setApartID(String.valueOf(idCurrent));
+//		contract.setCardRoom(this);
+//		contract.setMaxPeople(lblMaxPeople.getText());
+			
+		if (contractFrame == null) {
+	        contractFrame = new FrameContract();
+	        contractFrame.setE(event);
+	        contractFrame.setVisible(true);
+	        contractFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	        contractFrame.setLocationRelativeTo(null);
+	        contractFrame.setNumApart(String.valueOf(currentApartNum));
+	        contractFrame.setApartID(String.valueOf(idCurrent));
+	        contractFrame.setCardRoom(this);
+	        contractFrame.setMaxPeople(lblMaxPeople.getText());
+	    } else {
+	        contractFrame.setVisible(true);
+	        contractFrame.setExtendedState(JFrame.NORMAL); 
+	    }
+			
+			
+		
 	}
 
 	// btn edit room
 	protected void btnEditRoomActionPerformed(ActionEvent e) {
-		var add = new FrameAddRoom();
-		add.setVisible(true);
-		add.setLocationRelativeTo(null);
-		add.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		add.setRoomNum(currentApartNum);
-		add.setFloorApart(String.valueOf(currentapfloor));
-		add.setIDCurrent(String.valueOf(idCurrent));
-
-		
-		var dao = new ApartmentDao();
-		List<Apartment> apartments = dao.selectApartment();
-		for(Apartment apart: apartments) {
-			if(apart.getRoomNumber() == currentApartNum) {
-				add.displayConvenient(apart.getConvenient());
-				add.displayUlti(apart.getUtilities());
-				break;
-			}
+		if(frameAddRoom==null) {
+			frameAddRoom = new FrameAddRoom();
+			frameAddRoom.setVisible(true);
+			frameAddRoom.setLocationRelativeTo(null);
+			frameAddRoom.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			frameAddRoom.setRoomNum(currentApartNum);
+			frameAddRoom.setFloorApart(String.valueOf(currentapfloor));
+			frameAddRoom.setIDCurrent(String.valueOf(idCurrent));
+	
 			
-		}
+			var dao = new ApartmentDao();
+			List<Apartment> apartments = dao.selectApartment();
+			for(Apartment apart: apartments) {
+				if(apart.getRoomNumber() == currentApartNum) {
+					frameAddRoom.displayConvenient(apart.getConvenient());
+					frameAddRoom.displayUlti(apart.getUtilities());
+					break;
+				}
+				
+			}
+		}else {
+			frameAddRoom.setVisible(true);
+			frameAddRoom.setExtendedState(JFrame.NORMAL); 
+	    }
+		
 
 
 	}
 
 	// btn view room
 	protected void btnViewRoomActionPerformed(ActionEvent e) {
-		var view = new ViewRoomApartNoBtn();
-		view.setVisible(true);
-		view.setLocationRelativeTo(null);
-		view.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		view.setRoomNum(currentApartNum);
-		view.setFloorApart(String.valueOf(currentapfloor));
-		view.setIDCurrent(String.valueOf(idCurrent));
-		
-
-		var dao = new ApartmentDao();
-		List<Apartment> apartments = dao.selectApartment();
-		for (Apartment apartment : apartments) {
-			if (apartment.getRoomNumber() == currentApartNum) {
-				view.displayConvenient(apartment.getConvenient());
-				view.showMaxPeople(apartment.getPeopleMaximun());
-				view.showTypeRoom(apartment.getType());
-				view.displayUlti(apartment.getUtilities());
-				break; 
+		if(frameViewRoomApartNoBtn==null) {
+			frameViewRoomApartNoBtn = new ViewRoomApartNoBtn();
+			frameViewRoomApartNoBtn.setVisible(true);
+			frameViewRoomApartNoBtn.setLocationRelativeTo(null);
+			frameViewRoomApartNoBtn.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			frameViewRoomApartNoBtn.setRoomNum(currentApartNum);
+			frameViewRoomApartNoBtn.setFloorApart(String.valueOf(currentapfloor));
+			frameViewRoomApartNoBtn.setIDCurrent(String.valueOf(idCurrent));
+			
+	
+			var dao = new ApartmentDao();
+			List<Apartment> apartments = dao.selectApartment();
+			for (Apartment apartment : apartments) {
+				if (apartment.getRoomNumber() == currentApartNum) {
+					frameViewRoomApartNoBtn.displayConvenient(apartment.getConvenient());
+					frameViewRoomApartNoBtn.showMaxPeople(apartment.getPeopleMaximun());
+					frameViewRoomApartNoBtn.showTypeRoom(apartment.getType());
+					frameViewRoomApartNoBtn.displayUlti(apartment.getUtilities());
+					break; 
+				}
 			}
-		}
+		}else {
+			frameViewRoomApartNoBtn.setVisible(true);
+			frameViewRoomApartNoBtn.setExtendedState(JFrame.NORMAL); 
+	    }
+		
 
 	}
 	
@@ -393,73 +432,92 @@ public class CardRoom extends JPanel {
 	// -----------------------------Rented-------------------------------------------------
 	// btn payment
 	protected void btnPaymentActionPerformed(ActionEvent e) {
-		var addPaymen = new FrameAddMoney();
-		addPaymen.setVisible(true);
-		addPaymen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		addPaymen.setLocationRelativeTo(null);
-		addPaymen.setCurrentCardRoom(currentApartNum);
-		addPaymen.setBtnPayMonthListener(new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            addPaymen.btnPayMonthActionPerformed(null);
-	        }
-	    });
-		
-		addPaymen.setBtnPayAllListener(new ActionListener() {
+		if(frameFrameAddMoney==null) {
+			frameFrameAddMoney = new FrameAddMoney();
+			frameFrameAddMoney.setVisible(true);
+			frameFrameAddMoney.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			frameFrameAddMoney.setLocationRelativeTo(null);
+			frameFrameAddMoney.setCurrentCardRoom(currentApartNum);
+			frameFrameAddMoney.setBtnPayMonthListener(new ActionListener() {
+		        @Override
+		        public void actionPerformed(ActionEvent e) {
+		            frameFrameAddMoney.btnPayMonthActionPerformed(null);
+		        }
+		    });
 			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				addPaymen.setBtnPayAllListener(null);
+			frameFrameAddMoney.setBtnPayAllListener(new ActionListener() {
 				
-			}
-		});
-		addPaymen.setMoneyAll(Float.parseFloat(lblPrice.getText()));
-		addPaymen.setIdFeeAll(idFeeAll);
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					frameFrameAddMoney.setBtnPayAllListener(null);
+					
+				}
+			});
+			frameFrameAddMoney.setMoneyAll(Float.parseFloat(lblPrice.getText()));
+			frameFrameAddMoney.setIdFeeAll(idFeeAll);
+		} else {
+			frameFrameAddMoney.setVisible(true);
+			frameFrameAddMoney.setExtendedState(JFrame.NORMAL); 
+	    }
+		
 		
 	}
  
 	// btn checkout
 	protected void btnCheckOutActionPerformed(ActionEvent e) {
-		String apartNum = String.valueOf(currentApartNum);
-		String priceStr = lblPrice.getText();
-		var frame = new FrameContractDisconnect();
-		frame.setEvent(event);
-		frame.setVisible(true);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		if(frameFrameContractDisconnect==null) {
+			String apartNum = String.valueOf(currentApartNum);
+			String priceStr = lblPrice.getText();
+			frameFrameContractDisconnect = new FrameContractDisconnect();
+			frameFrameContractDisconnect.setEvent(event);
+			frameFrameContractDisconnect.setVisible(true);
+			frameFrameContractDisconnect.setLocationRelativeTo(null);
+			frameFrameContractDisconnect.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			
+			frameFrameContractDisconnect.setApartNum(apartNum);
+			frameFrameContractDisconnect.setOwneraName(lblOwner.getText());
+			frameFrameContractDisconnect.setImgCon(imgContracts);
+			frameFrameContractDisconnect.setFromDateCon(fromDateCon);
+			frameFrameContractDisconnect.setToDateCon(toDateCon);
+			frameFrameContractDisconnect.setRoomateRoom(inforRoomate);
+			frameFrameContractDisconnect.setIDCon(String.valueOf(idCon));
+			frameFrameContractDisconnect.setCardRoom(this);
+			frameFrameContractDisconnect.setPriceStr(priceStr);
+		} else {
+			frameFrameContractDisconnect.setVisible(true);
+			frameFrameContractDisconnect.setExtendedState(JFrame.NORMAL); 
+		}
 		
-		frame.setApartNum(apartNum);
-		frame.setOwneraName(lblOwner.getText());
-		frame.setImgCon(imgContracts);
-		frame.setFromDateCon(fromDateCon);
-		frame.setToDateCon(toDateCon);
-		frame.setRoomateRoom(inforRoomate);
-		frame.setIDCon(String.valueOf(idCon));
-		frame.setCardRoom(this);
-		frame.setPriceStr(priceStr);
 	}
 
 	// btn view renter
 	protected void btnViewActionPerformed(ActionEvent e) {
-		var view = new ViewRoomOfUser();
-		view.setVisible(true);
-		view.setLocationRelativeTo(null);
-		view.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
-		view.setApNum(String.valueOf(currentApartNum));
-		view.setMaxPeop(String.valueOf(peopleMax));
-		view.setType(typeRoom);
-		view.loadRoomateInfor(inforRoomate);
-		
-		var dao = new ApartmentDao();
-		List<Apartment> apartments = dao.selectApartment();
-		
-		for(Apartment apart : apartments) {
-			if(apart.getRoomNumber() == currentApartNum) {
-				view.displayCon(apart.getConvenient());
-				view.displayUti(apart.getUtilities());
+		if(frameViewRoomOfUser==null) {
+			frameViewRoomOfUser = new ViewRoomOfUser();
+			frameViewRoomOfUser.setVisible(true);
+			frameViewRoomOfUser.setLocationRelativeTo(null);
+			frameViewRoomOfUser.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			
+			frameViewRoomOfUser.setApNum(String.valueOf(currentApartNum));
+			frameViewRoomOfUser.setMaxPeop(String.valueOf(peopleMax));
+			frameViewRoomOfUser.setType(typeRoom);
+			frameViewRoomOfUser.loadRoomateInfor(inforRoomate);
+			frameViewRoomOfUser.setOwnerNameCard(lblOwner.getText());
+			
+			var dao = new ApartmentDao();
+			List<Apartment> apartments = dao.selectApartment();
+			
+			for(Apartment apart : apartments) {
+				if(apart.getRoomNumber() == currentApartNum) {
+					frameViewRoomOfUser.displayCon(apart.getConvenient());
+					frameViewRoomOfUser.displayUti(apart.getUtilities());
+				}
 			}
+		} else {
+			frameViewRoomOfUser.setVisible(true);
+			frameViewRoomOfUser.setExtendedState(JFrame.NORMAL); 
 		}
+		
 	}
 	
 	// money

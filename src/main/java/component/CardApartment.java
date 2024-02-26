@@ -149,7 +149,7 @@ public class CardApartment extends JPanel {
 					cardRoom.setMoneyApart(String.valueOf(matchFee.getTotal()));
 					cardRoom.setIdFeeAll(matchFee.getIdFeeAll());
 				} else {
-					cardRoom.setMoneyApart("0");
+					cardRoom.setMoneyApart("0.0");
 				}
 				
 				
