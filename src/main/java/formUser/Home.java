@@ -31,7 +31,10 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.SystemColor;
+import javax.swing.JTable;
 
 public class Home extends JPanel {
 
@@ -42,11 +45,34 @@ public class Home extends JPanel {
 	private JLabel lblNewLabel;
 	private JLabel lblBillOrNoti;
 	private JPanel panel;
+	private JScrollPane scrollPane_1;
+	private JTable table;
 	
 	public Home() {
 		setBounds(0, 0, 1100, 800);
 		System.out.println("userId" + userId);
 		panel = new JPanel();
+		
+		scrollPane_1 = new JScrollPane();
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		
+		table = new JTable();
+		scrollPane_1.setViewportView(table);
+		panel.setLayout(gl_panel);
 		scrollPane = new JScrollPane();
 		scrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED, SystemColor.menu, SystemColor.menu, SystemColor.menu, SystemColor.menu));
 		panelAparts = new JPanel();
@@ -124,6 +150,7 @@ public class Home extends JPanel {
 		
 		
 		initComponent();
+		initTable();
 	
 	}
 	
@@ -148,16 +175,28 @@ public class Home extends JPanel {
 	}
 	
 
-	
+	public void initTable() {
+		var model = new DefaultTableModel();
+		model.addColumn("Room");
+		model.addColumn("Total");
+		model.addColumn("Time");
+		var dao = new FeesDao();
+		var user_id = Login.getId();
+		dao.getFeesUser(1, 500,  "0",  null, null, true, user_id,null).stream().forEach(fee-> {
+			model.addRow(new Object[] {fee.getRoom(),fee.getTotal(),fee.getTime(),fee.getNote()});
+			
+		});
+		table.setModel(model);
+	}
 	
 	
 	
 	private void initComponent() {
 		
-		lblNewLabel = new JLabel("List of rented rooms.");
+		lblNewLabel = new JLabel("List of rented rooms");
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
 		
-		lblBillOrNoti = new JLabel("Bill OR noti");
+		lblBillOrNoti = new JLabel("Bill haven't pay");
 		lblBillOrNoti.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		

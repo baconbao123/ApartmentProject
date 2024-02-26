@@ -36,6 +36,7 @@ import dao.ContractDao;
 import dao.UserDao;
 import entity.Contract;
 import entity.Users;
+import event.apartmentEvent;
 import view.AppStateManager;
 import view.CardRoom;
 
@@ -135,6 +136,16 @@ public class FrameContract extends JFrame {
 	private JLabel lblApartmentId;
 	private JLabel ReadID;
 	private String maxPeople;
+	private static apartmentEvent event;
+	
+
+	public apartmentEvent getE() {
+		return event;
+	}
+
+	public void setE(apartmentEvent event) {
+		this.event = event;
+	}
 
 	public void setMaxPeople(String maxPeopleStr) {
 		maxPeople = maxPeopleStr;
@@ -459,7 +470,7 @@ public class FrameContract extends JFrame {
 
 						String imgFilePathString = String.join(";", newAvatarFilePathList);
 						contract.setImgContracs(imgFilePathString);
-						dao.insertContract(contract);
+					
 
 						System.out.println("success insert contract");
 
@@ -474,9 +485,9 @@ public class FrameContract extends JFrame {
 						}
 
 						JOptionPane.showMessageDialog(null, "Save success");
-
-						dispose();
-
+						
+						
+						dao.insertContract(contract);
 						if (cardRoom != null) {
 							int roomNumber = cardRoom.getCurrentApartNum();
 							cardRoom.setBackgroundColor(new Color(39, 158, 255));
@@ -486,6 +497,9 @@ public class FrameContract extends JFrame {
 
 							AppStateManager.saveAppState(roomNumber, new Color(39, 158, 255), "rented");
 						}
+						
+						event.loadData();
+						dispose();
 
 					}
 				}

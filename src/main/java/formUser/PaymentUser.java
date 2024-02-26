@@ -71,7 +71,7 @@ public class PaymentUser extends JPanel {
 	 */
 	public PaymentUser() {
 		setBounds(0, 0, 1100, 800);
-		
+		filter = false;
 		title = new JLabel("Payment ");
 		title.setFont(new Font("Arial", Font.BOLD, 20));
 		

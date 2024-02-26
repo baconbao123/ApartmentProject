@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import dao.ContractDao;
 import entity.Contract;
+import event.apartmentEvent;
 import view.AppStateManager;
 import view.CardRoom;
 
@@ -71,8 +72,7 @@ public class FrameContractDisconnect extends JFrame {
 	private JLabel ReadIdCon;
 	private CardRoom cardRoom;
 	private String priceStr;
-	
-	
+	private apartmentEvent event;
 
 	public String getPriceStr() {
 		return priceStr;
@@ -80,6 +80,14 @@ public class FrameContractDisconnect extends JFrame {
 
 	public void setPriceStr(String priceStr) {
 		this.priceStr = priceStr;
+	}
+
+	public apartmentEvent getEvent() {
+		return event;
+	}
+
+	public void setEvent(apartmentEvent event) {
+		this.event = event;
 	}
 
 	public void setCardRoom(CardRoom cardRoom) {
@@ -259,7 +267,7 @@ public class FrameContractDisconnect extends JFrame {
 				
 				dao.updateConStatus(contract);
 				
-				dispose();
+				
 				
 				if(cardRoom!=null) {
 					int roomNumber = cardRoom.getCurrentApartNum();
@@ -271,6 +279,8 @@ public class FrameContractDisconnect extends JFrame {
 					
 					AppStateManager.saveAppState(roomNumber, Color.WHITE, "available");
 				}
+				dispose();
+				event.loadData();
 			}
 			
 		}
