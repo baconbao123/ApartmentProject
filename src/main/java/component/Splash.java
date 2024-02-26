@@ -2,6 +2,7 @@ package component;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
@@ -25,6 +27,7 @@ public class Splash extends JFrame {
 	private JLabel lblLogo;
 	private JProgressBar progressBar;
 	private Login login;
+	 private static boolean isSplashShown = false;
 
 	/**
 	 * Launch the application.
@@ -32,14 +35,18 @@ public class Splash extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
+				if(!isSplashShown) {
+					try {
 					Splash frame = new Splash();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 					frame.startLoading();
-				} catch (Exception e) {
-					e.printStackTrace();
+					isSplashShown = true;
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+				
 			}
 		});
 	}
@@ -110,11 +117,13 @@ public class Splash extends JFrame {
 	}
 	
 	private void showLoginScreen() {
-		login = new Login();
-		login.setVisible(true);
-		login.setLocationRelativeTo(null);
-		login.setSplash(this);
-		this.setVisible(false);
+		 if (isSplashShown) {
+            login = new Login();
+            login.setVisible(true);
+            login.setLocationRelativeTo(null);
+            login.setSplash(this);
+            this.setVisible(false);
+	     }
 	}
 	
 	

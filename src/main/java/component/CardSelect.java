@@ -51,7 +51,7 @@ public class CardSelect extends JPanel {
 		panelRenter.setBackground(Color.WHITE);
 		layeredPane.add(panelRenter);
 		
-		lblRenter = new JLabel("Total number of current tenants");
+		lblRenter = new JLabel("Total number of current renters");
 		lblRenter.setForeground(Color.GRAY);
 		lblRenter.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRenter.setFont(new Font("Tahoma", Font.BOLD, 20));

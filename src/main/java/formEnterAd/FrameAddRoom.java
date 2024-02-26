@@ -79,6 +79,7 @@ public class FrameAddRoom extends JFrame {
 	private JButton btnAddUlti;
 	private JLabel ReadMaxRoom;
 	private JLabel lblcurrentlyAMaximum;
+	private JLabel lblM;
 
 	
 
@@ -177,45 +178,51 @@ public class FrameAddRoom extends JFrame {
 	}
 	
 	public void displayConvenient(String convenient) {
-		panelCon.removeAll(); 
-	    panelCon.setLayout(new GridLayout(0, 2)); // Set the layout before adding components
-	    
-	    // Add btnAddCon first
-	    panelCon.add(btnAddCon);
-
-	    if(convenient != null) {
-	        String[] conveniences = convenient.split(";");
-	        
-	        for(String convenience : conveniences) {
-	            JCheckBox checkBox = new JCheckBox(convenience);
-	            checkBox.setSelected(true);
-	            panelCon.add(checkBox); // Add JCheckBox to the panel
-	        }
-	    }
-
-	    panelCon.revalidate();
-	    panelCon.repaint();
+		if(convenient!=null) {
+			panelCon.removeAll(); 
+		    panelCon.setLayout(new GridLayout(0, 2)); // Set the layout before adding components
+		    
+		    // Add btnAddCon first
+		    panelCon.add(btnAddCon);
+	
+		    if(convenient != null) {
+		        String[] conveniences = convenient.split(";");
+		        
+		        for(String convenience : conveniences) {
+		            JCheckBox checkBox = new JCheckBox(convenience);
+		            checkBox.setSelected(true);
+		            panelCon.add(checkBox); // Add JCheckBox to the panel
+		        }
+		    }
+	
+		    panelCon.revalidate();
+		    panelCon.repaint();
+		}
+		
 	}
 	
 	public void displayUlti(String ulti) {
-		panelUlti.removeAll(); 
-		panelUlti.setLayout(new GridLayout(0, 2)); // Set the layout before adding components
-	    
-	    // Add btnAddCon first
-		panelUlti.add(btnAddUlti);
-
-	    if(ulti != null) {
-	        String[] ultis = ulti.split(";");
-	        
-	        for(String u : ultis) {
-	            JCheckBox checkBox = new JCheckBox(u);
-	            checkBox.setSelected(true);
-	            panelUlti.add(checkBox); // Add JCheckBox to the panel
-	        }
-	    }
-
-	    panelUlti.revalidate();
-	    panelUlti.repaint();
+		if(ulti!=null) {
+			panelUlti.removeAll(); 
+			panelUlti.setLayout(new GridLayout(0, 2)); // Set the layout before adding components
+		    
+		    // Add btnAddCon first
+			panelUlti.add(btnAddUlti);
+	
+		    if(ulti != null) {
+		        String[] ultis = ulti.split(";");
+		        
+		        for(String u : ultis) {
+		            JCheckBox checkBox = new JCheckBox(u);
+		            checkBox.setSelected(true);
+		            panelUlti.add(checkBox); // Add JCheckBox to the panel
+		        }
+		    }
+	
+		    panelUlti.revalidate();
+		    panelUlti.repaint();
+		}
+		
 	}
 
 	
@@ -442,7 +449,17 @@ public class FrameAddRoom extends JFrame {
 		
 		String errorMessage = "";
 		
-		errorMessage = Valid.validateInputWithNOEmpty(txtType.getText(), Regex.TYPE, "Type Room ", " Invalid. Please enter an apartment with dimensions of 15*20 m2 or 20*20 m2");
+		if(getSelectedUlti().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Please enter at least 1 amenity");
+			return;
+		}
+		
+		if(getSelectedCon().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Please enter at least 1 utilities");
+			return;
+		}
+		
+		errorMessage = Valid.validateInputWithNOEmpty(txtType.getText(), Regex.TYPE, "Type Room ", " Invalid. Please enter an apartment with dimensions of 15*20 or 20*20");
 		if(errorMessage!=null) {
 			JOptionPane.showMessageDialog(null, errorMessage, "Invalid Input", JOptionPane.ERROR_MESSAGE);
 			return;
@@ -596,7 +613,7 @@ public class FrameAddRoom extends JFrame {
 		
 		scrollUtilities.setBorder(null);
 		
-		lblConvenient = new JLabel("Convenient");
+		lblConvenient = new JLabel("Utilities");
 		lblConvenient.setBounds(15, 139, 99, 17);
 		lblConvenient.setForeground(Color.GRAY);
 		lblConvenient.setFont(new Font("Arial", Font.BOLD, 14));
@@ -632,7 +649,7 @@ public class FrameAddRoom extends JFrame {
 			}
 		});
 		
-		lblUtilities = new JLabel("Utilities");
+		lblUtilities = new JLabel("Amenities");
 		lblUtilities.setBounds(15, 233, 99, 17);
 		lblUtilities.setForeground(Color.GRAY);
 		lblUtilities.setFont(new Font("Arial", Font.BOLD, 14));
@@ -653,7 +670,7 @@ public class FrameAddRoom extends JFrame {
 		lblegM.setFont(new Font("Arial", Font.PLAIN, 12));
 		
 		txtType = new JTextField();
-		txtType.setBounds(177, 379, 128, 18);
+		txtType.setBounds(177, 380, 84, 18);
 		txtType.setColumns(10);
 		txtType.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY));
 		
@@ -685,6 +702,11 @@ public class FrameAddRoom extends JFrame {
 		lblcurrentlyAMaximum.setFont(new Font("Arial", Font.PLAIN, 12));
 		lblcurrentlyAMaximum.setBounds(15, 342, 170, 34);
 		contentPane.add(lblcurrentlyAMaximum);
+		
+		lblM = new JLabel("/ m2");
+		lblM.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblM.setBounds(271, 381, 41, 17);
+		contentPane.add(lblM);
 	}
 	
 	

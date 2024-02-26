@@ -14,7 +14,7 @@ import javax.swing.border.EmptyBorder;
 import dao.ApartmentDao;
 import entity.Apartment;
 import formAdView.ViewRoomApartNoBtn;
-import formAdView.ViewRoomRenters;
+import formAdView.ViewRoomOfUser;
 import formEnterAd.FrameAddContract;
 import formEnterAd.FrameAddMoney;
 import formEnterAd.FrameAddRenter;
@@ -22,6 +22,7 @@ import formEnterAd.FrameContract;
 import formEnterAd.FrameAddRoom;
 import formUpdateAd.FrameContractDisconnect;
 import formUpdateAd.FrameUpApart;
+import formUpdateAd.FrameUpContract;
 import model.Fees;
 
 import java.awt.Font;
@@ -89,6 +90,17 @@ public class CardRoom extends JPanel {
 	private JLabel lblR;
 	private JLabel lblMaxPeople;
 	private JLabel lblRenter;
+	private FrameUpContract frameUpCon;
+	
+
+	
+	
+	
+
+	public String getLblPrice() {
+		return lblPrice.getText();
+	}
+
 
 	// name Card
 	public String getNameCard() {
@@ -238,6 +250,8 @@ public class CardRoom extends JPanel {
 		btnView = new JButton("View");
 		btnPayment = new JButton("Payment");
 
+		
+		
 		
 		initComponent();
 //		callStateCard();
@@ -413,15 +427,25 @@ public class CardRoom extends JPanel {
 
 	// btn view renter
 	protected void btnViewActionPerformed(ActionEvent e) {
-		var view = new ViewRoomRenters();
+		var view = new ViewRoomOfUser();
 		view.setVisible(true);
 		view.setLocationRelativeTo(null);
 		view.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-		view.setApartNum(String.valueOf(currentApartNum));
-		view.setApartType(typeRoom);
-		view.setMaxPeople(String.valueOf(peopleMax));
-		view.setRoomateInfor(inforRoomate);
+		
+		view.setApNum(String.valueOf(currentApartNum));
+		view.setMaxPeop(String.valueOf(peopleMax));
+		view.setType(typeRoom);
+		view.loadRoomateInfor(inforRoomate);
+		
+		var dao = new ApartmentDao();
+		List<Apartment> apartments = dao.selectApartment();
+		
+		for(Apartment apart : apartments) {
+			if(apart.getRoomNumber() == currentApartNum) {
+				view.displayCon(apart.getConvenient());
+				view.displayUti(apart.getUtilities());
+			}
+		}
 	}
 	
 	// money

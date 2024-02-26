@@ -132,7 +132,6 @@ public class FrameAddMoney extends JFrame {
 	}
 
 	public void btnPayAllActionPerformed(ActionEvent e) {
-		JOptionPane.showMessageDialog(null, idFeeAll);
 		if (idFeeAll != null) {
 			Set<Integer> uniqueValues = new HashSet<>();
 			

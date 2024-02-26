@@ -18,7 +18,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import dao.ApartmentDao;
 import entity.Apartment;
 import formAdView.ViewRoomContract;
-import formUserView.ViewRoomOfUser;
+import formAdView.ViewRoomOfUser;
 import net.sf.jasperreports.components.spiderchart.SpiderChartFillFactory;
 
 import java.awt.SystemColor;

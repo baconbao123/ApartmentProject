@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import java.awt.SystemColor;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,9 @@ import dao.UserDao;
 import entity.Contract;
 import entity.Users;
 import event.EventLoadTable;
+import model.Fees;
+import view.AppStateManager;
+import view.CardRoom;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -49,9 +53,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -112,6 +120,8 @@ public class FrameUpContract extends JFrame {
 	private JLabel lblDelete2_4;
 	private JLabel lblInfoRoomates2_5;
 	private JLabel lblDelete2_5;
+	private CardRoom cardRoom = new CardRoom();
+	private Float priceStr;
 
 	private List<String> roomatesList = new ArrayList<>();
 
@@ -153,6 +163,9 @@ public class FrameUpContract extends JFrame {
 		var daoAp = new ApartmentDao();
 		var daoUser = new UserDao();
 
+		var feeDao = new ApartmentDao();
+		List<Fees> fees = feeDao.selectMoneyByAll();
+
 		lblReadNum = new JLabel("101");
 
 		// owner
@@ -164,14 +177,11 @@ public class FrameUpContract extends JFrame {
 		cbbOwner = new JComboBox();
 		cbbOwner.setModel(new DefaultComboBoxModel());
 
-//		List<Object> renterInfor = daoUser.selRenterName();
-
 		for (Object renter : renterInfor) {
 			if (renter instanceof Users) {
-				Users renterObj = (Users) renter;
-				cbbOwner.addItem(renterObj.getId() + "-" + renterObj.getName() + "-" + renterObj.getPhone() + "-"
-						+ renterObj.getDob() + "-" + renterObj.getNic());
-				renterMapOwner.put(renterObj.getId(), renterObj);
+				Users renterObject = (Users) renter;
+				cbbOwner.addItem(renterObject.getId() + "-" + renterObject.getName() + "-" + renterObject.getNic());
+				renterMapOwner.put(renterObject.getId(), renterObject);
 
 			}
 		}
@@ -232,9 +242,64 @@ public class FrameUpContract extends JFrame {
 
 		dateFromDate = new JDateChooser();
 		dateFromDate.setDateFormatString("yyyy-MM-dd");
+		dateFromDate.setName("JDateFromDate");
+		dateFromDate.getJCalendar().setMinSelectableDate(Calendar.getInstance().getTime()); // Allow selecting dates
+																							// from today onwards
 
+		dateFromDate.addPropertyChangeListener("date", new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (dateFromDate.getDate() != null && dateToDate.getDate() != null) {
+					if (dateFromDate.getDate().after(dateToDate.getDate())) {
+						JOptionPane.showMessageDialog(null, "The check-out date cannot be after the check-in date");
+						dateFromDate.setDate(dateToDate.getDate());
+					}
+				}
+
+			}
+		});
+		dateFromDate.getDateEditor().getUiComponent().addKeyListener(new KeyAdapter() {
+		    @Override
+		    public void keyTyped(KeyEvent e) {
+		    	 super.keyTyped(e);
+		         char c = e.getKeyChar();
+		         if ((Character.isLetter(c) || (!Character.isLetter(c) && !Character.isWhitespace(c)))) {
+		             e.consume(); // Consume the event if a non-digit or non-whitespace character is entered
+		         }
+//		        
+		    }
+		});
+		
 		dateToDate = new JDateChooser();
 		dateToDate.setDateFormatString("yyyy-MM-dd");
+		dateToDate.setName("JDateToDate");
+		dateToDate.getJCalendar().setMinSelectableDate(Calendar.getInstance().getTime());
+
+		dateToDate.addPropertyChangeListener("date", new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (dateFromDate.getDate() != null && dateToDate.getDate() != null) {
+					if (dateToDate.getDate().before(dateFromDate.getDate())) {
+
+						JOptionPane.showMessageDialog(null, "The check-out date cannot be before the check-in date");
+						dateToDate.setDate(dateFromDate.getDate());
+						
+					}
+				}
+			}
+		});
+		dateToDate.getDateEditor().getUiComponent().addKeyListener(new KeyAdapter() {
+		    @Override
+		    public void keyTyped(KeyEvent e) {
+		    	super.keyTyped(e);
+		         char c = e.getKeyChar();
+		         if ((Character.isLetter(c) || (!Character.isLetter(c) && !Character.isWhitespace(c)))) {
+		             e.consume(); // Consume the event if a non-digit or non-whitespace character is entered
+		         }
+//		        
+		    }
+		});
 
 		// roomate
 //		Map<Integer, Users> renterMap = new HashMap<>();
@@ -242,8 +307,7 @@ public class FrameUpContract extends JFrame {
 		cbbRoomates.setModel(new DefaultComboBoxModel(new String[] { "" }));
 		for (Object renter : renterInfor) {
 			Users renterObject = (Users) renter;
-			cbbRoomates.addItem(renterObject.getId() + "-" + renterObject.getName() + "-" + renterObject.getPhone()
-					+ "-" + renterObject.getDob() + "-" + renterObject.getNic());
+			cbbRoomates.addItem(renterObject.getId() + "-" + renterObject.getName() + "-" + renterObject.getNic());
 			renterMapRoomate.put(renterObject.getId(), renterObject);
 		}
 
@@ -350,13 +414,53 @@ public class FrameUpContract extends JFrame {
 				} else if (rdbtnOffContract.isSelected()) {
 					contract.setStatus(false);
 				}
-				contract.setFormDate(sqlFromDate);
-				contract.setToDate(sqlToDate);
-				contract.setRoomates(romateString);
-				contract.setImgContracs(imgFilePathString);
 
-				dao.updateContract(contract);
-				JOptionPane.showMessageDialog(null, "Successful Update Contract");
+				if (rdbtnOffContract.isSelected()) {
+					int result1 = JOptionPane.showConfirmDialog(null, "Are you sure you want to update the room status to 'Off'");
+					
+					Fees matchFee = findFeeForApartment(fees, Integer.parseInt(lblReadNum.getText()));
+					if (matchFee != null) {
+						priceStr = matchFee.getTotal();
+					} else if (matchFee == null) {
+						priceStr = (float) 0;
+					}
+
+					if (result1 == JOptionPane.YES_OPTION) {
+						if (priceStr>0) {
+							JOptionPane.showMessageDialog(null, "Please make payment before checking out.");
+						} else if(priceStr <= 0) {
+							if (cardRoom != null) {
+								int roomNumber = Integer.parseInt(lblReadNum.getText());
+								cardRoom.setBackgroundColor(Color.WHITE);
+
+								CardLayout layout = (CardLayout) cardRoom.CardButton.getLayout();
+								layout.show(cardRoom.CardButton, "available");
+
+								AppStateManager.saveAppState(roomNumber, Color.WHITE, "available");
+							}	
+							
+							contract.setFormDate(sqlFromDate);
+							contract.setToDate(sqlToDate);
+							contract.setRoomates(romateString);
+							contract.setImgContracs(imgFilePathString);
+
+							dao.updateContract(contract);
+							JOptionPane.showMessageDialog(null, "Successful Update Contract");
+							
+						}
+
+					}
+				}
+				else if(rdbOnContract.isSelected()){
+					contract.setFormDate(sqlFromDate);
+					contract.setToDate(sqlToDate);
+					contract.setRoomates(romateString);
+					contract.setImgContracs(imgFilePathString);
+
+					dao.updateContract(contract);
+					JOptionPane.showMessageDialog(null, "Successful Update Contract");
+				}
+				
 
 				for (int i = 0; i < Math.min(conPathList.size(), 5); i++) {
 					try {
@@ -366,6 +470,7 @@ public class FrameUpContract extends JFrame {
 						e1.printStackTrace();
 					}
 				}
+				
 				dispose();
 				event.loadDataTable();
 			}
@@ -379,6 +484,16 @@ public class FrameUpContract extends JFrame {
 		dateFromDate.setDate(dateFrom);
 		dateToDate.setDate(dateTo);
 
+	}
+	
+	
+	public void validateDates() {
+	    if (dateFromDate.getDate() != null && dateToDate.getDate() != null) {
+	        if (dateFromDate.getDate().after(dateToDate.getDate())) {
+	            JOptionPane.showMessageDialog(null, "The check-out date cannot be after the check-in date");
+	            dateFromDate.setDate(dateToDate.getDate());
+	        }
+	    }
 	}
 
 	protected void btnUploadContractActionPerformed(ActionEvent e) {
@@ -498,6 +613,15 @@ public class FrameUpContract extends JFrame {
 				super.mouseClicked(e);
 			}
 		});
+	}
+
+	private Fees findFeeForApartment(List<Fees> fees, int roomNumber) {
+		for (Fees fee : fees) {
+			if (fee.getRoom() == roomNumber) {
+				return fee;
+			}
+		}
+		return null;
 	}
 
 	private void initComponent() {

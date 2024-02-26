@@ -57,7 +57,6 @@ public class FrameContractDisconnect extends JFrame {
 	private JLabel lblConImgs;
 	private JPanel panelImgCon;
 	private JLabel lblNewLabel_7;
-	private JRadioButton rdOn;
 	private JRadioButton rdOff;
 	private JLabel lblFromDate;
 	private JLabel ReadFormDate;
@@ -129,10 +128,8 @@ public class FrameContractDisconnect extends JFrame {
 		panelImgCon.setBackground(Color.WHITE);
 		panelImgCon.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		rdOn = new JRadioButton("On");
-		buttonGroup.add(rdOn);
-		
 		rdOff = new JRadioButton("Off");
+		rdOff.setSelected(true);
 		buttonGroup.add(rdOff);
 		
 		ReadFormDate = new JLabel("2012/12/12");
@@ -256,9 +253,7 @@ public class FrameContractDisconnect extends JFrame {
 				var dao = new ContractDao();
 				
 				contract.setId(Integer.parseInt(ReadIdCon.getText()));
-				if(rdOn.isSelected()) {
-					contract.setStatus(true);
-				} else if(rdOff.isSelected()) {
+				if(rdOff.isSelected()) {
 					contract.setStatus(false);
 				}
 				
@@ -311,12 +306,6 @@ public class FrameContractDisconnect extends JFrame {
 		lblNewLabel_7 = new JLabel("Status");
 		lblNewLabel_7.setForeground(Color.GRAY);
 		lblNewLabel_7.setFont(new Font("Arial", Font.BOLD, 14));
-		
-		rdOn.setSelected(true);
-		rdOn.setFocusable(false);
-		rdOn.setFont(new Font("Arial", Font.PLAIN, 14));
-		rdOn.setBackground(Color.WHITE);
-		rdOn.setBorder(null);
 		
 		rdOff.setFocusable(false);
 		rdOff.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -371,12 +360,7 @@ public class FrameContractDisconnect extends JFrame {
 								.addComponent(lblNewLabel_7, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblFromDate, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))
 							.addGap(46)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(ReadFormDate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(rdOn)
-									.addGap(18)
-									.addComponent(rdOff, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)))))
+							.addComponent(ReadFormDate)))
 					.addGap(26))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
@@ -401,7 +385,8 @@ public class FrameContractDisconnect extends JFrame {
 									.addGap(46)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 										.addComponent(ReadOwner, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(panelImgCon, GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))))
+										.addComponent(panelImgCon, GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+										.addComponent(rdOff, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))))
 							.addGap(26))))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(202)
@@ -432,7 +417,6 @@ public class FrameContractDisconnect extends JFrame {
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_7, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-						.addComponent(rdOn)
 						.addComponent(rdOff))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
@@ -450,7 +434,6 @@ public class FrameContractDisconnect extends JFrame {
 					.addComponent(btnSave, GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
 					.addContainerGap())
 		);
-		gl_contentPane.linkSize(SwingConstants.VERTICAL, new Component[] {rdOn, rdOff});
 		
 		panelRoomate = new JPanel();
 		panelRoomate.setBackground(Color.WHITE);

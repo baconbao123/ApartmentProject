@@ -175,7 +175,7 @@ public class Home extends JPanel {
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 547, GroupLayout.PREFERRED_SIZE)
 							.addGap(41)
-							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
+							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
 							.addGap(20))))
 		);
 		groupLayout.setVerticalGroup(
@@ -190,7 +190,7 @@ public class Home extends JPanel {
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(lblNewLabel)
 							.addGap(18)
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 606, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 273, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(86, Short.MAX_VALUE))
 		);
 		

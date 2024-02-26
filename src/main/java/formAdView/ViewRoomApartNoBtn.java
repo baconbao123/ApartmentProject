@@ -67,6 +67,7 @@ public class ViewRoomApartNoBtn extends JFrame {
 	private JLabel ReadMaxPeople;
 	private JScrollPane scrollUlti;
 	private JPanel panelUtilities;
+	private JLabel lblM;
 
 
 	public static void main(String[] args) {
@@ -95,21 +96,28 @@ public class ViewRoomApartNoBtn extends JFrame {
 		setContentPane(contentPane);
 
 		lblLabel = new JLabel("Information Of Apartment");
+		lblLabel.setBounds(170, 11, 182, 24);
 
 		lblFloor = new JLabel("Floor");
+		lblFloor.setBounds(10, 88, 40, 17);
 		ReadNumFloor = new JLabel("1");
+		ReadNumFloor.setBounds(154, 88, 26, 17);
 
 		lblReadApNum = new JLabel("101");
+		lblReadApNum.setBounds(356, 11, 26, 24);
 
 		
 		// number people in room
 		ReadNumPeople = new JLabel("0");
+		ReadNumPeople.setBounds(154, 338, 8, 17);
 		
 		scrollUlti = new JScrollPane();
+		scrollUlti.setBounds(153, 238, 367, 82);
 		panelUtilities = new JPanel();
 		panelUtilities.setLayout(new GridLayout(0,3));
 
 		scrollPane = new JScrollPane();
+		scrollPane.setBounds(153, 138, 367, 82);
 		panelCon = new JPanel();
 		panelCon.setLayout(new GridLayout(0,3));
 		
@@ -310,27 +318,34 @@ public class ViewRoomApartNoBtn extends JFrame {
 		ReadNumFloor.setFont(new Font("Arial", Font.PLAIN, 14));
 
 		lblConvenient = new JLabel("Convenient");
+		lblConvenient.setBounds(10, 162, 99, 17);
 		lblConvenient.setFont(new Font("Arial", Font.BOLD, 14));
 
 		lblUtilities = new JLabel("Utilities");
+		lblUtilities.setBounds(10, 267, 99, 17);
 		lblUtilities.setFont(new Font("Arial", Font.BOLD, 14));
 		ReadNumPeople.setFont(new Font("Arial", Font.PLAIN, 14));
 
 		lblOccupants = new JLabel("Occupants count");
+		lblOccupants.setBounds(10, 338, 126, 17);
 		lblOccupants.setFont(new Font("Arial", Font.BOLD, 14));
 
 		lblType = new JLabel("Type");
+		lblType.setBounds(10, 366, 117, 19);
 		lblType.setFont(new Font("Arial", Font.BOLD, 14));
 
-		ReadApartType = new JLabel("30*15 m2");
+		ReadApartType = new JLabel("30*15");
+		ReadApartType.setBounds(154, 366, 46, 19);
 		ReadApartType.setFont(new Font("Arial", Font.PLAIN, 14));
 
 		lblReadApNum.setFont(new Font("Arial", Font.BOLD, 15));
 
 		lblID = new JLabel("ID");
+		lblID.setBounds(10, 55, 40, 17);
 		lblID.setFont(new Font("Arial", Font.BOLD, 14));
 
 		ReadID = new JLabel("1");
+		ReadID.setBounds(154, 55, 26, 17);
 		ReadID.setFont(new Font("Arial", Font.PLAIN, 14));
 
 		scrollPane.setBorder(null);
@@ -339,105 +354,41 @@ public class ViewRoomApartNoBtn extends JFrame {
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		ReadNumOccupants_1 = new JLabel("/");
+		ReadNumOccupants_1.setBounds(168, 338, 8, 17);
 		ReadNumOccupants_1.setFont(new Font("Arial", Font.PLAIN, 14));
 		
 		ReadMaxPeople = new JLabel("0");
+		ReadMaxPeople.setBounds(182, 338, 18, 17);
 		ReadMaxPeople.setFont(new Font("Arial", Font.PLAIN, 14));
 		
 		
 		scrollUlti.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollUlti.setBorder(null);
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(165)
-							.addComponent(lblLabel, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-							.addGap(4)
-							.addComponent(lblReadApNum, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(5)
-							.addComponent(lblID, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-							.addGap(104)
-							.addComponent(ReadID, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(5)
-							.addComponent(lblFloor, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-							.addGap(104)
-							.addComponent(ReadNumFloor, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(5)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblConvenient, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblUtilities, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))
-							.addGap(44)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(scrollUlti, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(5)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-									.addGap(27)
-									.addComponent(ReadApartType, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblOccupants, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addComponent(ReadNumPeople)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(ReadNumOccupants_1, GroupLayout.PREFERRED_SIZE, 8, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(ReadMaxPeople, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)))))
-					.addContainerGap(24, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(6)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblReadApNum, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-					.addGap(20)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblID)
-						.addComponent(ReadID))
-					.addGap(16)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblFloor)
-						.addComponent(ReadNumFloor))
-					.addGap(33)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(24)
-							.addComponent(lblConvenient))
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(47)
-							.addComponent(lblUtilities))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(18)
-							.addComponent(scrollUlti, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblOccupants)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(ReadNumPeople)
-							.addComponent(ReadNumOccupants_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-							.addComponent(ReadMaxPeople, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblType, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-						.addComponent(ReadApartType, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-					.addGap(75))
-		);
+		
+		lblM = new JLabel("/  m2");
+		lblM.setBounds(200, 366, 41, 19);
+		lblM.setFont(new Font("Arial", Font.PLAIN, 14));
 		
 		
 		scrollUlti.setViewportView(panelUtilities);
-		contentPane.setLayout(gl_contentPane);
+		contentPane.setLayout(null);
+		contentPane.add(lblM);
+		contentPane.add(lblLabel);
+		contentPane.add(lblReadApNum);
+		contentPane.add(lblID);
+		contentPane.add(ReadID);
+		contentPane.add(lblFloor);
+		contentPane.add(ReadNumFloor);
+		contentPane.add(lblConvenient);
+		contentPane.add(lblUtilities);
+		contentPane.add(scrollUlti);
+		contentPane.add(scrollPane);
+		contentPane.add(lblType);
+		contentPane.add(ReadApartType);
+		contentPane.add(lblOccupants);
+		contentPane.add(ReadNumPeople);
+		contentPane.add(ReadNumOccupants_1);
+		contentPane.add(ReadMaxPeople);
 	}
 
 	

@@ -45,6 +45,8 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -88,7 +90,6 @@ public class FrameAddContract extends JFrame {
 	private JLabel lblImgCon5;
 	private JLabel lblStatus;
 	private JRadioButton rdbOnContract;
-	private JRadioButton rdbtnOffContract;
 	private JLabel lblFromDate;
 	private JDateChooser dateFromDate;
 	private JLabel lblToDate;
@@ -205,8 +206,7 @@ public class FrameAddContract extends JFrame {
 		for (Object renter : renterInfo) {
 			if (renter instanceof Users) {
 				Users renterObject = (Users) renter;
-				cbbOwner.addItem(renterObject.getId() + "-" + renterObject.getName() + "-" + renterObject.getPhone()
-						+ "-" + renterObject.getDob() + "-" + renterObject.getNic());
+				cbbOwner.addItem(renterObject.getId() + "-" + renterObject.getName() + "-" + renterObject.getNic());
 				renterMapOwner.put(renterObject.getId(), renterObject);
 			}
 		}
@@ -265,8 +265,7 @@ public class FrameAddContract extends JFrame {
 		cbbRoomates.setModel(new DefaultComboBoxModel(new String[] { "" }));
 		for (Object renter : renterInfo) {
 			Users renterObject = (Users) renter;
-			cbbRoomates.addItem(renterObject.getId() + "-" + renterObject.getName()+ "-" + renterObject.getPhone() + "-"
-					+ renterObject.getDob() + "-" + renterObject.getNic());
+			cbbRoomates.addItem(renterObject.getId() + "-" + renterObject.getName() + "-" + renterObject.getNic());
 			renterMapRoomate.put(renterObject.getId(), renterObject);
 		}
 		cbbRoomates.addActionListener(new ActionListener() {
@@ -351,9 +350,6 @@ public class FrameAddContract extends JFrame {
 		rdbOnContract.setBounds(163, 182, 33, 15);
 		rdbOnContract.setFocusable(false);
 		buttonGroup.add(rdbOnContract);
-		rdbtnOffContract = new JRadioButton("Off");
-		rdbtnOffContract.setBounds(236, 182, 35, 15);
-		rdbtnOffContract.setFocusable(false);
 		buttonGroup.add(rdbOnContract);
 
 		// fromdate - todate
@@ -377,6 +373,16 @@ public class FrameAddContract extends JFrame {
 
 			}
 		});
+		dateFromDate.getDateEditor().getUiComponent().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				super.keyTyped(e);
+				char c = e.getKeyChar();
+		         if ((Character.isLetter(c) || (!Character.isLetter(c) && !Character.isWhitespace(c)))) {
+		             e.consume(); // Consume the event if a non-digit or non-whitespace character is entered
+		         }
+			}
+		});
 
 		dateToDate = new JDateChooser();
 		dateToDate.setBounds(163, 253, 315, 19);
@@ -394,6 +400,16 @@ public class FrameAddContract extends JFrame {
 						dateToDate.setDate(dateFromDate.getDate());
 					}
 				}
+			}
+		});
+		dateToDate.getDateEditor().getUiComponent().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				super.keyTyped(e);
+				char c = e.getKeyChar();
+		         if ((Character.isLetter(c) || (!Character.isLetter(c) && !Character.isWhitespace(c)))) {
+		             e.consume(); // Consume the event if a non-digit or non-whitespace character is entered
+		         }
 			}
 		});
 
@@ -415,7 +431,7 @@ public class FrameAddContract extends JFrame {
 					java.sql.Date sqlToDate = new java.sql.Date(dateToDate.getDate().getTime());
 
 					// regex
-					if (!rdbOnContract.isSelected() && !rdbtnOffContract.isSelected()) {
+					if (!rdbOnContract.isSelected()) {
 						JOptionPane.showMessageDialog(FrameAddContract.this, "Please choose status", "Invalid Input",
 								JOptionPane.ERROR_MESSAGE);
 						return;
@@ -630,6 +646,7 @@ public class FrameAddContract extends JFrame {
 		}
 		return false;
 	}
+	
 
 	private void initComponent() {
 		lblAddContract = new JLabel("Add Contract");
@@ -690,10 +707,6 @@ public class FrameAddContract extends JFrame {
 		rdbOnContract.setBackground(SystemColor.window);
 		rdbOnContract.setBorder(null);
 
-		rdbtnOffContract.setFont(new Font("Arial", Font.BOLD, 12));
-		rdbtnOffContract.setBorder(null);
-		rdbtnOffContract.setBackground(SystemColor.window);
-
 		lblFromDate = new JLabel("From Date");
 		lblFromDate.setBounds(15, 216, 138, 19);
 		lblFromDate.setForeground(Color.GRAY);
@@ -736,7 +749,6 @@ public class FrameAddContract extends JFrame {
 		contentPane.add(lblToDate);
 		contentPane.add(rdbOnContract);
 		contentPane.add(btnUploadContract);
-		contentPane.add(rdbtnOffContract);
 		contentPane.add(lblImgCon1);
 		contentPane.add(lblImgCon2);
 		contentPane.add(lblImgCon3);

@@ -597,7 +597,7 @@ public class Bill extends JPanel {
 		var feeDao = new FeesDao();
 		
 //		LocalDate currentDate = LocalDate.now();
-		LocalDate currentDate = LocalDate.parse("2024-06-29",DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		LocalDate currentDate = LocalDate.parse("2024-02-25",DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate futureDate = currentDate.plus(2,ChronoUnit.DAYS);
 		boolean isNewMonth = futureDate.getMonth() != currentDate.getMonth();
 		if(isNewMonth) {

@@ -136,10 +136,13 @@ public class FrameAddRenter extends JFrame {
 		setContentPane(contentPane);
 
 		lblAddRenter = new JLabel("Add Renters");
+		lblAddRenter.setBounds(197, 11, 95, 19);
 
 		rdMale = new JRadioButton("Male");
+		rdMale.setBounds(245, 274, 55, 23);
 		buttonGroup.add(rdMale);
 		rdFemale = new JRadioButton("Female");
+		rdFemale.setBounds(328, 274, 69, 23);
 		buttonGroup.add(rdFemale);
 
 		final String[] genderFinal = { "" };
@@ -161,6 +164,7 @@ public class FrameAddRenter extends JFrame {
 		});
 
 		btnSaveRenter = new JButton("Save");
+		btnSaveRenter.setBounds(189, 458, 123, 31);
 		btnSaveRenter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				var user = new Users();
@@ -424,7 +428,7 @@ public class FrameAddRenter extends JFrame {
 				JDialog dialog = new JDialog();
 				JLabel imgLabel = new JLabel(
 						new ImageIcon(img.getImage().getScaledInstance(600, 600, Image.SCALE_SMOOTH)));
-				dialog.add(imgLabel);
+				dialog.getContentPane().add(imgLabel);
 				dialog.pack();
 				dialog.setVisible(true);
 				dialog.setLocationRelativeTo(null);
@@ -445,15 +449,18 @@ public class FrameAddRenter extends JFrame {
 		btnSaveRenter.setBackground(new Color(38, 185, 154));
 
 		lblAvatar = new JLabel("Avatar");
+		lblAvatar.setBounds(22, 49, 69, 23);
 		lblAvatar.setForeground(Color.GRAY);
 		lblAvatar.setFont(new Font("Arial", Font.BOLD, 14));
 		lblAvatar.setBackground(Color.ORANGE);
 
 		lblQuantityAvatar = new JLabel("(Up to 1 image(.png or .jpg))");
+		lblQuantityAvatar.setBounds(22, 69, 135, 14);
 		lblQuantityAvatar.setForeground(Color.GRAY);
 		lblQuantityAvatar.setFont(new Font("Arial", Font.PLAIN, 11));
 
 		btnUpAvatar = new JButton("Upload");
+		btnUpAvatar.setBounds(244, 49, 55, 39);
 		btnUpAvatar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnUpAvatarActionPerformed(e);
@@ -468,51 +475,61 @@ public class FrameAddRenter extends JFrame {
 		btnUpAvatar.setBackground(Color.LIGHT_GRAY);
 
 		lblImgAvatar = new JLabel("");
+		lblImgAvatar.setBounds(309, 49, 55, 39);
 		lblImgAvatar.setOpaque(true);
 		lblImgAvatar.setBackground(Color.WHITE);
 
-		lblFullname = new JLabel("Fullname");
+		lblFullname = new JLabel("<html>Fullname <span style='color:red; font-size: 14px;'>*</span></html>");
+		lblFullname.setBounds(22, 100, 198, 19);
 		lblFullname.setForeground(Color.GRAY);
 		lblFullname.setFont(new Font("Arial", Font.BOLD, 14));
 
 		txtFullname = new JTextField();
+		txtFullname.setBounds(247, 98, 207, 19);
 		txtFullname.setColumns(10);
 		txtFullname.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY,
 
 				Color.LIGHT_GRAY));
 
 		txtAddress = new JTextField();
+		txtAddress.setBounds(247, 162, 207, 19);
 		txtAddress.setColumns(10);
 		txtAddress.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY,
 
 				Color.LIGHT_GRAY));
-
-		lblAddress = new JLabel("Temporary address");
+		
+		lblAddress = new JLabel("<html>Temporary address <span style='color:red; font-size: 14px;'>*</span></html>");
+		lblAddress.setBounds(22, 163, 161, 19);
 		lblAddress.setForeground(Color.GRAY);
 		lblAddress.setFont(new Font("Arial", Font.BOLD, 14));
 
-		lblPhone = new JLabel("Phone");
+		lblPhone = new JLabel("<html>Phone <span style='color:red; font-size: 14px;'>*</span></html>");
+		lblPhone.setBounds(22, 195, 124, 19);
 		lblPhone.setForeground(Color.GRAY);
 		lblPhone.setFont(new Font("Arial", Font.BOLD, 14));
 
 		txtPhone = new JTextField();
+		txtPhone.setBounds(247, 194, 207, 19);
 		txtPhone.setColumns(10);
 		txtPhone.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY,
 
 				Color.LIGHT_GRAY));
-
-		lblDob = new JLabel("Date Of Birth");
+		
+		lblDob = new JLabel("<html>Date Of Birth <span style='color:red; font-size: 14px;'>*</span></html>");
+		lblDob.setBounds(22, 237, 124, 20);
 		lblDob.setForeground(Color.GRAY);
 		lblDob.setFont(new Font("Arial", Font.BOLD, 14));
 
 		dateDob = new JDateChooser();
+		dateDob.setBounds(247, 235, 207, 20);
 		dateDob.setDateFormatString("yyyy-MM-dd");
 //		dateDob.getJCalendar().setMaxSelectableDate(Calendar.getInstance().getTime());
 		Calendar currentDate = Calendar.getInstance();
 		currentDate.add(Calendar.YEAR, -18);
 		dateDob.getJCalendar().setMaxSelectableDate(currentDate.getTime());
 
-		lblGender = new JLabel("Gender");
+		lblGender = new JLabel("<html>Gender <span style='color:red; font-size: 14px;'>*</span></html>");
+		lblGender.setBounds(22, 277, 124, 20);
 		lblGender.setForeground(Color.GRAY);
 		lblGender.setFont(new Font("Arial", Font.BOLD, 14));
 
@@ -522,31 +539,37 @@ public class FrameAddRenter extends JFrame {
 		rdFemale.setFont(new Font("Arial", Font.PLAIN, 12));
 		rdFemale.setBackground(Color.WHITE);
 
-		lblCIC = new JLabel("National ID Card");
+		lblCIC = new JLabel("<html>National ID Card <span style='color:red; font-size: 14px;'>*</span></html>");
+		lblCIC.setBounds(22, 314, 198, 20);
 		lblCIC.setForeground(Color.GRAY);
 		lblCIC.setFont(new Font("Arial", Font.BOLD, 14));
 
 		txtCIC = new JTextField();
+		txtCIC.setBounds(247, 312, 207, 20);
 		txtCIC.setColumns(10);
 		txtCIC.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY,
 
 				Color.LIGHT_GRAY));
 
-		lblIAuthority = new JLabel("Issuing Authority");
+		lblIAuthority = new JLabel("<html>Issuing Authority <span style='color:red; font-size: 14px;'>*</span></html>");
+		lblIAuthority.setBounds(22, 351, 161, 19);
 		lblIAuthority.setForeground(Color.GRAY);
 		lblIAuthority.setFont(new Font("Arial", Font.BOLD, 14));
 
 		txtIssAuth = new JTextField();
+		txtIssAuth.setBounds(247, 349, 207, 19);
 		txtIssAuth.setColumns(10);
 		txtIssAuth.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY,
 
 				Color.LIGHT_GRAY, Color.LIGHT_GRAY));
 
-		lblQuantityImgCIC = new JLabel("(Up to 2 image(.png or .jpg))");
+		lblQuantityImgCIC = new JLabel("(upload 2 photos)");
+		lblQuantityImgCIC.setBounds(22, 334, 135, 14);
 		lblQuantityImgCIC.setForeground(Color.GRAY);
 		lblQuantityImgCIC.setFont(new Font("Arial", Font.PLAIN, 11));
 
 		btnUpCIC = new JButton("Upload");
+		btnUpCIC.setBounds(246, 382, 55, 42);
 		btnUpCIC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnUpCICActionPerformed(e);
@@ -561,181 +584,50 @@ public class FrameAddRenter extends JFrame {
 		btnUpCIC.setBackground(Color.LIGHT_GRAY);
 
 		lblImgCIC1 = new JLabel("");
+		lblImgCIC1.setBounds(308, 382, 55, 42);
 
 		lblImgCIC2 = new JLabel("");
+		lblImgCIC2.setBounds(370, 382, 55, 42);
 
 		lblEmail = new JLabel("Email");
+		lblEmail.setBounds(22, 132, 69, 19);
 		lblEmail.setForeground(Color.GRAY);
 		lblEmail.setFont(new Font("Arial", Font.BOLD, 14));
 
 		txtEmail = new JTextField();
+		txtEmail.setBounds(247, 130, 207, 19);
 		txtEmail.setColumns(10);
 		txtEmail.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY,
 
 				Color.LIGHT_GRAY));
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(17)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblAvatar, GroupLayout.PREFERRED_SIZE, 69,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblQuantityAvatar))
-								.addGap(87)
-								.addComponent(btnUpAvatar, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-								.addGap(10)
-								.addComponent(lblImgAvatar, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(17)
-								.addComponent(lblFullname, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
-								.addGap(156)
-								.addComponent(txtFullname, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE))
-						.addGroup(
-								Alignment.TRAILING,
-								gl_contentPane
-										.createSequentialGroup().addGap(192)
-										.addComponent(lblAddRenter, GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
-										.addGap(181))
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(17)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-														.addGroup(gl_contentPane.createSequentialGroup()
-																.addComponent(lblAddress, GroupLayout.PREFERRED_SIZE,
-																		161, GroupLayout.PREFERRED_SIZE)
-																.addGap(64).addComponent(txtAddress,
-																		GroupLayout.PREFERRED_SIZE, 207,
-																		GroupLayout.PREFERRED_SIZE))
-														.addGroup(gl_contentPane.createSequentialGroup()
-																.addComponent(lblPhone, GroupLayout.PREFERRED_SIZE, 124,
-																		GroupLayout.PREFERRED_SIZE)
-																.addGap(101)
-																.addComponent(txtPhone, GroupLayout.PREFERRED_SIZE, 207,
-																		GroupLayout.PREFERRED_SIZE))
-														.addGroup(gl_contentPane.createSequentialGroup()
-																.addComponent(lblDob, GroupLayout.PREFERRED_SIZE, 124,
-																		GroupLayout.PREFERRED_SIZE)
-																.addGap(101).addComponent(dateDob,
-																		GroupLayout.PREFERRED_SIZE, 207,
-																		GroupLayout.PREFERRED_SIZE))
-														.addGroup(gl_contentPane.createSequentialGroup()
-																.addComponent(lblGender, GroupLayout.PREFERRED_SIZE,
-																		124, GroupLayout.PREFERRED_SIZE)
-																.addGap(99)
-																.addComponent(rdMale, GroupLayout.PREFERRED_SIZE, 55,
-																		GroupLayout.PREFERRED_SIZE)
-																.addGap(28)
-																.addComponent(rdFemale, GroupLayout.PREFERRED_SIZE, 69,
-																		GroupLayout.PREFERRED_SIZE))
-														.addGroup(gl_contentPane.createSequentialGroup()
-																.addComponent(lblCIC, GroupLayout.PREFERRED_SIZE, 198,
-																		GroupLayout.PREFERRED_SIZE)
-																.addGap(27)
-																.addComponent(txtCIC, GroupLayout.PREFERRED_SIZE, 207,
-																		GroupLayout.PREFERRED_SIZE))
-														.addGroup(gl_contentPane.createSequentialGroup()
-																.addGroup(gl_contentPane
-																		.createParallelGroup(Alignment.LEADING)
-																		.addComponent(lblIAuthority,
-																				GroupLayout.PREFERRED_SIZE, 161,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGroup(gl_contentPane
-																				.createSequentialGroup().addGap(1)
-																				.addComponent(lblQuantityImgCIC)))
-																.addGap(63)
-																.addGroup(gl_contentPane
-																		.createParallelGroup(Alignment.LEADING)
-																		.addGroup(gl_contentPane.createSequentialGroup()
-																				.addGap(1).addComponent(txtIssAuth,
-																						GroupLayout.PREFERRED_SIZE, 207,
-																						GroupLayout.PREFERRED_SIZE))
-																		.addGroup(gl_contentPane.createSequentialGroup()
-																				.addComponent(btnUpCIC,
-																						GroupLayout.PREFERRED_SIZE, 55,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGap(7)
-																				.addComponent(lblImgCIC1,
-																						GroupLayout.PREFERRED_SIZE, 55,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGap(7).addComponent(lblImgCIC2,
-																						GroupLayout.PREFERRED_SIZE, 55,
-																						GroupLayout.PREFERRED_SIZE)))))
-												.addContainerGap())
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 69,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(156).addComponent(txtEmail, GroupLayout.PREFERRED_SIZE, 207,
-														GroupLayout.PREFERRED_SIZE))))
-						.addGroup(Alignment.TRAILING,
-								gl_contentPane.createSequentialGroup().addGap(184)
-										.addComponent(btnSaveRenter, GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
-										.addGap(161)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup().addGap(6)
-				.addComponent(lblAddRenter, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE).addGap(19)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblAvatar, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(20).addComponent(lblQuantityAvatar,
-								GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
-						.addComponent(btnUpAvatar, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblImgAvatar, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
-				.addGap(10)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(2).addComponent(lblFullname,
-								GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-						.addComponent(txtFullname, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-				.addGap(11)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(2).addComponent(lblEmail,
-								GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-						.addComponent(txtEmail, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(1).addComponent(lblAddress,
-								GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-						.addComponent(txtAddress, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-				.addGap(12)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(1).addComponent(lblPhone,
-								GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-						.addComponent(txtPhone, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-				.addGap(21)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(2).addComponent(lblDob,
-								GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-						.addComponent(dateDob, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(17)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(3).addComponent(lblGender,
-								GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-						.addComponent(rdMale).addComponent(rdFemale))
-				.addGap(15)
-				.addGroup(
-						gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup().addGap(2).addComponent(lblCIC,
-										GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-								.addComponent(txtCIC, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-				.addGap(15)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-						.createSequentialGroup().addGap(2)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblIAuthority, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_contentPane.createSequentialGroup().addGap(18).addComponent(
-										lblQuantityImgCIC, GroupLayout.PREFERRED_SIZE, 14,
-										GroupLayout.PREFERRED_SIZE))))
-						.addGroup(gl_contentPane.createSequentialGroup()
-								.addComponent(txtIssAuth, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-								.addGap(14)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(btnUpCIC, GroupLayout.PREFERRED_SIZE, 42,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblImgCIC1, GroupLayout.PREFERRED_SIZE, 42,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblImgCIC2, GroupLayout.PREFERRED_SIZE, 42,
-												GroupLayout.PREFERRED_SIZE))))
-				.addGap(34).addComponent(btnSaveRenter, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-				.addGap(27)));
-		contentPane.setLayout(gl_contentPane);
+		contentPane.setLayout(null);
+		contentPane.add(lblAvatar);
+		contentPane.add(lblQuantityAvatar);
+		contentPane.add(btnUpAvatar);
+		contentPane.add(lblImgAvatar);
+		contentPane.add(lblFullname);
+		contentPane.add(txtFullname);
+		contentPane.add(lblAddRenter);
+		contentPane.add(lblAddress);
+		contentPane.add(txtAddress);
+		contentPane.add(lblPhone);
+		contentPane.add(txtPhone);
+		contentPane.add(lblDob);
+		contentPane.add(dateDob);
+		contentPane.add(lblGender);
+		contentPane.add(rdMale);
+		contentPane.add(rdFemale);
+		contentPane.add(lblCIC);
+		contentPane.add(txtCIC);
+		contentPane.add(lblIAuthority);
+		contentPane.add(lblQuantityImgCIC);
+		contentPane.add(txtIssAuth);
+		contentPane.add(btnUpCIC);
+		contentPane.add(lblImgCIC1);
+		contentPane.add(lblImgCIC2);
+		contentPane.add(lblEmail);
+		contentPane.add(txtEmail);
+		contentPane.add(btnSaveRenter);
 	}
 
 }

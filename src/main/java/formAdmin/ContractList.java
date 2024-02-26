@@ -79,6 +79,7 @@ public class ContractList extends JPanel {
 	private JButton btnReset;
 	private CardRoom cardRoom = new CardRoom();
 //	private EventLoadTable eventLoad;
+	
 
 	/** 
 	 * Create the panel.
@@ -183,9 +184,9 @@ public class ContractList extends JPanel {
 		});
 		List<String> uniqueStatusList = new ArrayList<>(statusSet);//cbb
 		DefaultComboBoxModel<String> statusComboBoxModel = new DefaultComboBoxModel<>(uniqueStatusList.toArray(new String[0]));//cbb
-		statusComboBoxModel.addElement("Search by status");
+		statusComboBoxModel.addElement("All");
 		cbbStatus.setModel(statusComboBoxModel);//cbb
-		cbbStatus.setSelectedItem("Search by status");
+		cbbStatus.setSelectedItem("All");
 		tableConstract.setModel(model);
 
 		tableConstract.getColumnModel().getColumn(0).setCellRenderer(new CenterRenderer());
@@ -239,30 +240,34 @@ public class ContractList extends JPanel {
 
 			@Override
 			public void edit(int row) {
-				Integer apartInt = (Integer) tableConstract.getValueAt(row, 1);
-				String apartStr = String.valueOf(apartInt);
-				
-				Integer id = (Integer) tableConstract.getValueAt(row, 0);
-				
-				java.sql.Date fromDate = (java.sql.Date) tableConstract.getValueAt(row, 5);
-				java.sql.Date toDate = (java.sql.Date) tableConstract.getValueAt(row, 6);
-				
 				String statusStr = (String) tableConstract.getValueAt(row, 4);
-			    boolean status = statusStr.equals("On");
-			    Integer ownerId= (Integer) tableConstract.getValueAt(row, 9);
 				
-				var upCon = new FrameUpContract(id, apartStr, fromDate, toDate, status, ownerId, new EventLoadTable() {
-					
-					@Override
-					public void loadDataTable() {
-						loadTableContract();
-						
-					}
-				});
-				
-				upCon.setVisible(true);
-				upCon.setLocationRelativeTo(null);
-				upCon.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		        if (statusStr.equals("Off")) {
+		            return;
+		        }
+		        
+		        Integer apartInt = (Integer) tableConstract.getValueAt(row, 1);
+		        String apartStr = String.valueOf(apartInt);
+		        
+		        Integer id = (Integer) tableConstract.getValueAt(row, 0);
+		        
+		        java.sql.Date fromDate = (java.sql.Date) tableConstract.getValueAt(row, 5);
+		        java.sql.Date toDate = (java.sql.Date) tableConstract.getValueAt(row, 6);
+		        
+		        boolean status = statusStr.equals("On");
+		        Integer ownerId = (Integer) tableConstract.getValueAt(row, 9);
+		        
+		        var upCon = new FrameUpContract(id, apartStr, fromDate, toDate, status, ownerId, new EventLoadTable() {
+		            @Override
+		            public void loadDataTable() {
+		                loadTableContract();
+		            }
+		        });
+		        
+		        upCon.setVisible(true);
+		        upCon.setLocationRelativeTo(null);
+		        upCon.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		        
 			}
 		};
 
@@ -463,6 +468,7 @@ public class ContractList extends JPanel {
 					contract.getImgContracs(), statusContract, contract.getFormDate(), contract.getToDate(),
 					roomateNamesString, contract.getRoomates(), contract.getOwnerID()});
 		});
+		
 	}
 	
 	protected void btnResetActionPerformed(ActionEvent e) {

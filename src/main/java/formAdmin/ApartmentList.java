@@ -39,12 +39,16 @@ public class ApartmentList extends JPanel {
 		lblNewLabel.setBackground(new Color(46, 204, 113));
 		
 		colorRented = new JTextPane();
+		colorRented.setEditable(false);
+		colorRented.setEnabled(false);
 		colorRented.setBackground(new Color(29, 158, 255));
 		
 		lblRented_1 = new JLabel("Rented");
 		lblRented_1.setFont(new Font("Arial", Font.PLAIN, 14));
 		
 		colorAvailable = new JTextPane();
+		colorAvailable.setEnabled(false);
+		colorAvailable.setEditable(false);
 		colorAvailable.setBackground(new Color(255, 255, 255));
 		
 		lblRented_2 = new JLabel("Available Room");
