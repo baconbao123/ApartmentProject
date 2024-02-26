@@ -13,6 +13,7 @@ import javax.swing.border.EmptyBorder;
 
 import dao.ApartmentDao;
 import entity.Apartment;
+import event.apartmentEvent;
 import formAdView.ViewRoomApartNoBtn;
 import formAdView.ViewRoomOfUser;
 import formEnterAd.FrameAddContract;
@@ -91,11 +92,22 @@ public class CardRoom extends JPanel {
 	private JLabel lblMaxPeople;
 	private JLabel lblRenter;
 	private FrameUpContract frameUpCon;
+	private apartmentEvent event;
 	
 
 	
 	
 	
+
+	public apartmentEvent getEvent() {
+		return event;
+	}
+
+
+	public void setEvent(apartmentEvent event) {
+		this.event = event;
+	}
+
 
 	public String getLblPrice() {
 		return lblPrice.getText();
@@ -316,6 +328,7 @@ public class CardRoom extends JPanel {
 	// btn add renter
 	protected void btnAddRenterActionPerformed(ActionEvent e) {
 		var contract = new FrameContract();
+		contract.setE(event);
 		contract.setVisible(true);
 		contract.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contract.setLocationRelativeTo(null);
@@ -410,6 +423,7 @@ public class CardRoom extends JPanel {
 		String apartNum = String.valueOf(currentApartNum);
 		String priceStr = lblPrice.getText();
 		var frame = new FrameContractDisconnect();
+		frame.setEvent(event);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
