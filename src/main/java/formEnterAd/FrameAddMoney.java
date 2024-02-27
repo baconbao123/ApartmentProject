@@ -98,6 +98,7 @@ public class FrameAddMoney extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameAddMoney() {
+		setTitle("Confirm");
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 276, 157);
@@ -216,12 +217,12 @@ public class FrameAddMoney extends JFrame {
 		                    }
 		                });
 
-		                paymentDialog.add(btnTime);
+		                paymentDialog.getContentPane().add(btnTime);
 		                
 		            }
 		        }
 
-		        paymentDialog.setLayout(new FlowLayout());
+		        paymentDialog.getContentPane().setLayout(new FlowLayout());
 		        paymentDialog.setLocationRelativeTo(null);
 		        paymentDialog.setSize(300, 500);
 		        paymentDialog.setVisible(true);
@@ -274,7 +275,7 @@ public class FrameAddMoney extends JFrame {
 	                }
 	            });
 
-	            paymentDialog.add(btnTime);
+	            paymentDialog.getContentPane().add(btnTime);
 	        }
 	    }
 

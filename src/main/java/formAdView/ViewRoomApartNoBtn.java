@@ -87,6 +87,7 @@ public class ViewRoomApartNoBtn extends JFrame {
 	 * Create the frame.
 	 */
 	public ViewRoomApartNoBtn() {
+		setTitle("View Apartment Information");
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 565, 455);

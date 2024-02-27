@@ -316,7 +316,7 @@ public class FeesDao {
 					cs.setDate(5, toTime);
 				}
 					cs.setInt(6, id);
-				if (room == null || room.isEmpty() ) {
+				if (room == null ) {
 						cs.setNull(7, java.sql.Types.INTEGER);
 					}
 					else {

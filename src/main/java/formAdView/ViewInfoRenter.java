@@ -139,7 +139,8 @@ public class ViewInfoRenter extends JFrame {
 		initComponent();
 		
 	}
-	public ViewInfoRenter(){};
+	public ViewInfoRenter(){
+		setTitle("View Renter Information");};
 	
 	private void addMouseListenerImg(JLabel label, ImageIcon img) {
 		label.addMouseListener(new MouseAdapter() {

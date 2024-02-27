@@ -76,6 +76,7 @@ public class ViewRoomOfUser extends JFrame {
 	 * Create the frame.
 	 */
 	public ViewRoomOfUser() {
+		setTitle("View Apartment Information");
 		setBackground(SystemColor.menu);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 904, 673);

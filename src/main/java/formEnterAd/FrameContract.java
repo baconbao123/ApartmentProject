@@ -178,6 +178,7 @@ public class FrameContract extends JFrame {
 	 */
 //	public FrameAddContract() {};
 	public FrameContract() {
+		setTitle("Add Contract");
 
 		setBackground(SystemColor.window);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

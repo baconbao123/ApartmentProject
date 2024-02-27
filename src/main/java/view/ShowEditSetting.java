@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -648,6 +649,7 @@ public class ShowEditSetting extends JFrame {
 				}
 				var rs = user.emailExist(email);
 				if(email.equals(infor.getEmail())) {
+					JOptionPane.showConfirmDialog(null, "show  update equals");
 					Users info = user.updateInforUser(userId, txtAddress.getText(), txtPhone.getText(), gender,
 							newAvatarPath, txtFullName.getText(), null, txtEmail.getText(), imgNicPathsString,
 							txtiAuthority.getText(), txtNIC.getText(), sqlDate);
@@ -661,6 +663,7 @@ public class ShowEditSetting extends JFrame {
 				} else if(email.contains(" ")) {
 					JOptionPane.showMessageDialog(null, "Email not be spaces", "Error", JOptionPane.ERROR_MESSAGE);
 				}else{
+					JOptionPane.showConfirmDialog(null, "show not update equals");
 					Users info = user.updateInforUser(userId, txtAddress.getText(), txtPhone.getText(), gender,
 							newAvatarPath, txtFullName.getText(), null, txtEmail.getText(), imgNicPathsString,
 							txtiAuthority.getText(), txtNIC.getText(), sqlDate);

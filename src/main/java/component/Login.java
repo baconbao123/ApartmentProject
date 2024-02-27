@@ -64,7 +64,7 @@ public class Login extends JFrame {
 	private JPasswordField txtPass;
 	private JLabel lblStatusNoti;
 	private JLabel lblStatusLoad;
-	private JLabel lblStatus;
+	private JLabel lblStatus;	
 	private static Login instance;
 	
 	

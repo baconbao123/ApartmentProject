@@ -516,6 +516,7 @@ public class FrameAddContract extends JFrame {
 	}
 
 	public FrameAddContract() {
+		setTitle("Add Contract");
 		setBackground(SystemColor.window);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 510, 589);

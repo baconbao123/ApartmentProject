@@ -142,7 +142,7 @@ public class ViewRoomContract extends JFrame {
 						ImageIcon iconNewShow = new ImageIcon(
 								clickedImage.getScaledInstance(600, 600, Image.SCALE_SMOOTH));
 						JLabel imgLabelShow = new JLabel(iconNewShow);
-						dialog.add(imgLabelShow);
+						dialog.getContentPane().add(imgLabelShow);
 						dialog.pack();
 						dialog.setVisible(true);
 						dialog.setLocationRelativeTo(null);
@@ -178,7 +178,8 @@ public class ViewRoomContract extends JFrame {
 		initComponent();
 	}
 
-	public ViewRoomContract() {};
+	public ViewRoomContract() {
+		setTitle("View Contract");};
 
 	private void initComponent() {
 		lblContractInformation.setBounds(129, 16, 187, 24);

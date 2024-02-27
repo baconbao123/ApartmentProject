@@ -100,6 +100,7 @@ public class FrameAddRoom extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameAddRoom() {
+		setTitle("Create In Apartment");
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 501, 551);

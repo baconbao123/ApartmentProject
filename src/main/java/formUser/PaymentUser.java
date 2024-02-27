@@ -350,6 +350,7 @@ public class PaymentUser extends JPanel {
 		totalOfRow = dao.totalUserFees(user_id,status, from.getDate(), to.getDate(),filter, inputRoom.getText());
 		totalOfPage = Math.ceil(totalOfRow.doubleValue() / rowOfPage.doubleValue());
 		lblDisplay.setText("Display  "+(pageNumber*rowOfPage-rowOfPage)+" to "+((pageNumber*rowOfPage)>totalOfRow? totalOfRow :pageNumber*rowOfPage)+ " in "+ totalOfRow + " rows");
+		var room = inputRoom.getText().isEmpty()? null : inputRoom.getText();
 		dao.getFeesUser(pageNumber, rowOfPage,  null,  null,  null, filter, user_id,null).stream().forEach(fee-> {
 			model.addRow(new Object[] {fee.getId(),fee.getRoom(),fee.getTotal(),fee.getElectric(),fee.getWater(),fee.getRent(),fee.getOther(),fee.getTime(),fee.getNote(),fee.getStatus(),"Action"});
 			
@@ -382,8 +383,9 @@ public class PaymentUser extends JPanel {
 		var dao = new FeesDao();
 		totalOfRow = dao.totalUserFees(user_id,status, from.getDate(), to.getDate(),filter, inputRoom.getText());
 		totalOfPage = Math.ceil(totalOfRow.doubleValue() / rowOfPage.doubleValue());
+		var room = inputRoom.getText().isEmpty()? null : inputRoom.getText();
 		lblDisplay.setText("Display  "+(pageNumber*rowOfPage-rowOfPage)+" to "+((pageNumber*rowOfPage)>totalOfRow? totalOfRow :pageNumber*rowOfPage)+ " in "+ totalOfRow + " rows");
-		dao.getFeesUser(pageNumber, rowOfPage,status, from.getDate(), to.getDate(),filter, user_id, inputRoom.getText()).stream().forEach(fee-> {
+		dao.getFeesUser(pageNumber, rowOfPage,status, from.getDate(), to.getDate(),filter, user_id, room).stream().forEach(fee-> {
 			model.addRow(new Object[] {fee.getId(),fee.getRoom(),fee.getTotal(),fee.getElectric(),fee.getWater(),fee.getRent(),fee.getOther(),fee.getTime(),fee.getNote(),fee.getStatus(),"Action"});
 		});
 		table.setModel(model);

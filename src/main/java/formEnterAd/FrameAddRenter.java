@@ -124,6 +124,7 @@ public class FrameAddRenter extends JFrame {
 	}
 
 	public FrameAddRenter(RenterList renterList) {
+		setTitle("Add Renter");
 		this.renterlist = renterList;
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
